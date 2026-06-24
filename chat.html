@@ -83,7 +83,7 @@
 <div class="app">
   <div class="bar">
     <div class="brand"><div class="logo"></div>Pept<span>X</span>.AI<small>research</small></div>
-    <a class="toCards" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Cards</a>
+    <a class="toCards" href="cards.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Cards</a>
   </div>
   <div class="thread" id="thread"></div>
   <div class="composer">
@@ -118,7 +118,7 @@ function add(role,html,related){
   let inner='';
   if(role!=='user') inner+=`<div class="who"><span>PeptX.AI</span></div>`;
   inner+=`<div class="bubble">${html}`;
-  if(related&&related.length){inner+=`<div class="rel">${related.map(n=>`<a href="index.html?card=${encodeURIComponent(n)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>${esc(n)}</a>`).join('')}</div>`;}
+  if(related&&related.length){inner+=`<div class="rel">${related.map(n=>`<a href="cards.html?card=${encodeURIComponent(n)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>${esc(n)}</a>`).join('')}</div>`;}
   inner+=`</div>`;
   m.innerHTML=inner;thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;
 }

@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"/>
+<title>PeptX.AI — The Peptide Research Index</title>
+<meta name="description" content="Every research peptide, graded by evidence and distilled into a card. Tap for mechanism, pharmacokinetics, and what the literature shows. Research use only."/>
+<meta name="theme-color" content="#05070d"/>
+<meta name="robots" content="index,follow"/>
+<meta property="og:title" content="PeptX.AI — The Peptide Research Index"/>
+<meta property="og:description" content="Every research peptide, graded by evidence and distilled into a swipeable card. Research-use-only."/>
+<meta property="og:type" content="website"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a84ff'/%3E%3Cstop offset='1' stop-color='%2300d4aa'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05070d; --ink:#f4f6fc; --muted:#98a1b6;
+    --glass:rgba(255,255,255,.06); --glass2:rgba(255,255,255,.1);
+    --hair:rgba(255,255,255,.15); --hair2:rgba(255,255,255,.08);
+    --display:'Clash Display',sans-serif; --body:'Satoshi',sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:var(--body);color:var(--ink);background:var(--bg);overflow:hidden;
+    -webkit-font-smoothing:antialiased;position:fixed;inset:0;touch-action:none}
+  .aura{position:fixed;inset:-30vmax;z-index:0;filter:blur(34px);opacity:.8;pointer-events:none}
+  .aura span{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:drift 30s ease-in-out infinite}
+  .aura .a{width:50vmax;height:50vmax;left:-8vmax;top:-10vmax;background:radial-gradient(circle,#1b4dff55,transparent 60%)}
+  .aura .b{width:46vmax;height:46vmax;right:-10vmax;top:0;background:radial-gradient(circle,#bf5af24d,transparent 62%);animation-delay:-10s}
+  .aura .c{width:54vmax;height:54vmax;left:14vmax;bottom:-26vmax;background:radial-gradient(circle,#00d4aa3d,transparent 60%);animation-delay:-18s}
+  @keyframes drift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(4vmax,-3vmax,0) scale(1.08)}}
+  body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  .app{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+  /* top bar */
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,5vw,30px) 6px;flex:none}
+  .brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-.01em}
+  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0a84ff,#00d4aa);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .logo::after{content:"";position:absolute;inset:7px;border:2px solid #fff;border-right-color:transparent;border-bottom-color:transparent;border-radius:4px;transform:rotate(45deg)}
+  .brand span{color:#00d4aa}
+  .cmpBtn{font-family:var(--body);font-weight:600;font-size:13px;color:var(--ink);padding:9px 15px;border-radius:100px;
+    background:var(--glass);border:1px solid var(--hair2);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+    cursor:pointer;transition:.3s;display:flex;align-items:center;gap:7px}
+  .cmpBtn:hover{border-color:var(--hair)}
+  .cmpBtn.on{background:var(--ink);color:#05070d}
+  .cmpBtn svg{width:15px;height:15px}
+
+  .counter{text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;padding:2px 0 0}
+  .counter b{color:var(--ink)}
+
+  /* stage */
+  .stage{flex:1;position:relative;display:flex;align-items:center;justify-content:center;padding:8px clamp(12px,4vw,24px);min-height:0}
+  .deck{position:relative;width:min(380px,86vw);height:min(560px,66vh);}
+  @media(max-height:680px){.deck{height:74vh}}
+
+  /* card */
+  .card{position:absolute;inset:0;border-radius:30px;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.85,.2,1),opacity .4s;will-change:transform}
+  .card.back-peek{transform:scale(.9) translateY(26px);opacity:.5;filter:saturate(.7)}
+  .face{position:absolute;inset:0;border-radius:30px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;
+    background:linear-gradient(165deg,var(--glass2),var(--glass));border:1px solid var(--hair);
+    box-shadow:0 34px 80px -26px rgba(0,0,0,.9),0 8px 22px -12px rgba(0,0,0,.7);
+    backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);display:flex;flex-direction:column}
+  .face.front{padding:20px 24px 18px}
+  .face.back{transform:rotateY(180deg);padding:0}
+  .flipper{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.85,.2,1);will-change:transform}
+  .flipper.flip{transform:rotateY(180deg)}
+  /* edge sheen */
+  .face::before{content:"";position:absolute;inset:0;border-radius:30px;padding:1px;pointer-events:none;
+    background:linear-gradient(150deg,rgba(255,255,255,.55),transparent 42%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55}
+  /* holo */
+  .holo{position:absolute;inset:0;border-radius:30px;pointer-events:none;z-index:4;opacity:0;transition:opacity .45s;mix-blend-mode:color-dodge;
+    background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.5),transparent 38%),
+      conic-gradient(from 0deg at var(--mx,50%) var(--my,50%),#ff64c4aa,#64d2ffaa,#7cffcbaa,#ffe066aa,#ff64c4aa)}
+  .card.active .face.front .holo{opacity:.4}
+
+  /* ── FRONT (dummy guide) ── */
+  .ftop{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:2}
+  .cat{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted)}
+  .cat .d{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+  .grade{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;position:relative;flex:none;
+    font-family:var(--display);font-weight:700;font-size:25px;color:#05070d;background:var(--gcol);
+    box-shadow:0 10px 22px -6px var(--gcol),inset 0 1px 0 rgba(255,255,255,.6)}
+  .grade small{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-family:var(--body);font-weight:600;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+  .hero{position:relative;z-index:2;margin-top:22px}
+  .nick{font-family:var(--display);font-weight:600;font-size:clamp(28px,7.4vw,39px);line-height:1;letter-spacing:-.025em;
+    background:linear-gradient(120deg,#fff,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .real{font-family:var(--mono);font-size:13px;color:var(--muted);margin-top:10px;letter-spacing:.02em}
+  .real b{color:var(--ink);font-weight:500}
+
+  .tldr{position:relative;z-index:2;margin-top:10px;font-size:14px;line-height:1.42;color:#e7ebf5}
+
+  .meters{position:relative;z-index:2;margin-top:auto;padding-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:9px 12px}
+  .m.full{grid-column:1/-1}
+  .col .meters{grid-template-columns:1fr;gap:9px}
+  .m .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:10px;color:var(--muted);font-weight:500;margin-bottom:5px;gap:6px}
+  .m .lab b{color:var(--ink);font-family:var(--mono);font-weight:500;text-align:right;white-space:nowrap}
+  .m.est .lab span::after{content:" °";color:var(--accent)}
+  .track{height:5px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden}
+  .track i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),#ffffffcc);transform-origin:left;animation:grow 1s .15s both cubic-bezier(.2,.8,.2,1)}
+  .track.est i{background:repeating-linear-gradient(90deg,var(--accent),var(--accent) 5px,transparent 5px,transparent 9px)}
+  @keyframes grow{from{transform:scaleX(0)}}
+  .cap{position:relative;z-index:2;margin-top:7px;font-size:9.5px;color:var(--muted);letter-spacing:.01em}
+  .cap b{color:var(--accent)}
+  .tags{position:relative;z-index:2;margin-top:9px;display:flex;flex-wrap:wrap;gap:6px}
+  .t{font-size:10.5px;font-weight:600;color:#cdd4e3;padding:5px 10px;border-radius:100px;background:rgba(255,255,255,.06);border:1px solid var(--hair2)}
+
+  .expand{position:relative;z-index:2;margin-top:14px;width:100%;border:none;cursor:pointer;
+    font-family:var(--body);font-weight:700;font-size:14px;color:#05070d;padding:15px;border-radius:16px;
+    background:linear-gradient(180deg,#fff,#dfe5f0);box-shadow:0 10px 26px -10px rgba(255,255,255,.5),inset 0 1px 0 #fff;
+    display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s}
+  .expand:active{transform:scale(.97)}
+  .expand svg{width:15px;height:15px}
+
+  /* ── BACK (detail) ── */
+  .back .inner{padding:24px 24px 22px;overflow-y:auto;height:100%;position:relative;z-index:2}
+  .back .bhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .back h2{font-family:var(--display);font-weight:600;font-size:27px;letter-spacing:-.02em;line-height:1.02}
+  .back .fn{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .flipback{flex:none;width:36px;height:36px;border-radius:12px;border:1px solid var(--hair);background:var(--glass);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:15px}
+  .sec{margin-top:20px}
+  .sec h3{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px}
+  .sec p{font-size:14px;line-height:1.6;color:#dde2ef}
+  .efx{display:flex;flex-direction:column;gap:8px}
+  .efx li{list-style:none;display:flex;gap:10px;font-size:13.5px;color:#dde2ef;line-height:1.4}
+  .efx li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:6px;flex:none;box-shadow:0 0 9px var(--accent)}
+  .kv{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .kv div{background:rgba(255,255,255,.045);border:1px solid var(--hair2);border-radius:13px;padding:11px 13px}
+  .kv span{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .kv b{font-family:var(--mono);font-weight:500;font-size:15px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chips span{font-size:12.5px;padding:6px 11px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--hair2);color:#dde2ef}
+  .disc{margin-top:22px;padding:12px 14px;border-radius:13px;background:rgba(255,255,255,.03);border:1px solid var(--hair2);font-size:11.5px;line-height:1.5;color:var(--muted)}
+  .disc b{color:#c7cedd}
+
+  /* controls */
+  .ctrl{flex:none;display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 0 calc(18px + env(safe-area-inset-bottom))}
+  .nav{width:54px;height:54px;border-radius:50%;border:1px solid var(--hair);background:var(--glass);color:var(--ink);cursor:pointer;
+    display:grid;place-items:center;backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);transition:.25s}
+  .nav:hover{background:var(--glass2);transform:scale(1.05)}
+  .nav:active{transform:scale(.92)}
+  .nav svg{width:21px;height:21px}
+  .dots{display:flex;gap:7px;align-items:center}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:.3s;cursor:pointer}
+  .dots i.on{background:var(--ink);width:22px;border-radius:7px}
+  .hint{text-align:center;font-size:11.5px;color:var(--muted);padding-bottom:6px;opacity:.8}
+
+  /* compare */
+  .compare{flex:1;display:none;flex-direction:column;min-height:0;padding:6px clamp(12px,4vw,22px) calc(16px + env(safe-area-inset-bottom))}
+  .compare.on{display:flex}
+  .stage.hide{display:none}.ctrl.hide{display:none}
+  .cols{flex:1;display:flex;gap:14px;min-height:0}
+  .col{flex:1;border-radius:24px;padding:20px;display:flex;flex-direction:column;min-width:0;
+    background:linear-gradient(165deg,var(--glass2),var(--glass));border:1px solid var(--hair);
+    backdrop-filter:blur(15px) saturate(150%);-webkit-backdrop-filter:blur(15px) saturate(150%);box-shadow:var(--shadow)}
+  .col .nick{font-size:clamp(20px,4.5vw,30px)}
+  .col .real{font-size:11px}
+  .col .tldr{font-size:13px;margin-top:12px}
+  .col .meters{padding-top:16px;gap:10px}
+  .picker{display:flex;gap:7px;overflow-x:auto;padding:14px 2px 2px;scrollbar-width:none}
+  .picker::-webkit-scrollbar{display:none}
+  .picker button{flex:none;font-size:12px;font-weight:600;color:var(--muted);padding:8px 13px;border-radius:100px;background:var(--glass);border:1px solid var(--hair2);cursor:pointer;white-space:nowrap;transition:.25s}
+  .picker button.aSel{color:#05070d;background:var(--ink)}
+  .picker button.bSel{color:var(--ink);border-color:var(--ink)}
+  .swap{text-align:center;font-size:11.5px;color:var(--muted);padding:8px}
+  .pickbar{flex:none;padding:13px 2px 0}
+  .cmpSearch{width:100%;font-family:var(--body);font-size:13.5px;color:var(--ink);background:var(--glass);border:1px solid var(--hair2);
+    border-radius:100px;padding:11px 17px;outline:none;transition:.2s;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .cmpSearch:focus{border-color:var(--hair);background:var(--glass2)}
+  .cmpSearch::placeholder{color:var(--muted)}
+  .catfilter{flex:none;display:flex;gap:6px;overflow-x:auto;padding:10px 2px 0;scrollbar-width:none}
+  .catfilter::-webkit-scrollbar{display:none}
+  .catfilter button{flex:none;font-size:11.5px;font-weight:600;color:var(--muted);padding:7px 12px;border-radius:100px;background:var(--glass);
+    border:1px solid var(--hair2);cursor:pointer;white-space:nowrap;transition:.2s;display:flex;align-items:center;gap:6px}
+  .catfilter button .d{width:7px;height:7px;border-radius:50%}
+  .catfilter button.on{color:#05070d;background:var(--ink);border-color:var(--ink)}
+  .picker .none{flex:none;font-size:12.5px;color:var(--muted);padding:12px 6px}
+  @media(max-width:560px){.cols{flex-direction:column;overflow-y:auto}.col .meters{margin-top:14px}}
+  ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
+
+  /* ── chat popup ── */
+  .chatScrim{position:fixed;inset:0;z-index:40;background:rgba(3,5,10,.5);opacity:0;pointer-events:none;transition:.3s}
+  .chatScrim.on{opacity:1;pointer-events:auto}
+  .chatPop{position:fixed;z-index:50;right:clamp(12px,3vw,26px);bottom:clamp(12px,3vw,24px);
+    width:min(412px,94vw);height:min(644px,82vh);display:flex;flex-direction:column;border-radius:26px;overflow:hidden;
+    background:linear-gradient(170deg,rgba(20,24,36,.92),rgba(8,10,18,.96));border:1px solid var(--hair);
+    box-shadow:0 40px 90px -25px rgba(0,0,0,.85);backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
+    transform:translateY(26px) scale(.97);opacity:0;pointer-events:none;transform-origin:bottom right;
+    transition:transform .34s cubic-bezier(.2,.85,.2,1),opacity .3s}
+  .chatPop.on{transform:none;opacity:1;pointer-events:auto}
+  @media(max-width:560px){.chatPop{right:8px;left:8px;width:auto;height:86vh;bottom:8px}}
+  .cpHead{flex:none;display:flex;align-items:center;justify-content:space-between;padding:15px 16px 13px;border-bottom:1px solid var(--hair2)}
+  .cpHead .t{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:15px}
+  .cpHead .t .clogo{width:26px;height:26px;border-radius:8px;background:linear-gradient(145deg,#0a84ff,#00d4aa);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .cpHead .t small{font-family:var(--body);font-weight:600;font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:1px}
+  .cpClose{width:32px;height:32px;border-radius:10px;border:1px solid var(--hair2);background:var(--glass);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:14px;transition:.2s}
+  .cpClose:hover{background:var(--glass2)}
+  .thread{flex:1;overflow-y:auto;padding:14px 16px 12px;display:flex;flex-direction:column;gap:13px;scroll-behavior:smooth}
+  .msg{max-width:90%;animation:pop .4s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes pop{from{opacity:0;transform:translateY(9px)}}
+  .msg.user{align-self:flex-end}
+  .bubble{padding:13px 15px;border-radius:18px;font-size:14.5px;line-height:1.5;border:1px solid var(--hair2)}
+  .user .bubble{background:linear-gradient(160deg,rgba(0,212,170,.22),rgba(0,212,170,.1));border-color:rgba(0,212,170,.3);border-bottom-right-radius:7px;color:#eafff9}
+  .ai .bubble{background:linear-gradient(160deg,var(--glass2),var(--glass));border-bottom-left-radius:7px;box-shadow:0 14px 36px -18px rgba(0,0,0,.7)}
+  .ai .bubble b{font-weight:700;color:#fff}
+  .ai .bubble .disc{display:block;margin-top:9px;padding:0;background:none;border:none;font-size:11px;color:var(--muted);font-style:italic;line-height:1.4}
+  .who{font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);margin:0 4px 5px}
+  .who span{color:var(--accent)}
+  .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+  .rel button{font-family:var(--body);font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;padding:7px 12px;border-radius:100px;
+    background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.28);display:inline-flex;align-items:center;gap:6px;transition:.2s}
+  .rel button:hover{background:rgba(0,212,170,.18)}
+  .rel button svg{width:12px;height:12px}
+  .typing{display:flex;gap:5px;padding:3px 2px}
+  .typing i{width:8px;height:8px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite both}
+  .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+  .suggest{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+  .suggest button{font-family:var(--body);font-size:12.5px;font-weight:500;color:var(--ink);padding:9px 13px;border-radius:13px;
+    background:var(--glass);border:1px solid var(--hair2);cursor:pointer;text-align:left;transition:.25s}
+  .suggest button:hover{border-color:var(--hair);transform:translateY(-1px)}
+  .composer{flex:none;padding:8px 14px calc(13px + env(safe-area-inset-bottom))}
+  .inbox{display:flex;align-items:flex-end;gap:8px;background:var(--glass2);border:1px solid var(--hair);border-radius:22px;padding:6px 6px 6px 16px}
+  .inbox textarea{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:var(--body);font-size:14.5px;line-height:1.4;resize:none;max-height:110px;padding:9px 0}
+  .inbox textarea::placeholder{color:var(--muted)}
+  .send{flex:none;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(160deg,#0a84ff,#00d4aa);display:grid;place-items:center;transition:.2s;box-shadow:0 6px 16px -6px #00d4aa88}
+  .send:disabled{opacity:.4;cursor:default;box-shadow:none}
+  .send:not(:disabled):active{transform:scale(.92)}
+  .send svg{width:18px;height:18px}
+  .foot{text-align:center;font-size:10px;color:var(--muted);margin-top:8px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="aura"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+<div class="app">
+  <div class="bar">
+    <a class="brand" href="index.html" style="text-decoration:none;color:inherit"><div class="logo"></div>Pept<span>X</span></a>
+    <div style="display:flex;gap:9px;align-items:center">
+      <button class="cmpBtn" id="askBtn" style="color:#00d4aa;border-color:rgba(0,212,170,.35)">✦ Ask AI</button>
+      <button class="cmpBtn" id="cmpBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="7" height="14" rx="1.5"/><rect x="14" y="5" width="7" height="14" rx="1.5"/></svg>Compare</button>
+    </div>
+  </div>
+  <div class="counter" id="counter"></div>
+
+  <div class="stage" id="stage"><div class="deck" id="deck"></div></div>
+
+  <div class="ctrl" id="ctrl">
+    <button class="nav" id="prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="dots" id="dots"></div>
+    <button class="nav" id="next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="hint" id="hint">Swipe or use arrows · tap Expand for the deep science · <a href="terms.html" style="color:inherit">Terms</a> · <a href="privacy.html" style="color:inherit">Privacy</a></div>
+
+  <div class="compare" id="compare">
+    <div class="cols" id="cols"></div>
+    <div class="pickbar">
+      <input id="cmpSearch" class="cmpSearch" placeholder="Search a compound to compare…" autocomplete="off"/>
+    </div>
+    <div class="catfilter" id="catfilter"></div>
+    <div class="picker" id="picker"></div>
+  </div>
+</div>
+
+<div class="chatScrim" id="chatScrim"></div>
+<div class="chatPop" id="chatPop" aria-hidden="true">
+  <div class="cpHead">
+    <div class="t"><div class="clogo"></div>Pept<span style="color:var(--accent)">X</span>.AI<small>research</small></div>
+    <button class="cpClose" id="cpClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="thread" id="thread"></div>
+  <div class="composer">
+    <div class="inbox">
+      <textarea id="cInput" rows="1" placeholder="Ask about any peptide, mechanism, or comparison…"></textarea>
+      <button class="send" id="cSend" disabled aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="#031b16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="foot">Educational research summaries · not medical advice · <a href="terms.html" style="color:inherit">Terms</a></div>
+  </div>
+</div>
+
+<script>
+const CAT={"Weight Management":"#30D158","Healing & Recovery":"#0A84FF","Growth Hormone":"#BF5AF2","Metabolic & Exercise":"#2CD4C4","Anti-Aging & Skin":"#FF375F","Sexual Health":"#FF453A","Cognitive Enhancement":"#64D2FF","Immune Support":"#5E5CE6","Muscle Growth":"#FF9F0A","Hormone Support":"#FFD60A","Anti-Inflammatory":"#66D4CF","Sleep & Recovery":"#7D7AFF","Cosmetic":"#FF6EC7"};
+function catCol(c){return CAT[c]||"#8E9BB3";}
+const API="https://pmebegdwqizozfmzxpuw.supabase.co/functions/v1/peptx-cards-export";
+function trunc(s,n){s=s||"";return s.length>n?s.slice(0,n).replace(/\s+\S*$/,"")+"…":s;}
+const GR={A:{c:"#FFD60A",l:"Clinical"},B:{c:"#64D2FF",l:"Emerging"},C:{c:"#C9A26B",l:"Early research"}};
+const EVID={A:92,B:62,C:34};
+const REG={research_compound:"Research compound",prescription_only:"Prescription (clinical)",emerging:"Emerging / in trials"};
+function hl(h){h=parseFloat(h);if(!h)return"—";return h>=24?(+(h/24).toFixed(h%24?1:0))+(h>=48?" days":" day"):h+" hrs";}
+function fmtT(h){h=parseFloat(h);if(isNaN(h))return"—";if(h<1)return Math.round(h*60)+" min";if(h<24)return (+h)+" hrs";const d=h/24;return (Number.isInteger(d)?d:+d.toFixed(1))+(d>=2?" days":" day");}
+function durPct(h){h=parseFloat(h)||1;return Math.min(100,Math.max(8,Math.log2(h+1)/Math.log2(220)*100));}
+function onsetPct(h){h=parseFloat(h)||1;return Math.max(12,Math.min(100,100-Math.log2(h+1)/Math.log2(60)*100));}
+function convPct(f){f=(f||'').toLowerCase();if(/as needed/.test(f))return 84;if(/2-3x weekly|twice weekly|2x weekly/.test(f))return 72;if(/weekly/.test(f))return 92;if(/1-2x daily|twice daily/.test(f))return 36;if(/daily/.test(f))return 50;return 58;}
+function convLabel(f){return (f||'').replace(/\s*\(.*?\)/g,'').split('/')[0].trim();}
+function tol(arr){const n=(arr||[]).length;return n<=2?["Well tolerated"]:n===3?["Moderate tolerability"]:["Notable side-effects"];}
+function meter(label,val,pct,est,full){return `<div class="m${est?' est':''}${full?' full':''}"><div class="lab"><span>${label}</span><b>${val}</b></div><div class="track${est?' est':''}"><i style="width:${pct}%"></i></div></div>`;}
+const REGSHORT={research_compound:"Research-grade",prescription_only:"Clinically approved",emerging:"In trials"};
+function rel(p){return[["Longevity",p.longevity_relevance],["Fitness",p.fitness_relevance],["Health",p.health_optimisation_relevance]].filter(r=>r[1]);}
+
+let DATA=[
+ {name:"Retatrutide",full_name:"Triple Hormone Receptor Agonist",category:"Weight Management",evidence_grade:"B",half_life_hours:120,absorption_route:"subcutaneous",regulatory_status_uk:"emerging",
+  tmax:24,freq:"Once weekly",cyc:false,effect:{v:"−28.7% weight",s:96},
+  nick:"The Heavyweight",tldr:"The newest, strongest weight-research compound — it hits three targets at once.",bestfor:"Weight & metabolic research",
+  description:"First-in-class triple agonist targeting GLP-1, GIP and glucagon receptors. Phase III research describes ~28.7% body-weight reduction; an oral formulation is in early development.",
+  mechanism_of_action:"Activates three receptors — GLP-1, GIP and glucagon. Research describes this combination as enhancing insulin secretion, reducing appetite and increasing energy expenditure.",
+  primary_effects:["Significant weight loss","Improved glucose control","Enhanced insulin sensitivity","Reduced appetite","Increased energy expenditure"],
+  evidence_summary:"A few human trials, primarily Phase III, describe significant weight loss and metabolic improvements. Long-term data is still being gathered.",
+  side_effects_common:["Nausea","Diarrhea","Vomiting"],synergistic_compounds:["Metformin"],
+  longevity_relevance:"Studied for reducing obesity-related health risks.",fitness_relevance:"Researched for weight management and metabolic efficiency.",health_optimisation_relevance:"Studied for weight loss and metabolic health."},
+
+ {name:"Semaglutide",full_name:"GLP-1 Receptor Agonist",category:"Weight Management",evidence_grade:"A",half_life_hours:168,absorption_route:"subcutaneous",regulatory_status_uk:"prescription_only",
+  tmax:36,freq:"Once weekly",cyc:false,effect:{v:"≈ −15% weight",s:52},
+  nick:"The Proven One",tldr:"The household-name GLP-1 — the most-studied of the bunch, and the science behind Ozempic & Wegovy.",bestfor:"Weight & glucose research",
+  description:"GLP-1 analog studied extensively for appetite reduction, slowed gastric emptying and glycaemic control. Approved formulations include a weekly injection and a daily oral pill.",
+  mechanism_of_action:"Mimics the hormone GLP-1. Research describes glucose-dependent insulin secretion, suppressed glucagon release and slowed gastric emptying — regulating blood sugar and appetite.",
+  primary_effects:["Improves glycaemic control","Reduces body weight","Decreases appetite","Lowers HbA1c","Reduces cardiovascular risk factors"],
+  evidence_summary:"Multiple large-scale human trials describe consistent improvements in glycaemic control and weight. Long-term data beyond five years remains limited.",
+  side_effects_common:["Nausea","Vomiting","Diarrhea","Constipation"],synergistic_compounds:["Metformin"],
+  longevity_relevance:"Studied for reduced cardiovascular risk factors.",fitness_relevance:"Researched in weight-management contexts.",health_optimisation_relevance:"Studied for glycaemic control and metabolic health."},
+
+ {name:"Tirzepatide",full_name:"Dual GIP/GLP-1 Receptor Agonist",category:"Weight Management",evidence_grade:"A",half_life_hours:120,absorption_route:"subcutaneous",regulatory_status_uk:"prescription_only",
+  tmax:24,freq:"Once weekly",cyc:false,effect:{v:"−21% weight",s:72},
+  nick:"The Dual Threat",tldr:"A two-receptor weight compound with heavyweight trial data behind it (the SURMOUNT studies).",bestfor:"Weight & metabolic research",
+  description:"Dual agonist studied in the SURMOUNT trials, which describe up to 21% body-weight reduction. An oral formulation is in Phase III research.",
+  mechanism_of_action:"Targets both GLP-1 and GIP receptors. Research describes enhanced glucose-dependent insulin secretion and reduced glucagon, improving glycaemic markers and reducing appetite.",
+  primary_effects:["Significant weight reduction","Improved glycemic control","Reduced appetite","Increased insulin sensitivity","Lowered blood glucose"],
+  evidence_summary:"Multiple human trials (SURMOUNT series) describe significant weight loss and glycaemic control across diverse populations; long-term safety data is still accruing.",
+  side_effects_common:["Nausea","Diarrhea","Decreased appetite"],synergistic_compounds:["Metformin"],
+  longevity_relevance:"Studied for improved metabolic health.",fitness_relevance:"Researched for weight management.",health_optimisation_relevance:"Studied for weight loss and metabolic health."},
+
+ {name:"BPC-157",full_name:"Body Protection Compound-157",category:"Healing & Recovery",evidence_grade:"C",half_life_hours:5,absorption_route:"subcutaneous",regulatory_status_uk:"research_compound",
+  tmax:0.5,freq:"1-2x daily",cyc:false,effect:{v:"Tissue repair",s:40,q:true},
+  nick:"The Repair Kit",tldr:"A gut-derived 'healing' peptide — a recovery-research favourite, though most evidence is still from animal studies.",bestfor:"Tissue-repair research",
+  description:"Synthetic peptide derived from a protein found in gastric juice. Studied extensively in animal models for tissue repair and anti-inflammatory effects.",
+  mechanism_of_action:"Research describes modulation of growth factors and cytokines, enhanced angiogenesis, membrane stabilisation and possible nitric-oxide involvement.",
+  primary_effects:["Accelerates wound healing","Reduces inflammation","Promotes tendon & ligament repair","Protects gastric mucosa","Enhances angiogenesis"],
+  evidence_summary:"Most evidence comes from animal studies; one small human trial described potential healing benefits. Robust clinical trials are still needed.",
+  side_effects_common:["Mild injection-site irritation"],synergistic_compounds:["Collagen supplements","Vitamin C"],
+  longevity_relevance:"Studied for tissue repair and inflammation.",fitness_relevance:"Researched for recovery from injury.",health_optimisation_relevance:"Studied for tissue repair."},
+
+ {name:"TB-500",full_name:"Thymosin Beta-4",category:"Healing & Recovery",evidence_grade:"C",half_life_hours:4,absorption_route:"subcutaneous",regulatory_status_uk:"research_compound",
+  tmax:2,freq:"2-3x weekly",cyc:true,effect:{v:"Tissue repair",s:40,q:true},
+  nick:"The Tag-Team Healer",tldr:"A tissue-repair peptide that's usually researched hand-in-hand with BPC-157.",bestfor:"Recovery research",
+  description:"Synthetic version of Thymosin Beta-4. Studied for angiogenesis, cell migration and musculoskeletal tissue repair.",
+  mechanism_of_action:"Research describes binding to actin in the cytoskeleton, promoting cell migration, upregulating VEGF for angiogenesis and reducing pro-inflammatory cytokines.",
+  primary_effects:["Accelerates wound healing","Promotes angiogenesis","Reduces inflammation","Enhances muscle recovery","Improves joint flexibility"],
+  evidence_summary:"Evidence is largely from animal studies and anecdotal reports. Human clinical trials are needed to confirm effects and safety.",
+  side_effects_common:["Injection-site irritation","Mild headache"],synergistic_compounds:["BPC-157","Collagen supplements"],
+  longevity_relevance:"Studied for tissue repair.",fitness_relevance:"Researched for muscle recovery.",health_optimisation_relevance:"Studied for tissue repair and inflammation."},
+
+ {name:"CJC-1295 (DAC)",full_name:"Drug Affinity Complex GHRH Analog",category:"Growth Hormone",evidence_grade:"B",half_life_hours:192,absorption_route:"subcutaneous",regulatory_status_uk:"research_compound",
+  tmax:null,freq:"Once weekly",cyc:false,effect:{v:"Sustained GH ↑",s:68,q:true},
+  nick:"The Slow Burn",tldr:"A long-acting growth-hormone booster — one dose stays active for about 8 days.",bestfor:"Growth-hormone research",
+  description:"GHRH analog with a Drug Affinity Complex extending half-life to ~8 days. Studied for sustained growth-hormone elevation rather than pulsatile release.",
+  mechanism_of_action:"Research describes binding to GHRH receptors on the pituitary, stimulating GH secretion; the DAC extends half-life for sustained elevation over days.",
+  primary_effects:["Increased growth hormone","Improved muscle mass & strength","Enhanced fat loss","Improved recovery & repair","Potential anti-aging signals"],
+  evidence_summary:"A few human trials describe increased GH and improved body composition; long-term safety and efficacy data are lacking.",
+  side_effects_common:["Injection-site reactions","Water retention","Joint pain"],synergistic_compounds:["GHRP-6","Ipamorelin"],
+  longevity_relevance:"Studied for anti-aging signals via GH elevation.",fitness_relevance:"Researched for muscle growth and repair.",health_optimisation_relevance:"Studied for body composition and recovery."},
+
+ {name:"Ipamorelin",full_name:"Selective Growth Hormone Secretagogue",category:"Growth Hormone",evidence_grade:"B",half_life_hours:2,absorption_route:"subcutaneous",regulatory_status_uk:"research_compound",
+  tmax:0.25,freq:"Daily",cyc:true,effect:{v:"Selective GH ↑",s:58,q:true},
+  nick:"The Gentle One",tldr:"A clean, well-tolerated growth-hormone nudge — known in research for minimal side effects.",bestfor:"Growth-hormone research",
+  description:"Selective ghrelin-receptor agonist studied for GH release with minimal effect on cortisol or prolactin — noted as well-tolerated in research.",
+  mechanism_of_action:"Research describes selective agonism of the ghrelin (GH-secretagogue) receptor, stimulating pituitary GH release without significantly affecting cortisol or prolactin.",
+  primary_effects:["Increased GH release","Enhanced muscle growth","Improved fat metabolism","Reduced recovery time","Minimal cortisol impact"],
+  evidence_summary:"A few small human trials describe increased GH without major cortisol/prolactin effects; larger studies are needed.",
+  side_effects_common:["Injection-site reactions","Mild headache","Transient flushing"],synergistic_compounds:["GHRP-6","CJC-1295"],
+  longevity_relevance:"Studied for muscle maintenance and fat loss.",fitness_relevance:"Researched for muscle growth and recovery.",health_optimisation_relevance:"Studied for body composition."},
+
+ {name:"MOTS-c",full_name:"Mitochondrial-Derived Peptide",category:"Metabolic & Exercise",evidence_grade:"B",half_life_hours:4,absorption_route:"subcutaneous",regulatory_status_uk:"research_compound",
+  tmax:1,freq:"2-3x weekly",cyc:true,effect:{v:"Metabolic ↑",s:55,q:true},
+  nick:"The Exercise Mimic",tldr:"A mitochondrial peptide studied for doing to your metabolism some of what exercise does.",bestfor:"Metabolic & exercise research",
+  description:"Mitochondrial-derived peptide studied for metabolic function, exercise capacity and healthy-aging pathways.",
+  mechanism_of_action:"Research describes activation of the AMPK pathway — enhancing glucose uptake and fatty-acid oxidation — plus mitochondrial biogenesis.",
+  primary_effects:["Improves insulin sensitivity","Enhances exercise capacity","Promotes mitochondrial biogenesis","Increases fatty-acid oxidation","Supports healthy aging"],
+  evidence_summary:"A limited number of human trials describe improvements in metabolic markers and exercise performance; larger studies are needed.",
+  side_effects_common:["Injection-site irritation","Mild headache"],synergistic_compounds:["Berberine","Resveratrol"],
+  longevity_relevance:"Studied for mitochondrial function and metabolic health.",fitness_relevance:"Researched for exercise capacity.",health_optimisation_relevance:"Studied for metabolic function and energy."},
+
+ {name:"GHK-Cu",full_name:"Copper Peptide",category:"Anti-Aging & Skin",evidence_grade:"B",half_life_hours:3,absorption_route:"subcutaneous",regulatory_status_uk:"research_compound",
+  tmax:1,freq:"Daily",cyc:true,effect:{v:"Collagen ↑",s:60,q:true},
+  nick:"The Skin Architect",tldr:"A copper peptide studied for collagen, skin repair and anti-aging signals.",bestfor:"Skin & anti-aging research",
+  description:"Naturally occurring copper-binding peptide studied for regenerative properties, collagen synthesis and tissue remodelling.",
+  mechanism_of_action:"Research describes copper-ion transport into cells, upregulated collagen synthesis and modulation of inflammation- and oxidative-stress-related genes.",
+  primary_effects:["Enhances wound healing","Stimulates collagen production","Reduces inflammation","Improves skin elasticity","Promotes hair growth"],
+  evidence_summary:"A few small human trials describe improved skin healing and reduced signs of aging; larger rigorous studies are needed.",
+  side_effects_common:["Mild skin irritation"],synergistic_compounds:["Vitamin C"],
+  longevity_relevance:"Studied for skin regeneration and oxidative-stress reduction.",fitness_relevance:"Researched for tissue repair.",health_optimisation_relevance:"Studied for skin health."},
+
+ {name:"PT-141",full_name:"Bremelanotide",category:"Sexual Health",evidence_grade:"B",half_life_hours:2.7,absorption_route:"subcutaneous",regulatory_status_uk:"prescription_only",
+  tmax:1,freq:"As needed",cyc:false,effect:{v:"Desire/arousal ↑",s:66,q:true},
+  nick:"The Libido Switch",tldr:"A brain-acting compound studied for desire and arousal — with an approved clinical version (Vyleesi).",bestfor:"Sexual-health research",
+  description:"Melanocortin-receptor agonist studied for sexual desire and function via central nervous system activation. An approved clinical formulation exists (Vyleesi).",
+  mechanism_of_action:"Research describes activation of central melanocortin receptors (primarily MC3/MC4), modulating neurotransmitter release linked to arousal and desire.",
+  primary_effects:["Increased sexual desire","Improved arousal","Enhanced erectile function","More satisfactory events","Potential mood enhancement"],
+  evidence_summary:"Several human clinical trials describe efficacy for sexual desire and function, particularly in women with HSDD, versus placebo. More long-term data is needed.",
+  side_effects_common:["Nausea","Flushing","Headache"],synergistic_compounds:["L-arginine"],
+  longevity_relevance:null,fitness_relevance:null,health_optimisation_relevance:"Studied for quality of life via sexual health."}
+];
+
+let idx=0, mode="deck", aSel=0, bSel=1;
+const deck=document.getElementById('deck'), dots=document.getElementById('dots'), counter=document.getElementById('counter');
+
+function frontHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
+  return `<div class="face front" style="--accent:${acc};--gcol:${g.c}">
+    <div class="holo"></div>
+    <div class="ftop"><span class="cat"><span class="d"></span>${p.category}</span>
+      <span class="grade">${p.evidence_grade}<small>${g.l}</small></span></div>
+    <div class="hero"><div class="nick">${p.name}</div><div class="real">${p.nick?`<b style="color:var(--accent)">${p.nick}</b> · `:""}${p.full_name}</div></div>
+    <div class="tldr">${p.tldr||trunc(p.description,118)}</div>
+    <div class="meters">
+      ${p.effect?meter("Effect strength",p.effect.v,p.effect.s,p.effect.q,true):""}
+      ${meter("Evidence","Grade "+p.evidence_grade,EVID[p.evidence_grade])}
+      ${meter("Duration",hl(p.half_life_hours),durPct(p.half_life_hours))}
+      ${meter("Onset",fmtT(p.tmax),p.tmax==null?0:onsetPct(p.tmax))}
+      ${meter("Convenience",convLabel(p.freq)||"—",convPct(p.freq))}
+    </div>
+    ${p.effect?`<div class="cap"><b>°</b> Effect strength is relative to others in the same category.</div>`:""}
+    <div class="tags">
+      ${p.is_peptide===false?`<span class="t" style="color:#ffd60a;border-color:#ffd60a44;background:#ffd60a14">⚠ Non-peptide</span>`:""}
+      <span class="t">${REGSHORT[p.regulatory_status_uk]||p.regulatory_status_uk}</span>
+      <span class="t">${p.cyc?"Cycle on/off":"No cycling"}</span>
+      <span class="t">${tol(p.side_effects_common)[0]}</span>
+    </div>
+    <button class="expand" data-x>Expand the science
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+    </button></div>`;}
+
+function backHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade],rr=rel(p);
+  return `<div class="face back" style="--accent:${acc}"><div class="inner">
+    <div class="bhead"><div><h2>${p.name}</h2><div class="fn">${p.full_name}</div></div><button class="flipback" data-b>✕</button></div>
+    ${p.is_peptide===false?`<div class="disc" style="margin-top:16px;border-color:#ffd60a33"><b>⚠ ${p.compound_class}.</b> Grouped with peptides here for research convenience — it is not technically a peptide.</div>`:""}
+    <div class="sec"><p>${p.description}</p></div>
+    <div class="sec"><h3>How it works</h3><p>${p.mechanism_of_action}</p></div>
+    <div class="sec"><h3>What the research describes</h3><ul class="efx">${p.primary_effects.map(e=>`<li>${e}</li>`).join("")}</ul></div>
+    <div class="sec"><h3>Pharmacokinetics</h3><div class="kv">
+      <div><span>Half-life</span><b>${hl(p.half_life_hours)}</b></div>
+      <div><span>Route</span><b>${p.absorption_route.replace(/^./,c=>c.toUpperCase())}</b></div>
+      <div><span>Evidence</span><b>${p.evidence_grade} · ${g.l}</b></div>
+      <div><span>Status (UK)</span><b style="font-size:12px">${REG[p.regulatory_status_uk]||p.regulatory_status_uk}</b></div></div></div>
+    <div class="sec"><h3>Evidence summary</h3><p>${p.evidence_summary}</p></div>
+    ${rr.length?`<div class="sec"><h3>Research relevance</h3><ul class="efx">${rr.map(r=>`<li><b style="color:#fff">${r[0]}.</b>&nbsp;${r[1]}</li>`).join("")}</ul></div>`:""}
+    <div class="sec"><h3>Commonly noted in studies</h3><div class="chips">${p.side_effects_common.map(s=>`<span>${s}</span>`).join("")}</div></div>
+    <div class="sec"><h3>Researched alongside</h3><div class="chips">${p.synergistic_compounds.map(s=>`<span>+ ${s}</span>`).join("")}</div></div>
+    <div class="disc"><b>Research use only.</b> Educational summary of published research — not medical, health or dosing advice.</div>
+  </div></div>`;}
+
+function renderDeck(){
+  const nextP=DATA[(idx+1)%DATA.length];
+  deck.innerHTML=
+    `<div class="card back-peek">${frontHTML(nextP)}</div>
+     <div class="card active" id="top"><div class="flipper" id="flip">${frontHTML(DATA[idx])}${backHTML(DATA[idx])}</div></div>`;
+  counter.innerHTML=`<b>${idx+1}</b> / ${DATA.length} &nbsp;·&nbsp; ${DATA[idx].category}`;
+  dots.innerHTML=DATA.map((_,i)=>`<i class="${i===idx?'on':''}" data-i="${i}"></i>`).join("");
+  bindTop();
+}
+function isFlipped(){const f=document.getElementById('flip');return f&&f.classList.contains('flip');}
+function bindTop(){
+  const top=document.getElementById('top');if(!top)return;
+  const flip=document.getElementById('flip');
+  const front=top.querySelector('.face.front');
+  top.querySelector('[data-x]').onclick=e=>{e.stopPropagation();top.style.transform='';flip.classList.add('flip');};
+  const fb=top.querySelector('[data-b]');if(fb)fb.onclick=e=>{e.stopPropagation();flip.classList.remove('flip');};
+  // holo + tilt (outer card only, when not flipped/dragging) — does NOT fight the flip
+  top.addEventListener('pointermove',e=>{if(dragging||isFlipped())return;
+    const r=top.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+    front.style.setProperty('--mx',px*100+'%');front.style.setProperty('--my',py*100+'%');
+    top.style.transform=`perspective(1000px) rotateY(${(px-.5)*8}deg) rotateX(${(.5-py)*8}deg)`;});
+  top.addEventListener('pointerleave',()=>{if(!dragging&&!isFlipped())top.style.transform='';});
+  attachSwipe(top);
+}
+
+let dragging=false,startX=0,curX=0;
+function attachSwipe(top){
+  top.addEventListener('pointerdown',e=>{
+    if(isFlipped())return;                 // don't swipe while reading the back
+    if(e.target.closest('button'))return;  // let Expand / buttons get their click
+    dragging=true;startX=e.clientX;curX=0;top.style.transition='none';
+    try{top.setPointerCapture(e.pointerId);}catch(_){}});
+  top.addEventListener('pointermove',e=>{if(!dragging)return;curX=e.clientX-startX;
+    top.style.transform=`translateX(${curX}px) rotate(${curX*.045}deg)`;});
+  const end=()=>{if(!dragging)return;dragging=false;top.style.transition='';
+    if(Math.abs(curX)>70){commit(curX<0?1:-1);}else{top.style.transform='';}};
+  top.addEventListener('pointerup',end);top.addEventListener('pointercancel',end);top.addEventListener('lostpointercapture',end);
+}
+function commit(dir){
+  const top=document.getElementById('top');
+  top.style.transition='transform .4s ease, opacity .4s';
+  top.style.transform=`translateX(${dir>0?'-130%':'130%'}) rotate(${dir>0?-12:12}deg)`;top.style.opacity='0';
+  setTimeout(()=>{idx=(idx+dir+DATA.length)%DATA.length;renderDeck();},300);
+}
+
+document.getElementById('next').onclick=()=>commit(1);
+document.getElementById('prev').onclick=()=>commit(-1);
+dots.onclick=e=>{const i=e.target.dataset.i;if(i!=null){idx=+i;renderDeck();}};
+document.addEventListener('keydown',e=>{if(window.chatOpen||mode!=="deck")return;if(e.key==='ArrowRight')commit(1);if(e.key==='ArrowLeft')commit(-1);
+  if(e.key===' '||e.key==='Enter'){const f=document.getElementById('flip');if(f){document.getElementById('top').style.transform='';f.classList.toggle('flip');}}});
+
+// trackpad / mouse-wheel horizontal swipe
+let wheelLock=false;
+document.getElementById('stage').addEventListener('wheel',e=>{
+  if(mode!=="deck"||isFlipped())return;
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)+2){
+    e.preventDefault();
+    if(wheelLock||Math.abs(e.deltaX)<14)return;
+    wheelLock=true;commit(e.deltaX>0?1:-1);setTimeout(()=>{wheelLock=false;},480);
+  }
+},{passive:false});
+
+/* compare */
+const cmpBtn=document.getElementById('cmpBtn'),compare=document.getElementById('compare'),cols=document.getElementById('cols'),picker=document.getElementById('picker');
+cmpBtn.onclick=()=>{mode=mode==="deck"?"compare":"deck";
+  cmpBtn.classList.toggle('on',mode==="compare");
+  document.getElementById('stage').classList.toggle('hide',mode==="compare");
+  document.getElementById('ctrl').classList.toggle('hide',mode==="compare");
+  document.getElementById('hint').style.display=mode==="compare"?"none":"";
+  compare.classList.toggle('on',mode==="compare");
+  if(mode==="compare"){aSel=idx;bSel=(idx+1)%DATA.length;renderCompare();}};
+function miniCol(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
+  return `<div class="col" style="--accent:${acc};--gcol:${g.c}">
+    <div class="ftop"><span class="cat"><span class="d"></span>${p.category}</span><span class="grade">${p.evidence_grade}<small>${g.l}</small></span></div>
+    <div class="hero" style="margin-top:30px"><div class="nick">${p.name}</div>${p.nick?`<div class="real" style="margin-top:6px"><b style="color:var(--accent)">${p.nick}</b></div>`:""}</div>
+    <div class="tldr">${p.tldr||trunc(p.description,90)}</div>
+    <div class="meters">
+      ${p.effect?meter("Effect strength",p.effect.v,p.effect.s,p.effect.q):""}
+      ${meter("Evidence","Grade "+p.evidence_grade,EVID[p.evidence_grade])}
+      ${meter("Duration",hl(p.half_life_hours),durPct(p.half_life_hours))}
+      ${meter("Onset",fmtT(p.tmax),p.tmax==null?0:onsetPct(p.tmax))}
+      ${meter("Convenience",convLabel(p.freq)||"—",convPct(p.freq))}
+    </div></div>`;}
+let cmpQuery="",cmpCat="All";
+const cmpSearch=document.getElementById('cmpSearch'),catfilter=document.getElementById('catfilter');
+function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function renderFilters(){
+  const list=["All",...Array.from(new Set(DATA.map(p=>p.category)))];
+  catfilter.innerHTML=list.map(c=>`<button data-c="${escHtml(c)}" class="${c===cmpCat?'on':''}">${c==="All"?"":`<span class="d" style="background:${catCol(c)}"></span>`}${escHtml(c)}</button>`).join("");
+}
+function renderPicker(){
+  const q=cmpQuery.trim().toLowerCase();
+  const items=DATA.map((p,i)=>({p,i})).filter(({p})=>
+    (cmpCat==="All"||p.category===cmpCat) &&
+    (!q || (p.name||'').toLowerCase().includes(q) || (p.nick||'').toLowerCase().includes(q) || (p.full_name||'').toLowerCase().includes(q)));
+  picker.innerHTML=items.length
+    ? items.map(({p,i})=>`<button data-i="${i}" class="${i===aSel?'aSel':''} ${i===bSel?'bSel':''}">${escHtml(p.name)}</button>`).join("")
+    : `<div class="none">No matches — try another name or category.</div>`;
+}
+function renderCompare(){
+  cols.innerHTML=miniCol(DATA[aSel])+miniCol(DATA[bSel]);
+  renderFilters();renderPicker();
+}
+picker.onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;
+  if(i===aSel||i===bSel)return; bSel=i; renderCompare();};
+catfilter.onclick=e=>{const b=e.target.closest('button');if(!b)return;cmpCat=b.dataset.c;renderPicker();
+  Array.from(catfilter.children).forEach(x=>x.classList.toggle('on',x.dataset.c===cmpCat));};
+cmpSearch.addEventListener('input',()=>{cmpQuery=cmpSearch.value;renderPicker();});
+
+renderDeck(); // instant render with fallback set
+// upgrade to the full live library from the knowledge DB
+fetch(API).then(r=>r.json()).then(d=>{
+  if(d&&Array.isArray(d.cards)&&d.cards.length){DATA=d.cards;idx=0;mode="deck";compare.classList.remove('on');cmpBtn.classList.remove('on');document.getElementById('stage').classList.remove('hide');document.getElementById('ctrl').classList.remove('hide');
+    var qp=new URLSearchParams(location.search).get('card');
+    if(qp){var ci=DATA.findIndex(function(x){return (x.name||'').toLowerCase()===qp.toLowerCase();});if(ci>=0)idx=ci;}
+    renderDeck();}
+}).catch(()=>{});
+</script>
+
+<script>
+/* ── chat popup ── */
+(function(){
+const CHAT_API="https://pmebegdwqizozfmzxpuw.supabase.co/functions/v1/peptx-ai-chat";
+const session="s"+Math.random().toString(36).slice(2,10);
+const pop=document.getElementById('chatPop'),scrim=document.getElementById('chatScrim'),
+  thread=document.getElementById('thread'),input=document.getElementById('cInput'),send=document.getElementById('cSend');
+let history=[],busy=false,started=false;
+window.chatOpen=false;
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(s){s=esc(s);s=s.replace(/_([^_]+)_/g,'<span class="disc">$1</span>');s=s.replace(/\*([^*]+)\*/g,'<b>$1</b>');s=s.replace(/\*/g,'');s=s.replace(/\n{2,}/g,'<br><br>').replace(/\n/g,'<br>');return s;}
+function add(role,html,related){
+  const m=document.createElement('div');m.className='msg '+(role==='user'?'user':'ai');
+  let inner='';
+  if(role!=='user')inner+=`<div class="who"><span>PeptX.AI</span></div>`;
+  inner+=`<div class="bubble">${html}`;
+  if(related&&related.length)inner+=`<div class="rel">${related.map(n=>`<button data-card="${esc(n)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>${esc(n)}</button>`).join('')}</div>`;
+  inner+=`</div>`;
+  m.innerHTML=inner;thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;
+}
+function typing(){const m=document.createElement('div');m.className='msg ai';m.id='cTyping';
+  m.innerHTML=`<div class="who"><span>PeptX.AI</span></div><div class="bubble"><div class="typing"><i></i><i></i><i></i></div></div>`;
+  thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;}
+const STARTERS=["What is BPC-157?","Semaglutide vs Tirzepatide?","Best-researched peptides for recovery?","What does evidence grade A mean?"];
+function welcome(){
+  add('ai',`Hi — I'm <b>PeptX.AI</b>. Ask me about any peptide: what it is, how it works, how two compare, or what the evidence shows. <span class="disc">Educational research summaries only — not medical or dosing advice.</span>`);
+  const s=document.createElement('div');s.className='msg ai';
+  s.innerHTML=`<div class="suggest">${STARTERS.map(q=>`<button>${q}</button>`).join('')}</div>`;
+  s.querySelectorAll('button').forEach(b=>b.onclick=()=>{input.value=b.textContent;ask();});
+  thread.appendChild(s);thread.scrollTop=thread.scrollHeight;
+}
+async function ask(){
+  const q=input.value.trim();if(!q||busy)return;
+  busy=true;send.disabled=true;
+  const sg=thread.querySelector('.suggest');if(sg)sg.closest('.msg').remove();
+  add('user',esc(q));input.value='';input.style.height='auto';
+  const t=typing();
+  try{
+    const r=await fetch(CHAT_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,session_id:session,history})});
+    const d=await r.json();t.remove();
+    const ans=d.answer||"I couldn't reach my research base just now — try again in a moment.";
+    add('ai',fmt(ans),d.related);
+    history.push({role:'user',content:q},{role:'assistant',content:ans});
+    if(history.length>8)history=history.slice(-8);
+  }catch(e){t.remove();add('ai',`Connection hiccup — give that another go.`);}
+  busy=false;send.disabled=input.value.trim()==='';
+}
+/* related-chip → jump to that card in the deck */
+thread.addEventListener('click',e=>{const b=e.target.closest('[data-card]');if(!b)return;
+  const name=b.dataset.card.toLowerCase();const ci=DATA.findIndex(x=>(x.name||'').toLowerCase()===name);
+  if(ci>=0){if(mode!=="deck")cmpBtn.click();idx=ci;renderDeck();}closeChat();});
+
+function openChat(){window.chatOpen=true;pop.classList.add('on');scrim.classList.add('on');pop.setAttribute('aria-hidden','false');
+  if(!started){started=true;welcome();}setTimeout(()=>input.focus(),130);}
+function closeChat(){window.chatOpen=false;pop.classList.remove('on');scrim.classList.remove('on');pop.setAttribute('aria-hidden','true');}
+document.getElementById('askBtn').onclick=()=>{window.chatOpen?closeChat():openChat();};
+document.getElementById('cpClose').onclick=closeChat;
+scrim.onclick=closeChat;
+input.addEventListener('input',()=>{send.disabled=input.value.trim()===''||busy;input.style.height='auto';input.style.height=Math.min(110,input.scrollHeight)+'px';});
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask();}});
+send.onclick=ask;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window.chatOpen)closeChat();});
+if(new URLSearchParams(location.search).get('ask'))setTimeout(openChat,260);
+})();
+</script>
+<style>
+.gate{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(3,5,10,.8);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.gate.show{display:flex}
+.gatecard{max-width:430px;width:100%;border-radius:26px;padding:30px 28px;text-align:center;background:linear-gradient(165deg,rgba(22,26,38,.96),rgba(10,12,20,.98));border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 80px -20px #000;font-family:'Satoshi',sans-serif;color:#eef1f8}
+.gatecard .glogo{width:46px;height:46px;border-radius:13px;margin:0 auto 16px;background:linear-gradient(145deg,#0a84ff,#00d4aa);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.gatecard h2{font-family:'Clash Display',sans-serif;font-weight:600;font-size:26px;letter-spacing:-.02em;margin-bottom:12px}
+.gatecard h2 b{color:#00d4aa;font-weight:600}
+.gatecard p{font-size:14px;line-height:1.55;color:#c4cbda;margin-bottom:13px}
+.gatecard p b{color:#fff}
+.gatecard a{color:#00d4aa;text-decoration:none}
+.gatecard .gbtn{margin-top:8px;width:100%;border:none;cursor:pointer;font-family:'Satoshi',sans-serif;font-weight:700;font-size:15px;color:#05070d;padding:15px;border-radius:15px;background:linear-gradient(180deg,#fff,#dfe5f0)}
+.gatecard .gbtn:active{transform:scale(.98)}
+.gatecard small{display:block;margin-top:13px;font-size:11.5px;color:#8a93a8}
+</style>
+<div class="gate" id="ageGate"><div class="gatecard">
+  <div class="glogo"></div>
+  <h2>Pept<b>X</b>.AI</h2>
+  <p>A peptide <b>research-intelligence</b> tool. Everything here is an educational summary of published research — <b>not medical, health, or dosing advice</b>, and not a substitute for a professional.</p>
+  <p>All compounds are referenced <b>for laboratory and research use only</b>.</p>
+  <button class="gbtn" id="gateOk">I'm 18 or older — Enter</button>
+  <small>By entering you accept our <a href="terms.html">Terms</a> &amp; <a href="privacy.html">Privacy Policy</a>.</small>
+</div></div>
+<script>
+(function(){var g=document.getElementById('ageGate');if(!localStorage.getItem('peptx_ack18')){g.classList.add('show');document.body.style.overflow='hidden';}
+document.getElementById('gateOk').onclick=function(){localStorage.setItem('peptx_ack18','1');g.classList.remove('show');document.body.style.overflow='';};})();
+</script>
+</body>
+</html>

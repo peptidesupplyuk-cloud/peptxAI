@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /account.html
+Disallow: /assess.html
+Disallow: /labs.html
+
+Sitemap: https://peptx.ai/sitemap.xml
