@@ -139,6 +139,7 @@ const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const sb=createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
 const redirectTo=location.origin+location.pathname;
+const APPLE_ENABLED=false; // flip to true once Apple sign-in is configured in Supabase
 
 /* ---- profile form schema (maps to public.profiles columns) ---- */
 const GROUPS=[
@@ -244,10 +245,13 @@ $("gBtn").onclick=async()=>{
   const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo,scopes:"email profile"}});
   if(error)showMsg("Google sign-in isn't enabled yet — use the email link for now.","err");
 };
-$("aBtn").onclick=async()=>{
-  const {error}=await sb.auth.signInWithOAuth({provider:"apple",options:{redirectTo,scopes:"name email"}});
-  if(error)showMsg("Apple sign-in isn't enabled yet — use the email link for now.","err");
-};
+const aBtn=$("aBtn");
+if(APPLE_ENABLED&&aBtn){
+  aBtn.onclick=async()=>{
+    const {error}=await sb.auth.signInWithOAuth({provider:"apple",options:{redirectTo,scopes:"name email"}});
+    if(error)showMsg("Apple sign-in isn't enabled yet — use the email link for now.","err");
+  };
+}else if(aBtn){aBtn.remove();}
 $("em").addEventListener("keydown",e=>{if(e.key==="Enter")$("otpBtn").click();});
 
 /* ---- profile load/save ---- */
