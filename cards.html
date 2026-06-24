@@ -107,6 +107,7 @@
   .cap b{color:var(--accent)}
   .tags{position:relative;z-index:2;margin-top:9px;display:flex;flex-wrap:wrap;gap:6px}
   .t{font-size:10.5px;font-weight:600;color:#cdd4e3;padding:5px 10px;border-radius:100px;background:rgba(255,255,255,.06);border:1px solid var(--hair2)}
+  .t.use{color:var(--accent);background:rgba(0,212,170,.1);border-color:rgba(0,212,170,.28)}
 
   .expand{position:relative;z-index:2;margin-top:14px;width:100%;border:none;cursor:pointer;
     font-family:var(--body);font-weight:700;font-size:14px;color:#05070d;padding:15px;border-radius:16px;
@@ -135,6 +136,18 @@
   .chips span{font-size:12.5px;padding:6px 11px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--hair2);color:#dde2ef}
   .disc{margin-top:22px;padding:12px 14px;border-radius:13px;background:rgba(255,255,255,.03);border:1px solid var(--hair2);font-size:11.5px;line-height:1.5;color:var(--muted)}
   .disc b{color:#c7cedd}
+  .guidelink{display:inline-flex;align-items:center;gap:7px;margin-top:14px;font-family:var(--body);font-weight:700;font-size:13px;color:var(--accent);
+    padding:9px 14px;border-radius:11px;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.28);transition:.2s}
+  .guidelink:hover{background:rgba(0,212,170,.18)}
+  .guidelink svg{width:14px;height:14px}
+  .guidelink.solid{display:flex;justify-content:center;margin-top:20px;color:#04060b;background:linear-gradient(160deg,#0a84ff,#00d4aa);border:none;box-shadow:0 10px 26px -12px #00d4aa99}
+  .factrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .factrow span{font-family:var(--mono);font-size:11px;color:#cdd4e3;padding:6px 10px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--hair2)}
+  .ref{margin-bottom:9px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--hair2)}
+  .ref .rt{font-weight:600;font-size:13.5px;color:#eef1f8;line-height:1.35}
+  .ref .rs{font-size:12.5px;color:#b9c1d2;margin-top:6px;line-height:1.45}
+  .ref .rm{font-size:11px;color:var(--muted);margin-top:8px;font-family:var(--mono)}
+  .ref .rm a{color:var(--accent);text-decoration:none}
 
   /* controls */
   .ctrl{flex:none;display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 0 calc(18px + env(safe-area-inset-bottom))}
@@ -144,9 +157,10 @@
   .nav:active{transform:scale(.92)}
   .nav svg{width:21px;height:21px}
   .dots{display:flex;gap:7px;align-items:center}
-  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:.3s;cursor:pointer}
-  .dots i.on{background:var(--ink);width:22px;border-radius:7px}
+  .dots .prog{width:130px;height:4px;border-radius:4px;background:rgba(255,255,255,.14);overflow:hidden}
+  .dots .prog i{display:block;height:100%;border-radius:4px;background:var(--ink);transition:width .35s cubic-bezier(.2,.8,.2,1)}
   .hint{text-align:center;font-size:11.5px;color:var(--muted);padding-bottom:6px;opacity:.8}
+  .hint b{color:#c7cedd;font-weight:600}.hint a{color:inherit;opacity:.7}
 
   /* compare */
   .compare{flex:1;display:none;flex-direction:column;min-height:0;padding:6px clamp(12px,4vw,22px) calc(16px + env(safe-area-inset-bottom))}
@@ -166,6 +180,14 @@
   .picker button.aSel{color:#05070d;background:var(--ink)}
   .picker button.bSel{color:var(--ink);border-color:var(--ink)}
   .swap{text-align:center;font-size:11.5px;color:var(--muted);padding:8px}
+  .slotbar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 2px 0}
+  .slotlbl{font-size:12px;color:var(--muted)}.slotlbl b{color:var(--accent)}
+  .swapb{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-weight:600;font-size:12px;color:var(--ink);padding:7px 13px;border-radius:100px;background:var(--glass);border:1px solid var(--hair2);cursor:pointer;transition:.2s;flex:none}
+  .swapb:hover{border-color:var(--hair)}.swapb svg{width:14px;height:14px}
+  .col{position:relative;cursor:pointer}
+  .col.act{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 26px 60px -34px rgba(0,0,0,.85)}
+  .slottag{position:absolute;top:11px;right:13px;font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);pointer-events:none}
+  .col.act .slottag{color:var(--accent)}
   .pickbar{flex:none;padding:13px 2px 0}
   .cmpSearch{width:100%;font-family:var(--body);font-size:13.5px;color:var(--ink);background:var(--glass);border:1px solid var(--hair2);
     border-radius:100px;padding:11px 17px;outline:none;transition:.2s;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -252,10 +274,11 @@
     <div class="dots" id="dots"></div>
     <button class="nav" id="next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
   </div>
-  <div class="hint" id="hint">Swipe or use arrows · tap Expand for the deep science · <a href="terms.html" style="color:inherit">Terms</a> · <a href="privacy.html" style="color:inherit">Privacy</a></div>
+  <div class="hint" id="hint">Swipe or use ← → · tap <b>Expand</b> for the science</div>
 
   <div class="compare" id="compare">
     <div class="cols" id="cols"></div>
+    <div class="slotbar"><span class="slotlbl" id="slotLbl"></span><button class="swapb" id="swapBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 10l-3 3 3 3M4 13h12M17 14l3-3-3-3M20 11H8"/></svg>Swap</button></div>
     <div class="pickbar">
       <input id="cmpSearch" class="cmpSearch" placeholder="Search a compound to compare…" autocomplete="off"/>
     </div>
@@ -404,6 +427,8 @@ let DATA=[
 let idx=0, mode="deck", aSel=0, bSel=1;
 const deck=document.getElementById('deck'), dots=document.getElementById('dots'), counter=document.getElementById('counter');
 
+function slugify(s){return (s||'').toLowerCase().replace(/\+/g,' plus ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+function usesOf(p){const u=[];if(p.longevity_relevance)u.push('Longevity');if(p.fitness_relevance)u.push('Fitness');if(p.health_optimisation_relevance)u.push('Health');return u;}
 function frontHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
   return `<div class="face front" style="--accent:${acc};--gcol:${g.c}">
     <div class="holo"></div>
@@ -418,34 +443,44 @@ function frontHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
       ${meter("Onset",fmtT(p.tmax),p.tmax==null?0:onsetPct(p.tmax))}
       ${meter("Convenience",convLabel(p.freq)||"—",convPct(p.freq))}
     </div>
-    ${p.effect?`<div class="cap"><b>°</b> Effect strength is relative to others in the same category.</div>`:""}
     <div class="tags">
       ${p.is_peptide===false?`<span class="t" style="color:#ffd60a;border-color:#ffd60a44;background:#ffd60a14">⚠ Non-peptide</span>`:""}
+      ${usesOf(p).map(u=>`<span class="t use">${u}</span>`).join("")}
       <span class="t">${REGSHORT[p.regulatory_status_uk]||p.regulatory_status_uk}</span>
-      <span class="t">${p.cyc?"Cycle on/off":"No cycling"}</span>
-      <span class="t">${tol(p.side_effects_common)[0]}</span>
     </div>
     <button class="expand" data-x>Expand the science
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
     </button></div>`;}
 
+function refHTML(r){const meta=[r.authors,r.year].filter(Boolean).join(", ");
+  const pmid=r.pubmed_id?String(r.pubmed_id).replace(/\D/g,""):"";
+  const url=r.doi?("https://doi.org/"+r.doi):(pmid?("https://pubmed.ncbi.nlm.nih.gov/"+pmid+"/"):null);
+  return `<div class="ref"><div class="rt">${r.title||"Reference"}</div>${r.one_line_summary?`<div class="rs">${r.one_line_summary}</div>`:""}<div class="rm">${meta}${url?`${meta?" · ":""}<a href="${url}" target="_blank" rel="noopener">source ↗</a>`:""}</div></div>`;}
 function backHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade],rr=rel(p);
+  const refs=p.key_research_refs||[];
+  const facts=[(p.administration&&p.administration.length)?p.administration.join("/"):"",p.freq,p.dose_range,p.cycle_duration?("Cycle: "+p.cycle_duration):""].filter(Boolean);
+  const reg=[["UK",p.regulatory_status_uk],["US",p.regulatory_status_us],["EU",p.regulatory_status_eu]].filter(r=>r[1]);
   return `<div class="face back" style="--accent:${acc}"><div class="inner">
     <div class="bhead"><div><h2>${p.name}</h2><div class="fn">${p.full_name}</div></div><button class="flipback" data-b>✕</button></div>
-    ${p.is_peptide===false?`<div class="disc" style="margin-top:16px;border-color:#ffd60a33"><b>⚠ ${p.compound_class}.</b> Grouped with peptides here for research convenience — it is not technically a peptide.</div>`:""}
+    <a class="guidelink" href="learn/${slugify(p.name)}.html">Read the full ${p.name} guide<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    ${p.is_peptide===false?`<div class="disc" style="margin-top:14px;border-color:#ffd60a33"><b>⚠ ${p.compound_class}.</b> Grouped with peptides here for research convenience — it is not technically a peptide.</div>`:""}
+    ${facts.length?`<div class="factrow">${facts.map(f=>`<span>${f}</span>`).join("")}</div>`:""}
     <div class="sec"><p>${p.description}</p></div>
     <div class="sec"><h3>How it works</h3><p>${p.mechanism_of_action}</p></div>
     <div class="sec"><h3>What the research describes</h3><ul class="efx">${p.primary_effects.map(e=>`<li>${e}</li>`).join("")}</ul></div>
+    ${rr.length?`<div class="sec"><h3>Use areas</h3><ul class="efx">${rr.map(r=>`<li><b style="color:#fff">${r[0]}.</b>&nbsp;${r[1]}</li>`).join("")}</ul></div>`:""}
     <div class="sec"><h3>Pharmacokinetics</h3><div class="kv">
       <div><span>Half-life</span><b>${hl(p.half_life_hours)}</b></div>
-      <div><span>Route</span><b>${p.absorption_route.replace(/^./,c=>c.toUpperCase())}</b></div>
-      <div><span>Evidence</span><b>${p.evidence_grade} · ${g.l}</b></div>
-      <div><span>Status (UK)</span><b style="font-size:12px">${REG[p.regulatory_status_uk]||p.regulatory_status_uk}</b></div></div></div>
+      <div><span>Onset</span><b>${fmtT(p.tmax)}</b></div>
+      <div><span>Route</span><b style="font-size:13px">${(p.administration&&p.administration.length?p.administration.join("/"):p.absorption_route.replace(/^./,c=>c.toUpperCase()))}</b></div>
+      <div><span>Evidence</span><b>${p.evidence_grade} · ${g.l}</b></div></div></div>
+    ${reg.length?`<div class="sec"><h3>Regulatory status</h3><div class="chips">${reg.map(r=>`<span><b style="color:#cfd6e6">${r[0]}</b> · ${REG[r[1]]||r[1]}</span>`).join("")}</div>${p.regulatory_note?`<p style="margin-top:8px;font-size:12.5px;color:var(--muted)">${p.regulatory_note}</p>`:""}</div>`:""}
     <div class="sec"><h3>Evidence summary</h3><p>${p.evidence_summary}</p></div>
-    ${rr.length?`<div class="sec"><h3>Research relevance</h3><ul class="efx">${rr.map(r=>`<li><b style="color:#fff">${r[0]}.</b>&nbsp;${r[1]}</li>`).join("")}</ul></div>`:""}
+    ${refs.length?`<div class="sec"><h3>Research references</h3>${refs.map(refHTML).join("")}</div>`:""}
     <div class="sec"><h3>Commonly noted in studies</h3><div class="chips">${p.side_effects_common.map(s=>`<span>${s}</span>`).join("")}</div></div>
-    <div class="sec"><h3>Researched alongside</h3><div class="chips">${p.synergistic_compounds.map(s=>`<span>+ ${s}</span>`).join("")}</div></div>
-    <div class="disc"><b>Research use only.</b> Educational summary of published research — not medical, health or dosing advice.</div>
+    ${(p.synergistic_compounds&&p.synergistic_compounds.length)?`<div class="sec"><h3>Researched alongside</h3><div class="chips">${p.synergistic_compounds.map(s=>`<span>+ ${s}</span>`).join("")}</div></div>`:""}
+    <a class="guidelink solid" href="learn/${slugify(p.name)}.html">Open the full research guide<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+    <div class="disc"><b>Research use only.</b> Educational summary of published research — not medical, health or dosing advice. <a href="terms.html" style="color:var(--accent)">Terms</a> · <a href="privacy.html" style="color:var(--accent)">Privacy</a></div>
   </div></div>`;}
 
 function renderDeck(){
@@ -454,7 +489,7 @@ function renderDeck(){
     `<div class="card back-peek">${frontHTML(nextP)}</div>
      <div class="card active" id="top"><div class="flipper" id="flip">${frontHTML(DATA[idx])}${backHTML(DATA[idx])}</div></div>`;
   counter.innerHTML=`<b>${idx+1}</b> / ${DATA.length} &nbsp;·&nbsp; ${DATA[idx].category}`;
-  dots.innerHTML=DATA.map((_,i)=>`<i class="${i===idx?'on':''}" data-i="${i}"></i>`).join("");
+  dots.innerHTML=`<div class="prog"><i style="width:${Math.round((idx+1)/DATA.length*100)}%"></i></div>`;
   bindTop();
 }
 function isFlipped(){const f=document.getElementById('flip');return f&&f.classList.contains('flip');}
@@ -518,11 +553,12 @@ cmpBtn.onclick=()=>{mode=mode==="deck"?"compare":"deck";
   document.getElementById('ctrl').classList.toggle('hide',mode==="compare");
   document.getElementById('hint').style.display=mode==="compare"?"none":"";
   compare.classList.toggle('on',mode==="compare");
-  if(mode==="compare"){aSel=idx;bSel=(idx+1)%DATA.length;renderCompare();}};
-function miniCol(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
-  return `<div class="col" style="--accent:${acc};--gcol:${g.c}">
+  if(mode==="compare"){aSel=idx;bSel=(idx+1)%DATA.length;actSlot="b";renderCompare();}};
+function miniCol(p,slot){const acc=catCol(p.category),g=GR[p.evidence_grade];
+  return `<div class="col" data-slot="${slot}" style="--accent:${acc};--gcol:${g.c}">
+    <div class="slottag">${slot.toUpperCase()} · tap to change</div>
     <div class="ftop"><span class="cat"><span class="d"></span>${p.category}</span><span class="grade">${p.evidence_grade}<small>${g.l}</small></span></div>
-    <div class="hero" style="margin-top:30px"><div class="nick">${p.name}</div>${p.nick?`<div class="real" style="margin-top:6px"><b style="color:var(--accent)">${p.nick}</b></div>`:""}</div>
+    <div class="hero" style="margin-top:18px"><div class="nick">${p.name}</div>${p.nick?`<div class="real" style="margin-top:6px"><b style="color:var(--accent)">${p.nick}</b></div>`:""}</div>
     <div class="tldr">${p.tldr||trunc(p.description,90)}</div>
     <div class="meters">
       ${p.effect?meter("Effect strength",p.effect.v,p.effect.s,p.effect.q):""}
@@ -547,12 +583,23 @@ function renderPicker(){
     ? items.map(({p,i})=>`<button data-i="${i}" class="${i===aSel?'aSel':''} ${i===bSel?'bSel':''}">${escHtml(p.name)}</button>`).join("")
     : `<div class="none">No matches — try another name or category.</div>`;
 }
-function renderCompare(){
-  cols.innerHTML=miniCol(DATA[aSel])+miniCol(DATA[bSel]);
-  renderFilters();renderPicker();
+let actSlot="b"; // which card the picker edits (default: the second one)
+function updateSlotUI(){
+  const a=cols.querySelector('[data-slot="a"]'),b=cols.querySelector('[data-slot="b"]');
+  if(a)a.classList.toggle('act',actSlot==="a");
+  if(b)b.classList.toggle('act',actSlot==="b");
+  const name=(actSlot==="a"?DATA[aSel]:DATA[bSel]);
+  document.getElementById('slotLbl').innerHTML=`Changing card <b>${actSlot.toUpperCase()}</b>${name?` (${escHtml(name.name)})`:""} — pick below`;
 }
+function renderCompare(){
+  cols.innerHTML=miniCol(DATA[aSel],"a")+miniCol(DATA[bSel],"b");
+  renderFilters();renderPicker();updateSlotUI();
+}
+cols.onclick=e=>{const c=e.target.closest('[data-slot]');if(!c)return;actSlot=c.dataset.slot;updateSlotUI();};
 picker.onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;
-  if(i===aSel||i===bSel)return; bSel=i; renderCompare();};
+  const other=actSlot==="a"?bSel:aSel; if(i===other)return; // don't pick the same on both sides
+  if(actSlot==="a")aSel=i;else bSel=i; renderCompare();};
+document.getElementById('swapBtn').onclick=()=>{const t=aSel;aSel=bSel;bSel=t;renderCompare();};
 catfilter.onclick=e=>{const b=e.target.closest('button');if(!b)return;cmpCat=b.dataset.c;renderPicker();
   Array.from(catfilter.children).forEach(x=>x.classList.toggle('on',x.dataset.c===cmpCat));};
 cmpSearch.addEventListener('input',()=>{cmpQuery=cmpSearch.value;renderPicker();});
