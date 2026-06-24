@@ -98,6 +98,7 @@ function page(p, all){
     <p class="lede">${esc(p.tldr||p.description)}</p>
     <div class="herobtns">
       <a class="btn accent" href="/cards.html?card=${encodeURIComponent(p.name)}">Open the card</a>
+      <a class="btn ghost" href="/calculator.html?c=${encodeURIComponent(p.name)}">Dose calculator</a>
       <a class="btn ghost" href="/cards.html?ask=1">Ask the AI about ${esc(p.name)}</a>
       <a class="btn ghost" href="/account.html">+ Add to my profile</a>
     </div>
@@ -149,7 +150,7 @@ function page(p, all){
 
 <footer class="site"><div class="wrap fin">
   <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
-  <div class="flinks"><a href="/cards.html">Compounds</a><a href="/learn/">All guides</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
+  <div class="flinks"><a href="/cards.html">Compounds</a><a href="/learn/">All guides</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
   <span class="ruo">⚠ Research use only</span>
 </div></footer>
 </body>
@@ -184,7 +185,7 @@ function indexPage(all){
   ${sections}
   <div class="disc"><b>Research use only.</b> Educational summaries of published research — not medical advice.</div>
 </main>
-<footer class="site"><div class="wrap fin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="flinks"><a href="/cards.html">Compounds</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div><span class="ruo">⚠ Research use only</span></div></footer>
+<footer class="site"><div class="wrap fin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="flinks"><a href="/cards.html">Compounds</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div><span class="ruo">⚠ Research use only</span></div></footer>
 </body></html>`;
 }
 
@@ -306,7 +307,7 @@ footer.site{position:relative;z-index:2;border-top:1px solid var(--hair2);margin
 
   // sitemap
   const urls=[
-    ["/","1.0","weekly"],["/cards.html","0.9","weekly"],["/learn/","0.9","weekly"],
+    ["/","1.0","weekly"],["/cards.html","0.9","weekly"],["/learn/","0.9","weekly"],["/calculator.html","0.9","weekly"],
     ["/chat.html","0.6","monthly"],["/terms.html","0.3","yearly"],["/privacy.html","0.3","yearly"],
     ...all.map(p=>[`/learn/${slugify(p.name)}`,"0.8","monthly"])
   ];
