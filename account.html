@@ -3,66 +3,282 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>Sign in · PeptX.AI</title>
+<title>Your Account · PeptX.AI</title>
 <meta name="description" content="Sign in to PeptX.AI to save compounds, run a health assessment, and analyse your bloods and DNA privately."/>
 <meta name="robots" content="noindex,follow"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a84ff'/%3E%3Cstop offset='1' stop-color='%2300d4aa'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://pmebegdwqizozfmzxpuw.supabase.co" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#04060b;--ink:#f4f6fc;--muted:#9aa3b6;--accent:#00d4aa;--glass:rgba(255,255,255,.05);--glass2:rgba(255,255,255,.09);--hair:rgba(255,255,255,.13);--hair2:rgba(255,255,255,.07);--display:'Clash Display',sans-serif;--body:'Satoshi',sans-serif}
+  :root{--bg:#04060b;--ink:#f4f6fc;--muted:#9aa3b6;--accent:#00d4aa;--blue:#0a84ff;--glass:rgba(255,255,255,.05);--glass2:rgba(255,255,255,.09);--hair:rgba(255,255,255,.13);--hair2:rgba(255,255,255,.07);--display:'Clash Display',sans-serif;--body:'Satoshi',sans-serif;--mono:'JetBrains Mono',monospace}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--body);color:var(--ink);background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:26px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{font-family:var(--body);color:var(--ink);background:var(--bg);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   .scene{position:fixed;inset:0;z-index:0;background:radial-gradient(120% 80% at 50% -10%,#11151f,#070a11 45%,#04060b 100%)}
-  .smoke{position:fixed;border-radius:50%;filter:blur(70px);mix-blend-mode:screen;opacity:.45;z-index:0}
-  .s1{width:46vw;height:46vw;left:-10vw;top:-8vw;background:radial-gradient(circle,#2f6bff55,transparent 62%)}
-  .s2{width:42vw;height:42vw;right:-8vw;bottom:-10vw;background:radial-gradient(circle,#00d4aa33,transparent 64%)}
+  .smoke{position:fixed;border-radius:50%;filter:blur(70px);mix-blend-mode:screen;opacity:.4;z-index:0}
+  .s1{width:46vw;height:46vw;left:-12vw;top:-8vw;background:radial-gradient(circle,#2f6bff55,transparent 62%)}
+  .s2{width:44vw;height:44vw;right:-10vw;top:34vh;background:radial-gradient(circle,#00d4aa2a,transparent 64%)}
   a{color:var(--accent);text-decoration:none}
-  .card{position:relative;z-index:2;width:100%;max-width:440px;border-radius:26px;padding:clamp(28px,5vw,40px);text-align:center;
-    background:linear-gradient(165deg,var(--glass2),var(--glass));border:1px solid var(--hair);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);box-shadow:0 40px 90px -30px #000}
-  .brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:20px;margin-bottom:8px}
-  .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#0a84ff,#00d4aa);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
-  .logo::after{content:"";position:absolute;inset:9px;border:2px solid #fff;border-right-color:transparent;border-bottom-color:transparent;border-radius:4px;transform:rotate(45deg)}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(4,6,11,.8),rgba(4,6,11,.3));border-bottom:1px solid var(--hair2)}
+  .navin{max-width:1080px;margin:0 auto;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,5vw,36px)}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:18px;color:var(--ink)}
+  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0a84ff,#00d4aa);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+  .logo::after{content:"";position:absolute;inset:8px;border:2px solid #fff;border-right-color:transparent;border-bottom-color:transparent;border-radius:4px;transform:rotate(45deg)}
   .brand i{font-style:normal;color:var(--accent)}
-  h1{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.02em;margin:18px 0 8px}
-  .sub{color:#bcc4d4;font-size:14.5px;line-height:1.55;margin-bottom:22px}
-  .field{display:flex;flex-direction:column;gap:10px;text-align:left}
+  .navr{display:flex;align-items:center;gap:12px}
+  .navr .who{font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+  .lk{font-weight:600;font-size:13.5px;color:var(--ink);padding:9px 14px;border-radius:11px;border:1px solid var(--hair2);background:var(--glass);cursor:pointer}
+  .lk:hover{border-color:var(--hair)}
+  .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:clamp(28px,5vw,52px) clamp(18px,5vw,36px) 90px}
+
+  /* auth view */
+  .authwrap{min-height:72vh;display:flex;align-items:center;justify-content:center}
+  .authcard{width:100%;max-width:430px;border-radius:24px;padding:clamp(26px,5vw,38px);text-align:center;background:linear-gradient(165deg,var(--glass2),var(--glass));border:1px solid var(--hair);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);box-shadow:0 40px 90px -30px #000}
+  .authcard h1{font-family:var(--display);font-weight:600;font-size:27px;letter-spacing:-.02em;margin:6px 0 8px}
+  .authcard .sub{color:#bcc4d4;font-size:14.5px;line-height:1.55;margin-bottom:24px}
+  .field{text-align:left;display:flex;flex-direction:column;gap:8px}
   label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em}
-  input{width:100%;font-family:var(--body);font-size:15px;color:var(--ink);background:var(--glass);border:1px solid var(--hair);border-radius:13px;padding:14px 16px;outline:none}
-  input:focus{border-color:var(--accent)}
-  input:disabled{opacity:.55}
-  .btn{width:100%;border:none;cursor:not-allowed;font-family:var(--body);font-weight:700;font-size:15px;padding:15px;border-radius:14px;margin-top:14px;color:#03110d;background:linear-gradient(160deg,#0a84ff,#00d4aa);opacity:.65}
-  .gbtn{width:100%;cursor:not-allowed;font-weight:700;font-size:14.5px;padding:14px;border-radius:14px;margin-top:11px;color:var(--ink);background:var(--glass);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;gap:10px;opacity:.7}
-  .soon{display:inline-flex;align-items:center;gap:8px;font-family:'Clash Display';font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#ffd60a;padding:7px 14px;border-radius:100px;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.28);margin-bottom:20px}
-  .unlocks{text-align:left;margin:22px 0 6px;display:flex;flex-direction:column;gap:11px}
-  .unlocks div{display:flex;gap:11px;font-size:13.5px;color:#cdd4e3;align-items:flex-start}
-  .ck{flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;background:rgba(0,212,170,.15);border:1px solid rgba(0,212,170,.3);color:var(--accent);margin-top:1px}
-  .ck svg{width:12px;height:12px}
-  .back{display:inline-block;margin-top:22px;font-weight:600;font-size:14px}
+  input,select,textarea{width:100%;font-family:var(--body);font-size:15px;color:var(--ink);background:var(--glass);border:1px solid var(--hair);border-radius:12px;padding:13px 15px;outline:none;transition:.18s}
+  input:focus,select:focus,textarea:focus{border-color:var(--accent);background:var(--glass2)}
+  select option{background:#0b0f18}
+  textarea{resize:vertical;min-height:74px;line-height:1.5}
+  .btn{width:100%;border:none;cursor:pointer;font-family:var(--body);font-weight:700;font-size:15px;padding:14px;border-radius:13px;transition:transform .15s,box-shadow .2s,opacity .2s}
+  .btn:active{transform:scale(.98)}
+  .btn.accent{color:#03110d;background:linear-gradient(160deg,#0a84ff,#00d4aa);margin-top:14px;box-shadow:0 12px 28px -12px #00d4aa99}
+  .btn[disabled]{opacity:.55;cursor:default}
+  .gbtn{width:100%;cursor:pointer;font-weight:700;font-size:14.5px;padding:13px;border-radius:13px;margin-top:11px;color:var(--ink);background:var(--glass);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s}
+  .gbtn:hover{border-color:var(--hair2);background:var(--glass2)}
+  .sep{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:18px 0 4px}
+  .sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--hair2)}
+  .msg{margin-top:16px;font-size:13.5px;line-height:1.5;padding:13px 15px;border-radius:12px;display:none}
+  .msg.ok{display:block;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);color:#bfeee2}
+  .msg.err{display:block;background:rgba(255,69,58,.1);border:1px solid rgba(255,69,58,.3);color:#ffc7c2}
   .legal{margin-top:18px;font-size:11.5px;color:var(--muted)}
+
+  /* profile view */
+  .phead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:8px}
+  .phead h1{font-family:var(--display);font-weight:600;font-size:clamp(26px,5vw,38px);letter-spacing:-.02em}
+  .phead p{color:var(--muted);font-size:14px;margin-top:6px}
+  .completion{font-family:var(--mono);font-size:12px;color:var(--accent)}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  .pcard{border-radius:20px;padding:22px 22px 6px;background:linear-gradient(165deg,var(--glass2),var(--glass));border:1px solid var(--hair);backdrop-filter:blur(12px)}
+  .pcard.full{grid-column:1/-1}
+  .pcard h3{font-family:var(--display);font-weight:600;font-size:16px;display:flex;align-items:center;gap:9px;margin-bottom:16px}
+  .pcard h3 .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:13px 14px;margin-bottom:16px}
+  .row .f1{grid-column:1/-1}
+  .fg{display:flex;flex-direction:column;gap:7px}
+  .fg .hint{font-size:11px;color:var(--muted)}
+  .check{display:flex;align-items:center;gap:11px;padding:11px 0;cursor:pointer}
+  .check input{width:auto;accent-color:var(--accent);width:18px;height:18px}
+  .check span{font-size:14px}
+  @media(max-width:760px){.cards{grid-template-columns:1fr}.row{grid-template-columns:1fr}}
+  .savebar{position:sticky;bottom:0;z-index:5;margin-top:22px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+    padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,rgba(8,11,18,.7),rgba(8,11,18,.92));border:1px solid var(--hair);backdrop-filter:blur(18px)}
+  .savebar .st{font-size:13px;color:var(--muted)}
+  .savebar .st b{color:var(--accent)}
+  .savebar button{width:auto;padding:13px 26px;margin:0}
+  .ruo{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:100px;background:rgba(255,214,10,.07);border:1px solid rgba(255,214,10,.22);color:#e9d27a;font-size:12px;font-weight:600;margin-top:24px}
+  .loading{text-align:center;color:var(--muted);padding:60px 0;font-family:var(--mono);font-size:13px}
+  .hidden{display:none!important}
 </style>
 </head>
 <body>
 <div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
-<div class="card">
-  <span class="brand"><span class="logo"></span>Pept<i>X</i>.AI</span>
-  <div></div>
-  <h1>Create your profile</h1>
-  <p class="sub">One private account for everything personal in PeptX.AI — saved compounds, your assessment, and your bloods &amp; DNA.</p>
-  <span class="soon">● Accounts launching shortly</span>
-  <div class="field">
-    <label for="em">Email</label>
-    <input id="em" type="email" placeholder="you@email.com" disabled/>
+<nav><div class="navin">
+  <a class="brand" href="index.html"><span class="logo"></span>Pept<i>X</i>.AI</a>
+  <div class="navr" id="navr"><a class="lk" href="cards.html">Explore</a></div>
+</div></nav>
+
+<div class="wrap">
+  <div class="loading" id="boot">Connecting…</div>
+
+  <!-- AUTH -->
+  <div class="authwrap hidden" id="authView">
+    <div class="authcard">
+      <span class="brand" style="justify-content:center"><span class="logo"></span>Pept<i>X</i>.AI</span>
+      <h1>Sign in or create your profile</h1>
+      <p class="sub">One private account for everything personal — saved compounds, your assessment, and your bloods &amp; DNA. No password; we email you a secure link.</p>
+      <div class="field">
+        <label for="em">Email</label>
+        <input id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com"/>
+      </div>
+      <button class="btn accent" id="otpBtn">Email me a magic link</button>
+      <div class="sep">or</div>
+      <button class="gbtn" id="gBtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 5.1 29.5 3 24 3 16 3 9.1 7.6 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 36 26.7 37 24 37c-5.3 0-9.7-3.6-11.3-8.4l-6.5 5C9.3 40.5 16.1 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C39.9 36.7 45 31 45 24c0-1.2-.1-2.3-.4-3.5z"/></svg>Continue with Google</button>
+      <div class="msg" id="authMsg"></div>
+      <div class="legal"><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · Research use only</div>
+    </div>
   </div>
-  <button class="btn" disabled>Email me a magic link</button>
-  <button class="gbtn" disabled><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 5.1 29.5 3 24 3 16 3 9.1 7.6 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 36 26.7 37 24 37c-5.3 0-9.7-3.6-11.3-8.4l-6.5 5C9.3 40.5 16.1 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C39.9 36.7 45 31 45 24c0-1.2-.1-2.3-.4-3.5z"/></svg>Continue with Google</button>
-  <div class="unlocks">
-    <div><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Save &amp; track the compounds you're researching</div>
-    <div><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Run the card-by-card health assessment</div>
-    <div><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Upload bloods &amp; DNA for a private, research-grounded read</div>
+
+  <!-- PROFILE -->
+  <div class="hidden" id="profileView">
+    <div class="phead">
+      <div>
+        <h1>Your profile</h1>
+        <p id="pSubtitle">The more you tell PeptX.AI, the sharper your assessment and lab reads.</p>
+      </div>
+      <div class="completion" id="completion"></div>
+    </div>
+    <div class="cards" id="formCards"></div>
+    <div class="savebar">
+      <span class="st" id="saveSt">All your data stays private to your account.</span>
+      <button class="btn accent" id="saveBtn">Save profile</button>
+    </div>
+    <div class="ruo">⚠ Educational research tool · not medical advice · research use only</div>
   </div>
-  <a class="back" href="cards.html">← Explore the index meanwhile</a>
-  <div class="legal"><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · Research use only</div>
 </div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SB_URL="https://pmebegdwqizozfmzxpuw.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtZWJlZ2R3cWl6b3pmbXp4cHV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MzEsImV4cCI6MjA4OTk2MDYzMX0.B3z3hxwR7RBaPx2Q8S4Bp1mpQyaKifAHry7_z2RjiZI";
+const sb=createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const redirectTo=location.origin+location.pathname;
+
+/* ---- profile form schema (maps to public.profiles columns) ---- */
+const GROUPS=[
+ {t:"Identity",fields:[
+   {k:"first_name",l:"First name",type:"text"},
+   {k:"last_name",l:"Last name",type:"text"},
+   {k:"username",l:"Display name",type:"text"},
+   {k:"country",l:"Country",type:"text"},
+ ]},
+ {t:"Body & vitals",fields:[
+   {k:"age",l:"Age",type:"number"},
+   {k:"gender",l:"Sex",type:"select",opts:["","Male","Female","Other","Prefer not to say"]},
+   {k:"height_cm",l:"Height (cm)",type:"number"},
+   {k:"weight_kg",l:"Weight (kg)",type:"number"},
+   {k:"bp_systolic",l:"BP systolic",type:"number"},
+   {k:"bp_diastolic",l:"BP diastolic",type:"number"},
+ ]},
+ {t:"Lifestyle",fields:[
+   {k:"activity_level",l:"Activity level",type:"select",opts:["","Sedentary","Lightly active","Moderately active","Very active","Athlete"]},
+   {k:"exercise_type",l:"Training style",type:"text",hint:"e.g. resistance + cardio"},
+   {k:"sleep_quality",l:"Sleep quality",type:"select",opts:["","Poor","Fair","Good","Excellent"]},
+   {k:"stress_level",l:"Stress level",type:"select",opts:["","Low","Moderate","High","Severe"]},
+ ]},
+ {t:"Goals & approach",fields:[
+   {k:"primary_health_goal",l:"Primary goal",type:"select",opts:["","Longevity & healthspan","Fat loss","Muscle & performance","Recovery & injury","Cognition & focus","Sleep","Hormonal health","Skin & anti-aging","General optimisation"]},
+   {k:"risk_tolerance",l:"Risk approach",type:"select",opts:["","Conservative","Balanced","Aggressive"]},
+   {k:"research_goal",l:"What are you researching right now?",type:"text",full:true},
+   {k:"emerging_compounds_preference",l:"Open to emerging / experimental compounds",type:"check"},
+ ]},
+ {t:"Experience & current stack",full:true,fields:[
+   {k:"peptide_experience",l:"Peptide experience",type:"select",opts:["","None","Beginner","Intermediate","Advanced"]},
+   {k:"experience_level",l:"Biohacking experience",type:"select",opts:["","New","Some","Experienced"]},
+   {k:"current_compounds",l:"Current peptides / compounds",type:"text",full:true,hint:"free text"},
+   {k:"current_supplements",l:"Current supplements",type:"array",full:true,hint:"comma-separated"},
+   {k:"current_medications",l:"Current medications",type:"array",full:true,hint:"comma-separated"},
+   {k:"medical_conditions",l:"Medical conditions",type:"array",full:true,hint:"comma-separated"},
+   {k:"health_frustration",l:"Biggest health frustration",type:"textarea",full:true},
+ ]},
+ {t:"Data you have",fields:[
+   {k:"has_bloodwork",l:"Recent bloodwork?",type:"select",opts:["","No","Yes — recent","Yes — older"]},
+   {k:"has_dna_data",l:"DNA data?",type:"select",opts:["","No","Yes"]},
+ ]},
+ {t:"Notifications",fields:[
+   {k:"notify_email",l:"Email me research updates",type:"check"},
+   {k:"notify_whatsapp",l:"WhatsApp me (optional)",type:"check"},
+   {k:"whatsapp_number",l:"WhatsApp number",type:"text",full:true,hint:"include country code"},
+ ]},
+];
+const ALLK=GROUPS.flatMap(g=>g.fields);
+
+function fieldHTML(f){
+  const id="f_"+f.k;
+  if(f.type==="check") return `<label class="check f1"><input type="checkbox" id="${id}"/><span>${f.l}</span></label>`;
+  let ctrl;
+  if(f.type==="select") ctrl=`<select id="${id}">${f.opts.map(o=>`<option value="${o}">${o||"— select —"}</option>`).join("")}</select>`;
+  else if(f.type==="textarea") ctrl=`<textarea id="${id}" placeholder=""></textarea>`;
+  else{const it=f.type==="number"?"number":"text";ctrl=`<input id="${id}" type="${it}" ${f.type==="number"?'inputmode="decimal"':''}/>`;}
+  return `<div class="fg ${f.full?'f1':''}"><label for="${id}">${f.l}</label>${ctrl}${f.hint?`<span class="hint">${f.hint}</span>`:""}</div>`;
+}
+function renderForm(){
+  $("formCards").innerHTML=GROUPS.map(g=>{
+    const rows=g.fields.map(fieldHTML).join("");
+    return `<div class="pcard ${g.full?'full':''}"><h3><span class="dot"></span>${g.t}</h3><div class="row">${rows}</div></div>`;
+  }).join("");
+}
+function fillForm(p){
+  p=p||{};
+  for(const f of ALLK){const el=$("f_"+f.k);if(!el)continue;const v=p[f.k];
+    if(f.type==="check")el.checked=!!v;
+    else if(f.type==="array")el.value=Array.isArray(v)?v.join(", "):(v||"");
+    else el.value=(v===null||v===undefined)?"":v;}
+  updateCompletion();
+}
+function collect(uid){
+  const o={user_id:uid,updated_at:new Date().toISOString()};
+  for(const f of ALLK){const el=$("f_"+f.k);if(!el)continue;
+    if(f.type==="check")o[f.k]=el.checked;
+    else if(f.type==="number"){const n=parseFloat(el.value);o[f.k]=isNaN(n)?null:n;}
+    else if(f.type==="array"){const a=el.value.split(",").map(s=>s.trim()).filter(Boolean);o[f.k]=a.length?a:null;}
+    else o[f.k]=el.value.trim()||null;}
+  return o;
+}
+function updateCompletion(){
+  let filled=0;for(const f of ALLK){const el=$("f_"+f.k);if(!el)continue;
+    if(f.type==="check")continue;
+    if((el.value||"").toString().trim())filled++;}
+  const total=ALLK.filter(f=>f.type!=="check").length;
+  $("completion").textContent=`Profile ${Math.round(filled/total*100)}% complete`;
+}
+
+/* ---- auth actions ---- */
+function showMsg(t,kind){const m=$("authMsg");m.textContent=t;m.className="msg "+kind;}
+$("otpBtn").onclick=async()=>{
+  const email=$("em").value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){showMsg("Enter a valid email address.","err");return;}
+  $("otpBtn").disabled=true;$("otpBtn").textContent="Sending…";
+  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:redirectTo}});
+  $("otpBtn").disabled=false;$("otpBtn").textContent="Email me a magic link";
+  if(error)showMsg(error.message||"Couldn't send the link. Try again.","err");
+  else showMsg("✉️ Check your inbox — tap the link to sign in. (Check spam too.)","ok");
+};
+$("gBtn").onclick=async()=>{
+  const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo}});
+  if(error)showMsg("Google sign-in isn't enabled yet — use the email link for now.","err");
+};
+$("em").addEventListener("keydown",e=>{if(e.key==="Enter")$("otpBtn").click();});
+
+/* ---- profile load/save ---- */
+let CURRENT=null;
+async function loadProfile(uid){
+  const {data,error}=await sb.from("profiles").select("*").eq("user_id",uid).maybeSingle();
+  if(error&&error.code!=="PGRST116")console.warn(error);
+  fillForm(data||{});
+}
+$("saveBtn").onclick=async()=>{
+  if(!CURRENT)return;
+  const btn=$("saveBtn");btn.disabled=true;btn.textContent="Saving…";$("saveSt").textContent="";
+  const payload=collect(CURRENT.id);
+  const {error}=await sb.from("profiles").upsert(payload,{onConflict:"user_id"});
+  btn.disabled=false;btn.textContent="Save profile";
+  if(error){$("saveSt").innerHTML="⚠ "+(error.message||"Save failed");}
+  else{$("saveSt").innerHTML="<b>✓ Saved.</b> Your profile is up to date.";updateCompletion();}
+};
+
+/* ---- routing ---- */
+function showAuth(){$("boot").classList.add("hidden");$("profileView").classList.add("hidden");$("authView").classList.remove("hidden");}
+function showProfile(user){
+  $("boot").classList.add("hidden");$("authView").classList.add("hidden");$("profileView").classList.remove("hidden");
+  $("navr").innerHTML=`<span class="who">${user.email||""}</span><button class="lk" id="signout">Sign out</button>`;
+  $("signout").onclick=async()=>{await sb.auth.signOut();location.reload();};
+  renderForm();
+  $("formCards").addEventListener("input",updateCompletion,{once:false});
+  loadProfile(user.id);
+}
+async function route(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session&&session.user){CURRENT=session.user;showProfile(session.user);}
+  else showAuth();
+}
+sb.auth.onAuthStateChange((_e,session)=>{
+  if(session&&session.user){CURRENT=session.user;showProfile(session.user);}
+});
+route();
+</script>
 </body>
 </html>

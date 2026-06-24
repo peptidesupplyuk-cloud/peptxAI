@@ -379,6 +379,13 @@ fetch(API).then(r=>r.json()).then(d=>{
 // "Ask AI" entry points open the chat popup on the cards page
 ['heroAsk','navAsk','pillAsk','footAsk'].forEach(id=>{const el=document.getElementById(id);if(el)el.setAttribute('href','cards.html?ask=1');});
 
+// reflect signed-in state in the nav (reads supabase session flag from storage)
+try{
+  let signedIn=false;
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('sb-')&&k.endsWith('-auth-token')){const v=localStorage.getItem(k);if(v&&v.length>20){signedIn=true;break;}}}
+  if(signedIn){const s=document.querySelector('.navlinks .ghost');if(s){s.textContent='Account';}}
+}catch(e){}
+
 // scroll reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
