@@ -48,6 +48,8 @@
   .btn[disabled]{opacity:.55;cursor:default}
   .gbtn{width:100%;cursor:pointer;font-weight:700;font-size:14.5px;padding:13px;border-radius:13px;margin-top:11px;color:var(--ink);background:var(--glass);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s}
   .gbtn:hover{border-color:var(--hair2);background:var(--glass2)}
+  .abtn{background:#000;border-color:#000;color:#fff}
+  .abtn:hover{background:#111;border-color:#222}
   .sep{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:18px 0 4px}
   .sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--hair2)}
   .msg{margin-top:16px;font-size:13.5px;line-height:1.5;padding:13px 15px;border-radius:12px;display:none}
@@ -106,6 +108,7 @@
       <button class="btn accent" id="otpBtn">Email me a magic link</button>
       <div class="sep">or</div>
       <button class="gbtn" id="gBtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.5 5.1 29.5 3 24 3 16 3 9.1 7.6 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 36 26.7 37 24 37c-5.3 0-9.7-3.6-11.3-8.4l-6.5 5C9.3 40.5 16.1 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C39.9 36.7 45 31 45 24c0-1.2-.1-2.3-.4-3.5z"/></svg>Continue with Google</button>
+      <button class="gbtn abtn" id="aBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M17.05 12.04c-.03-2.6 2.13-3.85 2.22-3.91-1.21-1.77-3.1-2.01-3.77-2.04-1.6-.16-3.13.94-3.94.94-.81 0-2.07-.92-3.4-.89-1.75.03-3.36 1.02-4.26 2.58-1.82 3.16-.46 7.84 1.3 10.41.86 1.26 1.88 2.67 3.22 2.62 1.29-.05 1.78-.83 3.34-.83 1.56 0 2 .83 3.37.81 1.39-.03 2.27-1.28 3.12-2.55.98-1.46 1.39-2.88 1.41-2.95-.03-.01-2.7-1.04-2.73-4.13M14.6 4.5c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.98-1.08 3.15 1.14.09 2.3-.58 3.01-1.44"/></svg>Continue with Apple</button>
       <div class="msg" id="authMsg"></div>
       <div class="legal"><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · Research use only</div>
     </div>
@@ -238,13 +241,42 @@ $("otpBtn").onclick=async()=>{
   else showMsg("✉️ Check your inbox — tap the link to sign in. (Check spam too.)","ok");
 };
 $("gBtn").onclick=async()=>{
-  const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo}});
+  const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo,scopes:"email profile"}});
   if(error)showMsg("Google sign-in isn't enabled yet — use the email link for now.","err");
+};
+$("aBtn").onclick=async()=>{
+  const {error}=await sb.auth.signInWithOAuth({provider:"apple",options:{redirectTo,scopes:"name email"}});
+  if(error)showMsg("Apple sign-in isn't enabled yet — use the email link for now.","err");
 };
 $("em").addEventListener("keydown",e=>{if(e.key==="Enter")$("otpBtn").click();});
 
 /* ---- profile load/save ---- */
 let CURRENT=null;
+function parseName(user){
+  const m=user.user_metadata||{};
+  let full=(m.full_name||m.name||"").trim();
+  let f=(m.given_name||m.first_name||"").trim();
+  let l=(m.family_name||m.last_name||m.surname||"").trim();
+  if((!f||!l)&&full){const parts=full.split(/\s+/);if(!f)f=parts[0]||"";if(!l&&parts.length>1)l=parts.slice(1).join(" ");}
+  if(!full)full=[f,l].filter(Boolean).join(" ");
+  return {f,l,full};
+}
+// Seed contact + name on first sign-in (OAuth or magic link) without overwriting edited values
+async function ensureProfile(user){
+  try{
+    const {data:ex}=await sb.from("profiles").select("id,email,first_name,last_name,username").eq("user_id",user.id).maybeSingle();
+    const {f,l,full}=parseName(user);
+    const patch={user_id:user.id};let need=false;
+    if(!ex){patch.email=user.email||null;if(f)patch.first_name=f;if(l)patch.last_name=l;if(full)patch.username=full;patch.notify_email=true;need=true;}
+    else{
+      if(!ex.email&&user.email){patch.email=user.email;need=true;}
+      if(!ex.first_name&&f){patch.first_name=f;need=true;}
+      if(!ex.last_name&&l){patch.last_name=l;need=true;}
+      if(!ex.username&&full){patch.username=full;need=true;}
+    }
+    if(need){patch.updated_at=new Date().toISOString();await sb.from("profiles").upsert(patch,{onConflict:"user_id"});}
+  }catch(e){console.warn("ensureProfile",e);}
+}
 async function loadProfile(uid){
   const {data,error}=await sb.from("profiles").select("*").eq("user_id",uid).maybeSingle();
   if(error&&error.code!=="PGRST116")console.warn(error);
@@ -262,18 +294,27 @@ $("saveBtn").onclick=async()=>{
 
 /* ---- routing ---- */
 function showAuth(){$("boot").classList.add("hidden");$("profileView").classList.add("hidden");$("authView").classList.remove("hidden");}
-function showProfile(user){
+let shownFor=null;
+async function showProfile(user){
+  if(shownFor===user.id)return; shownFor=user.id;
   $("boot").classList.add("hidden");$("authView").classList.add("hidden");$("profileView").classList.remove("hidden");
   $("navr").innerHTML=`<span class="who">${user.email||""}</span><button class="lk" id="signout">Sign out</button>`;
   $("signout").onclick=async()=>{await sb.auth.signOut();location.reload();};
   renderForm();
   $("formCards").addEventListener("input",updateCompletion,{once:false});
+  await ensureProfile(user);
   loadProfile(user.id);
+}
+function authErrorFromUrl(){
+  const h=new URLSearchParams(location.hash.replace(/^#/,""));const q=new URLSearchParams(location.search);
+  return h.get("error_description")||q.get("error_description")||h.get("error")||q.get("error");
 }
 async function route(){
   const {data:{session}}=await sb.auth.getSession();
-  if(session&&session.user){CURRENT=session.user;showProfile(session.user);}
-  else showAuth();
+  if(session&&session.user){CURRENT=session.user;showProfile(session.user);return;}
+  showAuth();
+  const err=authErrorFromUrl();
+  if(err){showMsg(decodeURIComponent(err.replace(/\+/g," ")),"err");try{history.replaceState({},"",location.pathname);}catch(_){}}
 }
 sb.auth.onAuthStateChange((_e,session)=>{
   if(session&&session.user){CURRENT=session.user;showProfile(session.user);}
