@@ -166,8 +166,71 @@
   .picker button.aSel{color:#05070d;background:var(--ink)}
   .picker button.bSel{color:var(--ink);border-color:var(--ink)}
   .swap{text-align:center;font-size:11.5px;color:var(--muted);padding:8px}
+  .pickbar{flex:none;padding:13px 2px 0}
+  .cmpSearch{width:100%;font-family:var(--body);font-size:13.5px;color:var(--ink);background:var(--glass);border:1px solid var(--hair2);
+    border-radius:100px;padding:11px 17px;outline:none;transition:.2s;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .cmpSearch:focus{border-color:var(--hair);background:var(--glass2)}
+  .cmpSearch::placeholder{color:var(--muted)}
+  .catfilter{flex:none;display:flex;gap:6px;overflow-x:auto;padding:10px 2px 0;scrollbar-width:none}
+  .catfilter::-webkit-scrollbar{display:none}
+  .catfilter button{flex:none;font-size:11.5px;font-weight:600;color:var(--muted);padding:7px 12px;border-radius:100px;background:var(--glass);
+    border:1px solid var(--hair2);cursor:pointer;white-space:nowrap;transition:.2s;display:flex;align-items:center;gap:6px}
+  .catfilter button .d{width:7px;height:7px;border-radius:50%}
+  .catfilter button.on{color:#05070d;background:var(--ink);border-color:var(--ink)}
+  .picker .none{flex:none;font-size:12.5px;color:var(--muted);padding:12px 6px}
   @media(max-width:560px){.cols{flex-direction:column;overflow-y:auto}.col .meters{margin-top:14px}}
   ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
+
+  /* ── chat popup ── */
+  .chatScrim{position:fixed;inset:0;z-index:40;background:rgba(3,5,10,.5);opacity:0;pointer-events:none;transition:.3s}
+  .chatScrim.on{opacity:1;pointer-events:auto}
+  .chatPop{position:fixed;z-index:50;right:clamp(12px,3vw,26px);bottom:clamp(12px,3vw,24px);
+    width:min(412px,94vw);height:min(644px,82vh);display:flex;flex-direction:column;border-radius:26px;overflow:hidden;
+    background:linear-gradient(170deg,rgba(20,24,36,.92),rgba(8,10,18,.96));border:1px solid var(--hair);
+    box-shadow:0 40px 90px -25px rgba(0,0,0,.85);backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
+    transform:translateY(26px) scale(.97);opacity:0;pointer-events:none;transform-origin:bottom right;
+    transition:transform .34s cubic-bezier(.2,.85,.2,1),opacity .3s}
+  .chatPop.on{transform:none;opacity:1;pointer-events:auto}
+  @media(max-width:560px){.chatPop{right:8px;left:8px;width:auto;height:86vh;bottom:8px}}
+  .cpHead{flex:none;display:flex;align-items:center;justify-content:space-between;padding:15px 16px 13px;border-bottom:1px solid var(--hair2)}
+  .cpHead .t{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:15px}
+  .cpHead .t .clogo{width:26px;height:26px;border-radius:8px;background:linear-gradient(145deg,#0a84ff,#00d4aa);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .cpHead .t small{font-family:var(--body);font-weight:600;font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:1px}
+  .cpClose{width:32px;height:32px;border-radius:10px;border:1px solid var(--hair2);background:var(--glass);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:14px;transition:.2s}
+  .cpClose:hover{background:var(--glass2)}
+  .thread{flex:1;overflow-y:auto;padding:14px 16px 12px;display:flex;flex-direction:column;gap:13px;scroll-behavior:smooth}
+  .msg{max-width:90%;animation:pop .4s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes pop{from{opacity:0;transform:translateY(9px)}}
+  .msg.user{align-self:flex-end}
+  .bubble{padding:13px 15px;border-radius:18px;font-size:14.5px;line-height:1.5;border:1px solid var(--hair2)}
+  .user .bubble{background:linear-gradient(160deg,rgba(0,212,170,.22),rgba(0,212,170,.1));border-color:rgba(0,212,170,.3);border-bottom-right-radius:7px;color:#eafff9}
+  .ai .bubble{background:linear-gradient(160deg,var(--glass2),var(--glass));border-bottom-left-radius:7px;box-shadow:0 14px 36px -18px rgba(0,0,0,.7)}
+  .ai .bubble b{font-weight:700;color:#fff}
+  .ai .bubble .disc{display:block;margin-top:9px;padding:0;background:none;border:none;font-size:11px;color:var(--muted);font-style:italic;line-height:1.4}
+  .who{font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);margin:0 4px 5px}
+  .who span{color:var(--accent)}
+  .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+  .rel button{font-family:var(--body);font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;padding:7px 12px;border-radius:100px;
+    background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.28);display:inline-flex;align-items:center;gap:6px;transition:.2s}
+  .rel button:hover{background:rgba(0,212,170,.18)}
+  .rel button svg{width:12px;height:12px}
+  .typing{display:flex;gap:5px;padding:3px 2px}
+  .typing i{width:8px;height:8px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite both}
+  .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+  .suggest{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+  .suggest button{font-family:var(--body);font-size:12.5px;font-weight:500;color:var(--ink);padding:9px 13px;border-radius:13px;
+    background:var(--glass);border:1px solid var(--hair2);cursor:pointer;text-align:left;transition:.25s}
+  .suggest button:hover{border-color:var(--hair);transform:translateY(-1px)}
+  .composer{flex:none;padding:8px 14px calc(13px + env(safe-area-inset-bottom))}
+  .inbox{display:flex;align-items:flex-end;gap:8px;background:var(--glass2);border:1px solid var(--hair);border-radius:22px;padding:6px 6px 6px 16px}
+  .inbox textarea{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:var(--body);font-size:14.5px;line-height:1.4;resize:none;max-height:110px;padding:9px 0}
+  .inbox textarea::placeholder{color:var(--muted)}
+  .send{flex:none;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(160deg,#0a84ff,#00d4aa);display:grid;place-items:center;transition:.2s;box-shadow:0 6px 16px -6px #00d4aa88}
+  .send:disabled{opacity:.4;cursor:default;box-shadow:none}
+  .send:not(:disabled):active{transform:scale(.92)}
+  .send svg{width:18px;height:18px}
+  .foot{text-align:center;font-size:10px;color:var(--muted);margin-top:8px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -176,7 +239,7 @@
   <div class="bar">
     <div class="brand"><div class="logo"></div>Pept<span>X</span></div>
     <div style="display:flex;gap:9px;align-items:center">
-      <a class="cmpBtn" href="chat.html" style="text-decoration:none;color:#00d4aa;border-color:rgba(0,212,170,.35)">✦ Ask AI</a>
+      <button class="cmpBtn" id="askBtn" style="color:#00d4aa;border-color:rgba(0,212,170,.35)">✦ Ask AI</button>
       <button class="cmpBtn" id="cmpBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="7" height="14" rx="1.5"/><rect x="14" y="5" width="7" height="14" rx="1.5"/></svg>Compare</button>
     </div>
   </div>
@@ -193,8 +256,27 @@
 
   <div class="compare" id="compare">
     <div class="cols" id="cols"></div>
-    <div class="swap">comparing — pick a second card below</div>
+    <div class="pickbar">
+      <input id="cmpSearch" class="cmpSearch" placeholder="Search a compound to compare…" autocomplete="off"/>
+    </div>
+    <div class="catfilter" id="catfilter"></div>
     <div class="picker" id="picker"></div>
+  </div>
+</div>
+
+<div class="chatScrim" id="chatScrim"></div>
+<div class="chatPop" id="chatPop" aria-hidden="true">
+  <div class="cpHead">
+    <div class="t"><div class="clogo"></div>Pept<span style="color:var(--accent)">X</span>.AI<small>research</small></div>
+    <button class="cpClose" id="cpClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="thread" id="thread"></div>
+  <div class="composer">
+    <div class="inbox">
+      <textarea id="cInput" rows="1" placeholder="Ask about any peptide, mechanism, or comparison…"></textarea>
+      <button class="send" id="cSend" disabled aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="#031b16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="foot">Educational research summaries · not medical advice · <a href="terms.html" style="color:inherit">Terms</a></div>
   </div>
 </div>
 
@@ -414,7 +496,7 @@ function commit(dir){
 document.getElementById('next').onclick=()=>commit(1);
 document.getElementById('prev').onclick=()=>commit(-1);
 dots.onclick=e=>{const i=e.target.dataset.i;if(i!=null){idx=+i;renderDeck();}};
-document.addEventListener('keydown',e=>{if(mode!=="deck")return;if(e.key==='ArrowRight')commit(1);if(e.key==='ArrowLeft')commit(-1);
+document.addEventListener('keydown',e=>{if(window.chatOpen||mode!=="deck")return;if(e.key==='ArrowRight')commit(1);if(e.key==='ArrowLeft')commit(-1);
   if(e.key===' '||e.key==='Enter'){const f=document.getElementById('flip');if(f){document.getElementById('top').style.transform='';f.classList.toggle('flip');}}});
 
 // trackpad / mouse-wheel horizontal swipe
@@ -449,12 +531,31 @@ function miniCol(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
       ${meter("Onset",fmtT(p.tmax),p.tmax==null?0:onsetPct(p.tmax))}
       ${meter("Convenience",convLabel(p.freq)||"—",convPct(p.freq))}
     </div></div>`;}
+let cmpQuery="",cmpCat="All";
+const cmpSearch=document.getElementById('cmpSearch'),catfilter=document.getElementById('catfilter');
+function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function renderFilters(){
+  const list=["All",...Array.from(new Set(DATA.map(p=>p.category)))];
+  catfilter.innerHTML=list.map(c=>`<button data-c="${escHtml(c)}" class="${c===cmpCat?'on':''}">${c==="All"?"":`<span class="d" style="background:${catCol(c)}"></span>`}${escHtml(c)}</button>`).join("");
+}
+function renderPicker(){
+  const q=cmpQuery.trim().toLowerCase();
+  const items=DATA.map((p,i)=>({p,i})).filter(({p})=>
+    (cmpCat==="All"||p.category===cmpCat) &&
+    (!q || (p.name||'').toLowerCase().includes(q) || (p.nick||'').toLowerCase().includes(q) || (p.full_name||'').toLowerCase().includes(q)));
+  picker.innerHTML=items.length
+    ? items.map(({p,i})=>`<button data-i="${i}" class="${i===aSel?'aSel':''} ${i===bSel?'bSel':''}">${escHtml(p.name)}</button>`).join("")
+    : `<div class="none">No matches — try another name or category.</div>`;
+}
 function renderCompare(){
   cols.innerHTML=miniCol(DATA[aSel])+miniCol(DATA[bSel]);
-  picker.innerHTML=DATA.map((p,i)=>`<button data-i="${i}" class="${i===aSel?'aSel':''} ${i===bSel?'bSel':''}">${p.name}</button>`).join("");
+  renderFilters();renderPicker();
 }
 picker.onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;
   if(i===aSel||i===bSel)return; bSel=i; renderCompare();};
+catfilter.onclick=e=>{const b=e.target.closest('button');if(!b)return;cmpCat=b.dataset.c;renderPicker();
+  Array.from(catfilter.children).forEach(x=>x.classList.toggle('on',x.dataset.c===cmpCat));};
+cmpSearch.addEventListener('input',()=>{cmpQuery=cmpSearch.value;renderPicker();});
 
 renderDeck(); // instant render with fallback set
 // upgrade to the full live library from the knowledge DB
@@ -464,6 +565,72 @@ fetch(API).then(r=>r.json()).then(d=>{
     if(qp){var ci=DATA.findIndex(function(x){return (x.name||'').toLowerCase()===qp.toLowerCase();});if(ci>=0)idx=ci;}
     renderDeck();}
 }).catch(()=>{});
+</script>
+
+<script>
+/* ── chat popup ── */
+(function(){
+const CHAT_API="https://pmebegdwqizozfmzxpuw.supabase.co/functions/v1/peptx-ai-chat";
+const session="s"+Math.random().toString(36).slice(2,10);
+const pop=document.getElementById('chatPop'),scrim=document.getElementById('chatScrim'),
+  thread=document.getElementById('thread'),input=document.getElementById('cInput'),send=document.getElementById('cSend');
+let history=[],busy=false,started=false;
+window.chatOpen=false;
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(s){s=esc(s);s=s.replace(/_([^_]+)_/g,'<span class="disc">$1</span>');s=s.replace(/\*([^*]+)\*/g,'<b>$1</b>');s=s.replace(/\*/g,'');s=s.replace(/\n{2,}/g,'<br><br>').replace(/\n/g,'<br>');return s;}
+function add(role,html,related){
+  const m=document.createElement('div');m.className='msg '+(role==='user'?'user':'ai');
+  let inner='';
+  if(role!=='user')inner+=`<div class="who"><span>PeptX.AI</span></div>`;
+  inner+=`<div class="bubble">${html}`;
+  if(related&&related.length)inner+=`<div class="rel">${related.map(n=>`<button data-card="${esc(n)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>${esc(n)}</button>`).join('')}</div>`;
+  inner+=`</div>`;
+  m.innerHTML=inner;thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;
+}
+function typing(){const m=document.createElement('div');m.className='msg ai';m.id='cTyping';
+  m.innerHTML=`<div class="who"><span>PeptX.AI</span></div><div class="bubble"><div class="typing"><i></i><i></i><i></i></div></div>`;
+  thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;}
+const STARTERS=["What is BPC-157?","Semaglutide vs Tirzepatide?","Best-researched peptides for recovery?","What does evidence grade A mean?"];
+function welcome(){
+  add('ai',`Hi — I'm <b>PeptX.AI</b>. Ask me about any peptide: what it is, how it works, how two compare, or what the evidence shows. <span class="disc">Educational research summaries only — not medical or dosing advice.</span>`);
+  const s=document.createElement('div');s.className='msg ai';
+  s.innerHTML=`<div class="suggest">${STARTERS.map(q=>`<button>${q}</button>`).join('')}</div>`;
+  s.querySelectorAll('button').forEach(b=>b.onclick=()=>{input.value=b.textContent;ask();});
+  thread.appendChild(s);thread.scrollTop=thread.scrollHeight;
+}
+async function ask(){
+  const q=input.value.trim();if(!q||busy)return;
+  busy=true;send.disabled=true;
+  const sg=thread.querySelector('.suggest');if(sg)sg.closest('.msg').remove();
+  add('user',esc(q));input.value='';input.style.height='auto';
+  const t=typing();
+  try{
+    const r=await fetch(CHAT_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,session_id:session,history})});
+    const d=await r.json();t.remove();
+    const ans=d.answer||"I couldn't reach my research base just now — try again in a moment.";
+    add('ai',fmt(ans),d.related);
+    history.push({role:'user',content:q},{role:'assistant',content:ans});
+    if(history.length>8)history=history.slice(-8);
+  }catch(e){t.remove();add('ai',`Connection hiccup — give that another go.`);}
+  busy=false;send.disabled=input.value.trim()==='';
+}
+/* related-chip → jump to that card in the deck */
+thread.addEventListener('click',e=>{const b=e.target.closest('[data-card]');if(!b)return;
+  const name=b.dataset.card.toLowerCase();const ci=DATA.findIndex(x=>(x.name||'').toLowerCase()===name);
+  if(ci>=0){if(mode!=="deck")cmpBtn.click();idx=ci;renderDeck();}closeChat();});
+
+function openChat(){window.chatOpen=true;pop.classList.add('on');scrim.classList.add('on');pop.setAttribute('aria-hidden','false');
+  if(!started){started=true;welcome();}setTimeout(()=>input.focus(),130);}
+function closeChat(){window.chatOpen=false;pop.classList.remove('on');scrim.classList.remove('on');pop.setAttribute('aria-hidden','true');}
+document.getElementById('askBtn').onclick=()=>{window.chatOpen?closeChat():openChat();};
+document.getElementById('cpClose').onclick=closeChat;
+scrim.onclick=closeChat;
+input.addEventListener('input',()=>{send.disabled=input.value.trim()===''||busy;input.style.height='auto';input.style.height=Math.min(110,input.scrollHeight)+'px';});
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask();}});
+send.onclick=ask;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window.chatOpen)closeChat();});
+})();
 </script>
 <style>
 .gate{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(3,5,10,.8);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
