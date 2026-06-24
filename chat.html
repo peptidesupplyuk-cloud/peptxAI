@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"/>
+<title>PeptX.AI · Ask the peptide research assistant</title>
+<meta name="description" content="Ask PeptX.AI anything about peptide research — what a compound is, how it works, how two compare, what the evidence says. Educational, research use only."/>
+<meta name="theme-color" content="#05070d"/>
+<meta name="robots" content="index,follow"/>
+<meta property="og:title" content="PeptX.AI · Ask the peptide research assistant"/>
+<meta property="og:description" content="A research-grounded peptide chat. Educational summaries only — not medical advice."/>
+<meta property="og:type" content="website"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a84ff'/%3E%3Cstop offset='1' stop-color='%2300d4aa'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#05070d;--ink:#f4f6fc;--muted:#98a1b6;--accent:#00d4aa;
+    --glass:rgba(255,255,255,.06);--glass2:rgba(255,255,255,.1);--hair:rgba(255,255,255,.15);--hair2:rgba(255,255,255,.08);
+    --display:'Clash Display',sans-serif;--body:'Satoshi',sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:var(--body);color:var(--ink);background:var(--bg);overflow:hidden;-webkit-font-smoothing:antialiased;position:fixed;inset:0}
+  .aura{position:fixed;inset:-30vmax;z-index:0;filter:blur(34px);opacity:.7;pointer-events:none}
+  .aura span{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:drift 32s ease-in-out infinite}
+  .aura .a{width:48vmax;height:48vmax;left:-8vmax;top:-12vmax;background:radial-gradient(circle,#1b4dff44,transparent 60%)}
+  .aura .b{width:44vmax;height:44vmax;right:-10vmax;top:4vmax;background:radial-gradient(circle,#00d4aa3a,transparent 62%);animation-delay:-12s}
+  .aura .c{width:50vmax;height:50vmax;left:18vmax;bottom:-26vmax;background:radial-gradient(circle,#bf5af233,transparent 60%);animation-delay:-20s}
+  @keyframes drift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(4vmax,-3vmax,0) scale(1.07)}}
+  body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  .app{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;max-width:760px;margin:0 auto;width:100%}
+  .bar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(16px,4vw,26px) 10px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em}
+  .logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(145deg,#0a84ff,#00d4aa);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .logo::after{content:"";position:absolute;inset:8px;border:2px solid #fff;border-right-color:transparent;border-bottom-color:transparent;border-radius:4px;transform:rotate(45deg)}
+  .brand span{color:var(--accent)}.brand small{font-family:var(--body);font-weight:600;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:2px}
+  .toCards{font-family:var(--body);font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;padding:9px 15px;border-radius:100px;background:var(--glass);border:1px solid var(--hair2);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);display:flex;align-items:center;gap:7px;transition:.25s}
+  .toCards:hover{border-color:var(--hair)}
+  .toCards svg{width:15px;height:15px}
+
+  .thread{flex:1;overflow-y:auto;padding:10px clamp(14px,4vw,26px) 16px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+  .thread::-webkit-scrollbar{width:8px}.thread::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
+
+  .msg{max-width:88%;animation:pop .4s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes pop{from{opacity:0;transform:translateY(10px)}}
+  .msg.user{align-self:flex-end}
+  .bubble{padding:14px 17px;border-radius:20px;font-size:15px;line-height:1.5;border:1px solid var(--hair2)}
+  .user .bubble{background:linear-gradient(160deg,rgba(0,212,170,.22),rgba(0,212,170,.1));border-color:rgba(0,212,170,.3);border-bottom-right-radius:7px;color:#eafff9}
+  .ai .bubble{background:linear-gradient(160deg,var(--glass2),var(--glass));backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border-bottom-left-radius:7px;box-shadow:0 14px 36px -18px rgba(0,0,0,.7)}
+  .ai .bubble b{font-weight:700;color:#fff}
+  .ai .bubble .disc{display:block;margin-top:9px;font-size:11.5px;color:var(--muted);font-style:italic;line-height:1.4}
+  .who{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--muted);margin:0 4px 5px}
+  .ai .who span{color:var(--accent)}
+  .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+  .rel a{font-family:var(--body);font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;padding:7px 12px;border-radius:100px;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.28);display:inline-flex;align-items:center;gap:6px;transition:.2s}
+  .rel a:hover{background:rgba(0,212,170,.18)}
+  .rel a svg{width:12px;height:12px}
+
+  .typing{display:flex;gap:5px;padding:16px 18px}
+  .typing i{width:8px;height:8px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite both}
+  .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+
+  .suggest{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .suggest button{font-family:var(--body);font-size:13px;font-weight:500;color:var(--ink);padding:10px 15px;border-radius:14px;background:var(--glass);border:1px solid var(--hair2);cursor:pointer;text-align:left;transition:.25s;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .suggest button:hover{border-color:var(--hair);transform:translateY(-1px)}
+
+  .composer{flex:none;padding:8px clamp(14px,4vw,26px) calc(16px + env(safe-area-inset-bottom));}
+  .inbox{display:flex;align-items:flex-end;gap:9px;background:var(--glass2);border:1px solid var(--hair);border-radius:24px;padding:7px 7px 7px 18px;
+    backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);box-shadow:0 12px 34px -16px rgba(0,0,0,.7)}
+  .inbox textarea{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4;resize:none;max-height:120px;padding:10px 0}
+  .inbox textarea::placeholder{color:var(--muted)}
+  .send{flex:none;width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(160deg,#0a84ff,#00d4aa);display:grid;place-items:center;transition:.2s;box-shadow:0 6px 16px -6px #00d4aa88}
+  .send:disabled{opacity:.4;cursor:default;box-shadow:none}
+  .send:not(:disabled):active{transform:scale(.92)}
+  .send svg{width:19px;height:19px}
+  .foot{text-align:center;font-size:10.5px;color:var(--muted);margin-top:9px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="aura"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+<div class="app">
+  <div class="bar">
+    <div class="brand"><div class="logo"></div>Pept<span>X</span>.AI<small>research</small></div>
+    <a class="toCards" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Cards</a>
+  </div>
+  <div class="thread" id="thread"></div>
+  <div class="composer">
+    <div class="inbox">
+      <textarea id="input" rows="1" placeholder="Ask about any peptide, mechanism, or comparison…"></textarea>
+      <button class="send" id="send" disabled><svg viewBox="0 0 24 24" fill="none" stroke="#031b16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="foot">PeptX.AI summarises published research · educational, not medical advice · <a href="terms.html" style="color:inherit">Terms</a> · <a href="privacy.html" style="color:inherit">Privacy</a></div>
+  </div>
+</div>
+
+<script>
+const API="https://pmebegdwqizozfmzxpuw.supabase.co/functions/v1/peptx-ai-chat";
+const session="s"+Math.random().toString(36).slice(2,10);
+const thread=document.getElementById('thread');
+const input=document.getElementById('input');
+const send=document.getElementById('send');
+let history=[];let busy=false;
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(s){
+  s=esc(s);
+  // pull disclaimer (italic _..._ ) to a styled footnote
+  s=s.replace(/_([^_]+)_/g,'<span class="disc">$1</span>');
+  s=s.replace(/\*([^*]+)\*/g,'<b>$1</b>');
+  s=s.replace(/\*/g,'');
+  s=s.replace(/\n{2,}/g,'<br><br>').replace(/\n/g,'<br>');
+  return s;
+}
+function add(role,html,related){
+  const m=document.createElement('div');m.className='msg '+(role==='user'?'user':'ai');
+  let inner='';
+  if(role!=='user') inner+=`<div class="who"><span>PeptX.AI</span></div>`;
+  inner+=`<div class="bubble">${html}`;
+  if(related&&related.length){inner+=`<div class="rel">${related.map(n=>`<a href="index.html?card=${encodeURIComponent(n)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>${esc(n)}</a>`).join('')}</div>`;}
+  inner+=`</div>`;
+  m.innerHTML=inner;thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;
+}
+function typing(){const m=document.createElement('div');m.className='msg ai';m.id='typing';
+  m.innerHTML=`<div class="who"><span>PeptX.AI</span></div><div class="bubble"><div class="typing"><i></i><i></i><i></i></div></div>`;
+  thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;}
+
+const STARTERS=["What is BPC-157?","Semaglutide vs Tirzepatide — what's the difference?","Best-researched peptides for recovery?","What does evidence grade A actually mean?"];
+function welcome(){
+  add('ai',`Hi — I'm <b>PeptX.AI</b>. Ask me anything about peptide research: what a compound is, how it works, how two compare, or what the evidence says. <span class="disc">Educational research summaries only — not medical or dosing advice.</span>`);
+  const s=document.createElement('div');s.className='msg ai';
+  s.innerHTML=`<div class="suggest">${STARTERS.map(q=>`<button>${q}</button>`).join('')}</div>`;
+  s.querySelectorAll('button').forEach(b=>b.onclick=()=>{input.value=b.textContent;ask();});
+  thread.appendChild(s);
+}
+
+async function ask(){
+  const q=input.value.trim();if(!q||busy)return;
+  busy=true;send.disabled=true;
+  // remove starter suggestions on first send
+  const sg=thread.querySelector('.suggest');if(sg)sg.closest('.msg').remove();
+  add('user',esc(q));
+  input.value='';input.style.height='auto';
+  const t=typing();
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,session_id:session,history})});
+    const d=await r.json();
+    t.remove();
+    const ans=d.answer||"I couldn't reach my research base just now — try again in a moment.";
+    add('ai',fmt(ans),d.related);
+    history.push({role:'user',content:q},{role:'assistant',content:ans});
+    if(history.length>8)history=history.slice(-8);
+  }catch(e){t.remove();add('ai',`Connection hiccup — give that another go.`);}
+  busy=false;send.disabled=input.value.trim()==='';
+}
+
+input.addEventListener('input',()=>{send.disabled=input.value.trim()===''||busy;input.style.height='auto';input.style.height=Math.min(120,input.scrollHeight)+'px';});
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask();}});
+send.onclick=ask;
+welcome();input.focus();
+</script>
+<style>
+.gate{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(3,5,10,.8);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.gate.show{display:flex}
+.gatecard{max-width:430px;width:100%;border-radius:26px;padding:30px 28px;text-align:center;background:linear-gradient(165deg,rgba(22,26,38,.96),rgba(10,12,20,.98));border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 80px -20px #000;font-family:'Satoshi',sans-serif;color:#eef1f8}
+.gatecard .glogo{width:46px;height:46px;border-radius:13px;margin:0 auto 16px;background:linear-gradient(145deg,#0a84ff,#00d4aa);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.gatecard h2{font-family:'Clash Display',sans-serif;font-weight:600;font-size:26px;letter-spacing:-.02em;margin-bottom:12px}
+.gatecard h2 b{color:#00d4aa;font-weight:600}
+.gatecard p{font-size:14px;line-height:1.55;color:#c4cbda;margin-bottom:13px}
+.gatecard p b{color:#fff}
+.gatecard a{color:#00d4aa;text-decoration:none}
+.gatecard .gbtn{margin-top:8px;width:100%;border:none;cursor:pointer;font-family:'Satoshi',sans-serif;font-weight:700;font-size:15px;color:#05070d;padding:15px;border-radius:15px;background:linear-gradient(180deg,#fff,#dfe5f0)}
+.gatecard .gbtn:active{transform:scale(.98)}
+.gatecard small{display:block;margin-top:13px;font-size:11.5px;color:#8a93a8}
+</style>
+<div class="gate" id="ageGate"><div class="gatecard">
+  <div class="glogo"></div>
+  <h2>Pept<b>X</b>.AI</h2>
+  <p>A peptide <b>research-intelligence</b> tool. Everything here is an educational summary of published research — <b>not medical, health, or dosing advice</b>, and not a substitute for a professional.</p>
+  <p>All compounds are referenced <b>for laboratory and research use only</b>.</p>
+  <button class="gbtn" id="gateOk">I'm 18 or older — Enter</button>
+  <small>By entering you accept our <a href="terms.html">Terms</a> &amp; <a href="privacy.html">Privacy Policy</a>.</small>
+</div></div>
+<script>
+(function(){var g=document.getElementById('ageGate');if(!localStorage.getItem('peptx_ack18')){g.classList.add('show');document.body.style.overflow='hidden';}
+document.getElementById('gateOk').onclick=function(){localStorage.setItem('peptx_ack18','1');g.classList.remove('show');document.body.style.overflow='';};})();
+</script>
+</body>
+</html>
