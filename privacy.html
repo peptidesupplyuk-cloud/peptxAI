@@ -27,17 +27,32 @@
   ul{padding-left:20px}li{margin-bottom:7px}
   .back{display:inline-block;margin-top:34px;font-weight:600}
   footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--hair);color:var(--muted);font-size:13px}
+.blogo{height:28px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.brand .ai{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;color:var(--accent);margin-left:-2px}
+
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 42% at 50% -4%,rgba(150,180,228,.20),transparent 56%),radial-gradient(130% 100% at 50% 0%,#0c1119 0%,#080b13 42%,#04060b 100%)}
+.scene::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;background:repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}
+.smk{position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:cover;will-change:transform}
+.smk1{opacity:.62;mix-blend-mode:screen;-webkit-mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.43 0 0 0 0 0.95 1 0 0 0 -0.18'/></filter><rect width='1280' height='800' filter='url(%23b)'/></svg>");animation:drift1 90s ease-in-out infinite}
+.smk2{opacity:.4;mix-blend-mode:screen;-webkit-mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.013 0.017' numOctaves='5' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.72 0 0 0 0 0.82 0 0 0 0 1 1.2 0 0 0 -0.68'/></filter><rect width='1280' height='800' filter='url(%23w)'/></svg>");animation:drift2 120s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(-2%,0,0) scale(1.06)}50%{transform:translate3d(3%,-3%,0) scale(1.14)}}
+@keyframes drift2{0%,100%{transform:translate3d(2%,1%,0) scale(1.10)}50%{transform:translate3d(-3%,-2%,0) scale(1.20)}}
+@media(prefers-reduced-motion:reduce){.smk{animation:none!important}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#fxbg{display:none!important}
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<canvas id="fxbg" aria-hidden="true"></canvas>
+<div class="scene"></div>
+<div class="smk smk1"></div>
+<div class="smk smk2"></div>
+<div class="grain"></div>
 <div class="wrap">
-  <a class="brand" href="/"><div class="logo"></div>Pept<span>X</span>.AI</a>
+  <a class="brand" href="/"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a>
   <h1>Privacy Policy</h1>
   <div class="upd">Last updated: June 2026</div>
 
-  <p>This policy explains what PeptX.AI collects and why. We keep it minimal — you don't need an account to use PeptX.AI, and we don't sell your data.</p>
+  <p>This policy explains what PeptX.AI collects and why. We keep it minimal, you don't need an account to use PeptX.AI, and we don't sell your data.</p>
 
   <h2>What we collect</h2>
   <ul>
@@ -67,6 +82,5 @@
   <a class="back" href="/">← Back to PeptX.AI</a>
   <footer>© 2026 PeptX · For laboratory and research use only · <a href="terms.html">Terms of Use</a></footer>
 </div>
-<script src="fx-bg.js" defer></script>
 </body>
 </html>

@@ -11,10 +11,10 @@ const GR = {A:{c:"#FFD60A",l:"Clinical"},B:{c:"#64D2FF",l:"Emerging"},C:{c:"#C9A
 const REG = {research_compound:"Research compound",prescription_only:"Prescription (clinical)",emerging:"Emerging / in trials",licensed:"Licensed",approved:"Approved"};
 const catCol = c => CAT[c] || "#8E9BB3";
 const slugify = s => (s||"").toLowerCase().replace(/\+/g," plus ").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
-const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const esc = s => String(s==null?"":s).replace(/\s—\s/g,", ").replace(/—/g,", ").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const cap = s => (s||"").replace(/^./,c=>c.toUpperCase());
-function hl(h){h=parseFloat(h);if(!h)return"—";return h>=24?(+(h/24).toFixed(h%24?1:0))+(h>=48?" days":" day"):h+" hrs";}
-function fmtT(h){h=parseFloat(h);if(isNaN(h))return"—";if(h<1)return Math.round(h*60)+" min";if(h<24)return (+h)+" hrs";const d=h/24;return (Number.isInteger(d)?d:+d.toFixed(1))+(d>=2?" days":" day");}
+function hl(h){h=parseFloat(h);if(!h)return"n/a";return h>=24?(+(h/24).toFixed(h%24?1:0))+(h>=48?" days":" day"):h+" hrs";}
+function fmtT(h){h=parseFloat(h);if(isNaN(h))return"n/a";if(h<1)return Math.round(h*60)+" min";if(h<24)return (+h)+" hrs";const d=h/24;return (Number.isInteger(d)?d:+d.toFixed(1))+(d>=2?" days":" day");}
 function usesOf(p){const u=[];if(p.longevity_relevance)u.push(["Longevity",p.longevity_relevance]);if(p.fitness_relevance)u.push(["Fitness",p.fitness_relevance]);if(p.health_optimisation_relevance)u.push(["Health optimisation",p.health_optimisation_relevance]);return u;}
 
 function refHTML(r){
@@ -81,10 +81,9 @@ function page(p, all){
 <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>
 <body style="--accent:${acc};--gcol:${g.c}">
-<div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
-<canvas id="fxbg" aria-hidden="true"></canvas>
+<div class="scene"></div><div class="smk smk1"></div><div class="smk smk2"></div><div class="grain"></div>
 <nav><div class="navin">
-  <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
+  <a class="brand" href="/"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a>
   <div class="navr"><a class="lk" href="/cards.html">All compounds</a><a class="lk go" href="/cards.html?ask=1">Ask the AI</a></div>
 </div></nav>
 
@@ -119,7 +118,7 @@ function page(p, all){
         <div><span>Half-life</span><b>${esc(hl(p.half_life_hours))}</b></div>
         <div><span>Onset (t-max)</span><b>${esc(fmtT(p.tmax))}</b></div>
         <div><span>Route</span><b>${esc(p.administration&&p.administration.length?p.administration.join("/"):cap(p.absorption_route))}</b></div>
-        <div><span>Frequency</span><b>${esc(p.freq||"—")}</b></div>
+        <div><span>Frequency</span><b>${esc(p.freq||"n/a")}</b></div>
         ${p.dose_range?`<div><span>Typical range</span><b>${esc(p.dose_range)}</b></div>`:""}
         ${p.cycle_duration?`<div><span>Cycle</span><b>${esc(p.cycle_duration)}</b></div>`:""}
       </div>${p.dosing_notes?`<p class="muted" style="margin-top:12px">${esc(p.dosing_notes)}</p>`:""}</section>
@@ -150,12 +149,10 @@ function page(p, all){
 </main>
 
 <footer class="site"><div class="wrap fin">
-  <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
+  <a class="brand" href="/"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a>
   <div class="flinks"><a href="/cards.html">Compounds</a><a href="/learn/">All guides</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
   <span class="ruo">Research use only</span>
-</div></footer>
-<script src="/fx-bg.js" defer></script>
-</body>
+</div></footer></body>
 </html>`;
 }
 
@@ -179,18 +176,15 @@ function indexPage(all){
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/learn/learn.css">
 </head><body>
-<div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
-<canvas id="fxbg" aria-hidden="true"></canvas>
-<nav><div class="navin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="navr"><a class="lk" href="/cards.html">Swipe the deck</a><a class="lk go" href="/cards.html?ask=1">Ask the AI</a></div></div></nav>
+<div class="scene"></div><div class="smk smk1"></div><div class="smk smk2"></div><div class="grain"></div>
+<nav><div class="navin"><a class="brand" href="/"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a><div class="navr"><a class="lk" href="/cards.html">Swipe the deck</a><a class="lk go" href="/cards.html?ask=1">Ask the AI</a></div></div></nav>
 <main class="wrap">
   <nav class="crumbs"><a href="/">Home</a><span>›</span><span>Guides</span></nav>
   <header class="lhead"><h1>Peptide &amp; compound guides</h1><p>Every compound in the knowledge base — ${all.length} evidence-graded research guides. Tap any to read the mechanism, pharmacokinetics, evidence and references.</p></header>
   ${sections}
   <div class="disc"><b>Research use only.</b> Educational summaries of published research — not medical advice.</div>
 </main>
-<footer class="site"><div class="wrap fin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="flinks"><a href="/cards.html">Compounds</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div><span class="ruo">Research use only</span></div></footer>
-<script src="/fx-bg.js" defer></script>
-</body></html>`;
+<footer class="site"><div class="wrap fin"><a class="brand" href="/"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a><div class="flinks"><a href="/cards.html">Compounds</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div><span class="ruo">Research use only</span></div></footer></body></html>`;
 }
 
 const CSS = `:root{--bg:#04060b;--ink:#f4f6fc;--muted:#9aa3b6;--accent:#00d4aa;--blue:#0a84ff;--glass:rgba(255,255,255,.05);--glass2:rgba(255,255,255,.09);--hair:rgba(255,255,255,.13);--hair2:rgba(255,255,255,.07);--display:'Clash Display',sans-serif;--body:'Satoshi',sans-serif;--mono:'JetBrains Mono',monospace}
@@ -199,11 +193,15 @@ html{scroll-behavior:smooth}
 body{font-family:var(--body);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 ::selection{background:rgba(0,212,170,.3)}
-#fxbg{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
-.scene{position:fixed;inset:0;z-index:0;background:radial-gradient(120% 70% at 50% -10%,#11151f,#070a11 45%,#04060b 100%)}
-.smoke{position:fixed;border-radius:50%;filter:blur(70px);mix-blend-mode:screen;opacity:.32;z-index:0}
-.s1{width:46vw;height:46vw;left:-12vw;top:-8vw;background:radial-gradient(circle,#2f6bff55,transparent 62%)}
-.s2{width:42vw;height:42vw;right:-10vw;top:36vh;background:radial-gradient(circle,#00d4aa2e,transparent 64%)}
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 42% at 50% -4%,rgba(150,180,228,.20),transparent 56%),radial-gradient(130% 100% at 50% 0%,#0c1119 0%,#080b13 42%,#04060b 100%)}
+.scene::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;background:repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}
+.smk{position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:cover;will-change:transform}
+.smk1{opacity:.62;mix-blend-mode:screen;-webkit-mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.43 0 0 0 0 0.95 1 0 0 0 -0.18'/></filter><rect width='1280' height='800' filter='url(%23b)'/></svg>");animation:drift1 90s ease-in-out infinite}
+.smk2{opacity:.4;mix-blend-mode:screen;-webkit-mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.013 0.017' numOctaves='5' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.72 0 0 0 0 0.82 0 0 0 0 1 1.2 0 0 0 -0.68'/></filter><rect width='1280' height='800' filter='url(%23w)'/></svg>");animation:drift2 120s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(-2%,0,0) scale(1.06)}50%{transform:translate3d(3%,-3%,0) scale(1.14)}}
+@keyframes drift2{0%,100%{transform:translate3d(2%,1%,0) scale(1.10)}50%{transform:translate3d(-3%,-2%,0) scale(1.20)}}
+@media(prefers-reduced-motion:reduce){.smk{animation:none!important}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
 nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(4,6,11,.82),rgba(4,6,11,.3));border-bottom:1px solid var(--hair2)}
 .navin{max-width:1080px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,32px)}
@@ -211,6 +209,8 @@ nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linea
 .logo{width:30px;height:30px;border-radius:8px;position:relative;overflow:hidden;background:#0b111c;border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 12px -5px rgba(0,0,0,.7)}
 .logo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#f6f9ff,#a7b6c9 46%,#46546a);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat}
 .brand i{font-style:normal;color:var(--accent)}
+.blogo{height:28px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.brand .ai{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;color:var(--accent);margin-left:-2px}
 .navr{display:flex;gap:8px;align-items:center}
 .lk{font-weight:600;font-size:13.5px;color:var(--muted);padding:8px 13px;border-radius:10px}
 .lk:hover{color:var(--ink);background:var(--glass)}
@@ -307,8 +307,9 @@ footer.site{position:relative;z-index:2;border-top:1px solid var(--hair2);margin
   mkdirSync(OUT,{recursive:true});
   writeFileSync(`${OUT}/learn.css`,CSS);
   let n=0;
-  for(const p of all){ writeFileSync(`${OUT}/${slugify(p.name)}.html`, page(p,all)); n++; }
-  writeFileSync(`${OUT}/index.html`, indexPage(all));
+  const stripDash = s => s.replace(/\s—\s/g,", ").replace(/—/g,", ");
+  for(const p of all){ writeFileSync(`${OUT}/${slugify(p.name)}.html`, stripDash(page(p,all))); n++; }
+  writeFileSync(`${OUT}/index.html`, stripDash(indexPage(all)));
 
   // sitemap
   const urls=[

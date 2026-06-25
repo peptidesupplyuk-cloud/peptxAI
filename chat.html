@@ -4,11 +4,11 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"/>
 <title>PeptX.AI · Ask the peptide research assistant</title>
-<meta name="description" content="Ask PeptX.AI anything about peptide research — what a compound is, how it works, how two compare, what the evidence says. Educational, research use only."/>
+<meta name="description" content="Ask PeptX.AI anything about peptide research, what a compound is, how it works, how two compare, what the evidence says. Educational, research use only."/>
 <meta name="theme-color" content="#05070d"/>
 <meta name="robots" content="index,follow"/>
 <meta property="og:title" content="PeptX.AI · Ask the peptide research assistant"/>
-<meta property="og:description" content="A research-grounded peptide chat. Educational summaries only — not medical advice."/>
+<meta property="og:description" content="A research-grounded peptide chat. Educational summaries only, not medical advice."/>
 <meta property="og:type" content="website"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a84ff'/%3E%3Cstop offset='1' stop-color='%2300d4aa'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
@@ -76,13 +76,15 @@
   .send:not(:disabled):active{transform:scale(.92)}
   .send svg{width:19px;height:19px}
   .foot{text-align:center;font-size:10.5px;color:var(--muted);margin-top:9px;line-height:1.4}
+.blogo{height:28px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.brand .ai{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;color:var(--accent);margin-left:-2px}
 </style>
 </head>
 <body>
 <div class="aura"><span class="a"></span><span class="b"></span><span class="c"></span></div>
 <div class="app">
   <div class="bar">
-    <div class="brand"><div class="logo"></div>Pept<span>X</span>.AI<small>research</small></div>
+    <div class="brand"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></div>
     <a class="toCards" href="cards.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Cards</a>
   </div>
   <div class="thread" id="thread"></div>
@@ -126,9 +128,9 @@ function typing(){const m=document.createElement('div');m.className='msg ai';m.i
   m.innerHTML=`<div class="who"><span>PeptX.AI</span></div><div class="bubble"><div class="typing"><i></i><i></i><i></i></div></div>`;
   thread.appendChild(m);thread.scrollTop=thread.scrollHeight;return m;}
 
-const STARTERS=["What is BPC-157?","Semaglutide vs Tirzepatide — what's the difference?","Best-researched peptides for recovery?","What does evidence grade A actually mean?"];
+const STARTERS=["What is BPC-157?","Semaglutide vs Tirzepatide, what's the difference?","Best-researched peptides for recovery?","What does evidence grade A actually mean?"];
 function welcome(){
-  add('ai',`Hi — I'm <b>PeptX.AI</b>. Ask me anything about peptide research: what a compound is, how it works, how two compare, or what the evidence says. <span class="disc">Educational research summaries only — not medical or dosing advice.</span>`);
+  add('ai',`Hi, I'm <b>PeptX.AI</b>. Ask me anything about peptide research: what a compound is, how it works, how two compare, or what the evidence says. <span class="disc">Educational research summaries only, not medical or dosing advice.</span>`);
   const s=document.createElement('div');s.className='msg ai';
   s.innerHTML=`<div class="suggest">${STARTERS.map(q=>`<button>${q}</button>`).join('')}</div>`;
   s.querySelectorAll('button').forEach(b=>b.onclick=()=>{input.value=b.textContent;ask();});
@@ -147,11 +149,11 @@ async function ask(){
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,session_id:session,history})});
     const d=await r.json();
     t.remove();
-    const ans=d.answer||"I couldn't reach my research base just now — try again in a moment.";
+    const ans=d.answer||"I couldn't reach my research base just now, try again in a moment.";
     add('ai',fmt(ans),d.related);
     history.push({role:'user',content:q},{role:'assistant',content:ans});
     if(history.length>8)history=history.slice(-8);
-  }catch(e){t.remove();add('ai',`Connection hiccup — give that another go.`);}
+  }catch(e){t.remove();add('ai',`Connection hiccup, give that another go.`);}
   busy=false;send.disabled=input.value.trim()==='';
 }
 
@@ -177,9 +179,9 @@ welcome();input.focus();
 <div class="gate" id="ageGate"><div class="gatecard">
   <div class="glogo"></div>
   <h2>Pept<b>X</b>.AI</h2>
-  <p>A peptide <b>research-intelligence</b> tool. Everything here is an educational summary of published research — <b>not medical, health, or dosing advice</b>, and not a substitute for a professional.</p>
+  <p>A peptide <b>research-intelligence</b> tool. Everything here is an educational summary of published research, <b>not medical, health, or dosing advice</b>, and not a substitute for a professional.</p>
   <p>All compounds are referenced <b>for laboratory and research use only</b>.</p>
-  <button class="gbtn" id="gateOk">I'm 18 or older — Enter</button>
+  <button class="gbtn" id="gateOk">I'm 18 or older, Enter</button>
   <small>By entering you accept our <a href="terms.html">Terms</a> &amp; <a href="privacy.html">Privacy Policy</a>.</small>
 </div></div>
 <script>

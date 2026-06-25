@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Peptide Reconstitution &amp; Dose Calculator + Plasma-Level Model | PeptX.AI</title>
-<meta name="description" content="Free peptide reconstitution calculator: enter vial mg, bacteriostatic water and target dose to get the exact units to draw on an insulin syringe. Plus a half-life plasma-level model — auto-filled from PeptX.AI's evidence-graded knowledge base. Research use only."/>
+<meta name="description" content="Free peptide reconstitution calculator: enter vial mg, bacteriostatic water and target dose to get the exact units to draw on an insulin syringe. Plus a half-life plasma-level model, auto-filled from PeptX.AI's evidence-graded knowledge base. Research use only."/>
 <meta name="keywords" content="peptide reconstitution calculator, peptide dose calculator, units to draw, insulin syringe units, BPC-157 dosing, semaglutide units, peptide half-life calculator, plasma concentration, bacteriostatic water, biohacking"/>
 <meta name="robots" content="index,follow"/>
 <meta name="theme-color" content="#04060b"/>
@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="PeptX.AI"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Peptide Reconstitution &amp; Dose Calculator | PeptX.AI"/>
-<meta property="og:description" content="Get the exact units to draw on your syringe — auto-filled from an evidence-graded peptide knowledge base, with a half-life plasma-level model."/>
+<meta property="og:description" content="Get the exact units to draw on your syringe, auto-filled from an evidence-graded peptide knowledge base, with a half-life plasma-level model."/>
 <meta property="og:url" content="https://peptx.ai/calculator.html"/>
 <meta property="og:image" content="https://peptx.ai/og.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -114,13 +114,28 @@
   .fin{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
   .flinks{display:flex;flex-wrap:wrap;gap:18px}.flinks a{color:#b7bfd0;font-size:14px}.flinks a:hover{color:var(--ink)}
   .ruo{font-size:12px;font-weight:600;color:#e9d27a;background:rgba(255,214,10,.07);border:1px solid rgba(255,214,10,.22);padding:7px 13px;border-radius:100px}
+.blogo{height:28px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.brand .ai{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;color:var(--accent);margin-left:-2px}
+
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 42% at 50% -4%,rgba(150,180,228,.20),transparent 56%),radial-gradient(130% 100% at 50% 0%,#0c1119 0%,#080b13 42%,#04060b 100%)}
+.scene::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;background:repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}
+.smk{position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:cover;will-change:transform}
+.smk1{opacity:.62;mix-blend-mode:screen;-webkit-mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.43 0 0 0 0 0.95 1 0 0 0 -0.18'/></filter><rect width='1280' height='800' filter='url(%23b)'/></svg>");animation:drift1 90s ease-in-out infinite}
+.smk2{opacity:.4;mix-blend-mode:screen;-webkit-mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.013 0.017' numOctaves='5' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.72 0 0 0 0 0.82 0 0 0 0 1 1.2 0 0 0 -0.68'/></filter><rect width='1280' height='800' filter='url(%23w)'/></svg>");animation:drift2 120s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(-2%,0,0) scale(1.06)}50%{transform:translate3d(3%,-3%,0) scale(1.14)}}
+@keyframes drift2{0%,100%{transform:translate3d(2%,1%,0) scale(1.10)}50%{transform:translate3d(-3%,-2%,0) scale(1.20)}}
+@media(prefers-reduced-motion:reduce){.smk{animation:none!important}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#fxbg{display:none!important}
 </style>
 </head>
 <body>
-<div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
-<canvas id="fxbg" aria-hidden="true"></canvas>
+<div class="scene"></div>
+<div class="smk smk1"></div>
+<div class="smk smk2"></div>
+<div class="grain"></div>
 <nav><div class="navin">
-  <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
+  <a class="brand" href="/"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a>
   <div class="navr"><a class="lk" href="/cards.html">Compounds</a><a class="lk" href="/learn/">Guides</a><a class="lk go" href="/cards.html?ask=1">Ask AI</a></div>
 </div></nav>
 
@@ -129,12 +144,12 @@
   <header class="hero">
     <span class="eyebrow">Peptide Lab</span>
     <h1>Peptide <em>reconstitution</em> &amp; dose calculator</h1>
-    <p class="lede">Enter your vial, water and target dose — get the exact units to draw on an insulin syringe. Pick a compound and PeptX.AI auto-fills typical ranges and half-life from the evidence-graded knowledge base, then models the plasma curve. No generic calculator does this.</p>
+    <p class="lede">Enter your vial, water and target dose, get the exact units to draw on an insulin syringe. Pick a compound and PeptX.AI auto-fills typical ranges and half-life from the evidence-graded knowledge base, then models the plasma curve. No generic calculator does this.</p>
 
     <div class="picker">
       <div class="pf grow">
         <label for="cmp">Compound (auto-fills from our data)</label>
-        <select id="cmp"><option value="">— Custom / pick a compound —</option></select>
+        <select id="cmp"><option value="">,  Custom / pick a compound , </option></select>
       </div>
       <div class="pf grow"><div class="selinfo" id="selinfo"></div></div>
     </div>
@@ -157,12 +172,12 @@
         <select id="syr"><option value="100">1 mL · 100 units</option><option value="50">0.5 mL · 50 units</option><option value="30">0.3 mL · 30 units</option></select></div>
 
       <div class="result">
-        <div class="bigres"><span class="n" id="rUnits">—</span><span class="u">units to draw</span></div>
+        <div class="bigres"><span class="n" id="rUnits">, </span><span class="u">units to draw</span></div>
         <div class="subres">
-          <div>Volume per dose<b id="rVol">—</b></div>
-          <div>Concentration<b id="rConc">—</b></div>
-          <div>Per unit on syringe<b id="rPerUnit">—</b></div>
-          <div>Doses per vial<b id="rDoses">—</b></div>
+          <div>Volume per dose<b id="rVol">, </b></div>
+          <div>Concentration<b id="rConc">, </b></div>
+          <div>Per unit on syringe<b id="rPerUnit">, </b></div>
+          <div>Doses per vial<b id="rDoses">, </b></div>
         </div>
         <div class="warnote" id="rWarn"></div>
       </div>
@@ -171,7 +186,7 @@
     <!-- PLASMA -->
     <div class="tool">
       <h2><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17c3 0 3-8 6-8s3 6 6 6 3-9 6-9"/></svg></span>Plasma-level model</h2>
-      <div class="hint">Half-life accumulation curve (one-compartment, relative). Educational — not a dosing schedule.</div>
+      <div class="hint">Half-life accumulation curve (one-compartment, relative). Educational, not a dosing schedule.</div>
       <div class="row">
         <div class="fg"><label for="hl">Half-life (hours)</label><input id="hl" type="number" inputmode="decimal" value="5" min="0" step="any"/></div>
         <div class="fg"><label for="freq">Dose every</label>
@@ -180,25 +195,25 @@
       <div id="modelBox">
         <div class="chartwrap"><svg id="chart" viewBox="0 0 600 170" preserveAspectRatio="none"></svg></div>
         <div class="ssrow">
-          <div>≈ Steady state<b id="ssTime">—</b></div>
-          <div>Peak : trough<b id="ssRatio">—</b></div>
-          <div>Accumulation<b id="ssAccum">—</b></div>
+          <div>≈ Steady state<b id="ssTime">, </b></div>
+          <div>Peak : trough<b id="ssRatio">, </b></div>
+          <div>Accumulation<b id="ssAccum">, </b></div>
         </div>
       </div>
-      <div class="modeloff" id="modelOff" style="display:none">No half-life on record for this compound — enter one to model the curve.</div>
+      <div class="modeloff" id="modelOff" style="display:none">No half-life on record for this compound, enter one to model the curve.</div>
     </div>
   </div>
 
-  <div class="disc"><b>Research &amp; education only.</b> These tools are calculators and models for laboratory and research planning — they are <b>not</b> medical, dosing or treatment advice, and not a substitute for a qualified professional. The plasma model is a simplified one-compartment illustration of published half-life, not a guarantee of real-world levels. Always verify against primary sources. <a href="/cards.html?ask=1" style="color:var(--accent)">Ask the AI</a> for context.</div>
+  <div class="disc"><b>Research &amp; education only.</b> These tools are calculators and models for laboratory and research planning, they are <b>not</b> medical, dosing or treatment advice, and not a substitute for a qualified professional. The plasma model is a simplified one-compartment illustration of published half-life, not a guarantee of real-world levels. Always verify against primary sources. <a href="/cards.html?ask=1" style="color:var(--accent)">Ask the AI</a> for context.</div>
 
   <section class="blk">
     <h2 class="sh">How to reconstitute a peptide</h2>
-    <p class="sp">The four numbers that matter — and what this calculator does with them.</p>
+    <p class="sp">The four numbers that matter, and what this calculator does with them.</p>
     <div class="how">
       <div class="step"><div class="n">01</div><h3>Vial amount</h3><p>The total peptide in the vial, in mg (e.g. a 10 mg vial of BPC-157).</p></div>
-      <div class="step"><div class="n">02</div><h3>Add water</h3><p>The volume of bacteriostatic water you draw into the vial — more water = a more dilute, easier-to-measure solution.</p></div>
+      <div class="step"><div class="n">02</div><h3>Add water</h3><p>The volume of bacteriostatic water you draw into the vial, more water = a more dilute, easier-to-measure solution.</p></div>
       <div class="step"><div class="n">03</div><h3>Target dose</h3><p>The amount per administration, in mcg or mg. We pre-fill a typical research range per compound.</p></div>
-      <div class="step"><div class="n">04</div><h3>Read the units</h3><p>We convert to units on a U-100 insulin syringe — the number you actually draw to.</p></div>
+      <div class="step"><div class="n">04</div><h3>Read the units</h3><p>We convert to units on a U-100 insulin syringe, the number you actually draw to.</p></div>
     </div>
   </section>
 
@@ -206,15 +221,15 @@
     <h2 class="sh">Calculator FAQ</h2>
     <div class="faq">
       <details open><summary>How do I work out units to draw?<span class="pl">+</span></summary><p>Concentration = vial mg ÷ water mL. Volume per dose = dose ÷ concentration. On a U-100 insulin syringe, 100 units = 1 mL, so units = volume (mL) × 100. The calculator does all of this and pre-fills typical values per compound from our knowledge base.</p></details>
-      <details><summary>What is "per unit on the syringe"?<span class="pl">+</span></summary><p>It's how many mcg sit in a single unit mark on your U-100 syringe at your chosen dilution — handy for quickly eyeballing or adjusting a dose without recalculating.</p></details>
-      <details><summary>What does the plasma-level model show?<span class="pl">+</span></summary><p>A simplified one-compartment model: each dose adds to the amount in your system, which then decays by the compound's half-life. Repeated dosing accumulates toward a steady state. It's relative and illustrative — for understanding accumulation and timing, not a prescription.</p></details>
+      <details><summary>What is "per unit on the syringe"?<span class="pl">+</span></summary><p>It's how many mcg sit in a single unit mark on your U-100 syringe at your chosen dilution, handy for quickly eyeballing or adjusting a dose without recalculating.</p></details>
+      <details><summary>What does the plasma-level model show?<span class="pl">+</span></summary><p>A simplified one-compartment model: each dose adds to the amount in your system, which then decays by the compound's half-life. Repeated dosing accumulates toward a steady state. It's relative and illustrative, for understanding accumulation and timing, not a prescription.</p></details>
       <details><summary>Is this medical advice?<span class="pl">+</span></summary><p>No. PeptX.AI tools are for laboratory and research use and education only. Nothing here recommends a compound, dose or protocol. Consult a qualified professional for anything affecting health.</p></details>
     </div>
   </section>
 </main>
 
 <footer class="site"><div class="wrap fin">
-  <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
+  <a class="brand" href="/"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a>
   <div class="flinks"><a href="/cards.html">Compounds</a><a href="/learn/">Guides</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
   <span class="ruo">Research use only</span>
 </div></footer>
@@ -232,7 +247,7 @@
 <script>
 const API="https://pmebegdwqizozfmzxpuw.supabase.co/functions/v1/peptx-cards-export";
 const $=id=>document.getElementById(id);
-const fmt=(n,d=2)=>{if(!isFinite(n))return"—";const r=Math.round(n*10**d)/10**d;return (Math.abs(r)>=100?Math.round(r):r).toString();};
+const fmt=(n,d=2)=>{if(!isFinite(n))return", ";const r=Math.round(n*10**d)/10**d;return (Math.abs(r)>=100?Math.round(r):r).toString();};
 let DOSE_UNIT="mcg", COMPOUNDS=[];
 
 function slugify(s){return (s||'').toLowerCase().replace(/\+/g,' plus ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
@@ -243,7 +258,7 @@ function calcRecon(){
   const vial=parseFloat($("vial").value), bac=parseFloat($("bac").value), doseRaw=parseFloat($("dose").value);
   const syr=parseInt($("syr").value,10);
   const warn=$("rWarn");warn.classList.remove("show");
-  if(!(vial>0)||!(bac>0)||!(doseRaw>0)){$("rUnits").textContent="—";$("rVol").textContent=$("rConc").textContent=$("rPerUnit").textContent=$("rDoses").textContent="—";return;}
+  if(!(vial>0)||!(bac>0)||!(doseRaw>0)){$("rUnits").textContent=", ";$("rVol").textContent=$("rConc").textContent=$("rPerUnit").textContent=$("rDoses").textContent=", ";return;}
   const doseMg=DOSE_UNIT==="mg"?doseRaw:doseRaw/1000;
   const conc=vial/bac;                 // mg per mL
   const volMl=doseMg/conc;             // mL per dose
@@ -255,8 +270,8 @@ function calcRecon(){
   $("rConc").textContent=fmt(conc,2)+" mg/mL";
   $("rPerUnit").textContent=fmt(mcgPerUnit,1)+" mcg/unit";
   $("rDoses").textContent=Math.floor(doses)+" doses";
-  if(units>syr){warn.textContent=`That's ${fmt(units,1)} units — more than a ${syr}-unit syringe holds. Add more water or split the dose.`;warn.classList.add("show");}
-  else if(units<2){warn.textContent=`Only ${fmt(units,1)} units — very small to measure accurately. Use less water for a tighter draw.`;warn.classList.add("show");}
+  if(units>syr){warn.textContent=`That's ${fmt(units,1)} units, more than a ${syr}-unit syringe holds. Add more water or split the dose.`;warn.classList.add("show");}
+  else if(units<2){warn.textContent=`Only ${fmt(units,1)} units, very small to measure accurately. Use less water for a tighter draw.`;warn.classList.add("show");}
 }
 
 /* ---- plasma model (one-compartment, relative) ---- */
@@ -336,12 +351,11 @@ $("cmp").addEventListener("change",()=>{
 recalc();
 fetch(API).then(r=>r.json()).then(d=>{
   COMPOUNDS=(d.cards||[]).filter(c=>c.name).sort((a,b)=>a.name.localeCompare(b.name));
-  $("cmp").insertAdjacentHTML("beforeend",COMPOUNDS.map(c=>`<option value="${c.name.replace(/"/g,'&quot;')}">${c.name}${c.nick?` — ${c.nick}`:""}</option>`).join(""));
+  $("cmp").insertAdjacentHTML("beforeend",COMPOUNDS.map(c=>`<option value="${c.name.replace(/"/g,'&quot;')}">${c.name}${c.nick?`, ${c.nick}`:""}</option>`).join(""));
   // deep-link ?c=Name
   const q=new URLSearchParams(location.search).get("c");
   if(q){const hit=COMPOUNDS.find(c=>c.name.toLowerCase()===q.toLowerCase());if(hit){$("cmp").value=hit.name;$("cmp").dispatchEvent(new Event("change"));}}
 }).catch(()=>{});
 </script>
-<script src="fx-bg.js" defer></script>
 </body>
 </html>

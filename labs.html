@@ -48,27 +48,42 @@
   .accent{color:#03110d;background:linear-gradient(160deg,#0a84ff,#00d4aa)}
   .ghost{color:var(--ink);background:var(--glass);border:1px solid var(--hair)}
   .note{margin-top:22px;font-size:12.5px;color:var(--muted)}
+.blogo{height:28px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.brand .ai{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;color:var(--accent);margin-left:-2px}
+
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 42% at 50% -4%,rgba(150,180,228,.20),transparent 56%),radial-gradient(130% 100% at 50% 0%,#0c1119 0%,#080b13 42%,#04060b 100%)}
+.scene::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;background:repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}
+.smk{position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:cover;will-change:transform}
+.smk1{opacity:.62;mix-blend-mode:screen;-webkit-mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.43 0 0 0 0 0.95 1 0 0 0 -0.18'/></filter><rect width='1280' height='800' filter='url(%23b)'/></svg>");animation:drift1 90s ease-in-out infinite}
+.smk2{opacity:.4;mix-blend-mode:screen;-webkit-mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.013 0.017' numOctaves='5' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.72 0 0 0 0 0.82 0 0 0 0 1 1.2 0 0 0 -0.68'/></filter><rect width='1280' height='800' filter='url(%23w)'/></svg>");animation:drift2 120s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(-2%,0,0) scale(1.06)}50%{transform:translate3d(3%,-3%,0) scale(1.14)}}
+@keyframes drift2{0%,100%{transform:translate3d(2%,1%,0) scale(1.10)}50%{transform:translate3d(-3%,-2%,0) scale(1.20)}}
+@media(prefers-reduced-motion:reduce){.smk{animation:none!important}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#fxbg{display:none!important}
 </style>
 </head>
 <body>
-<div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
-<canvas id="fxbg" aria-hidden="true"></canvas>
-<nav><div class="navin"><a class="brand" href="index.html"><span class="logo"></span>Pept<i>X</i>.AI</a><a class="lk" href="cards.html">← Compounds</a></div></nav>
+<div class="scene"></div>
+<div class="smk smk1"></div>
+<div class="smk smk2"></div>
+<div class="grain"></div>
+<nav><div class="navin"><a class="brand" href="index.html"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a><a class="lk" href="cards.html">← Compounds</a></div></nav>
 <div class="wrap">
   <span class="soon"><span class="p"></span>In active build · launching shortly</span>
   <h1>Read your <em>own biology.</em></h1>
-  <p class="lead">Upload a blood panel or a raw DNA export (23andMe, Ancestry, Nucleus). PeptX.AI parses it and gives you a private, research-grounded read — what the markers and variants are associated with in the literature, and which compounds the research most often connects to them. Your data is tied to your account and never sold.</p>
+  <p class="lead">Upload a blood panel or a raw DNA export (23andMe, Ancestry, Nucleus). PeptX.AI parses it and gives you a private, research-grounded read, what the markers and variants are associated with in the literature, and which compounds the research most often connects to them. Your data is tied to your account and never sold.</p>
   <div class="grid">
     <div class="panel">
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3h6M10 3v6.5L5.5 17a2.5 2.5 0 0 0 2.2 3.7h8.6A2.5 2.5 0 0 0 18.5 17L14 9.5V3"/></svg></div>
       <h3>Blood panels</h3>
-      <p>Hormones, lipids, metabolic, inflammation, micronutrients — parsed from a PDF or photo into structured markers with research context.</p>
+      <p>Hormones, lipids, metabolic, inflammation, micronutrients, parsed from a PDF or photo into structured markers with research context.</p>
       <div class="drop"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg> Drag a PDF or photo here · <i>enabled at launch</i></div>
     </div>
     <div class="panel">
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4c6 4 10 12 16 16M4 20C10 16 14 8 20 4M7 5h4M13 19h4M6 9h3M15 15h3"/></svg></div>
       <h3>DNA exports</h3>
-      <p>Drop a raw genotype file and we surface variants the research associates with metabolism, recovery, methylation and more — strictly educational.</p>
+      <p>Drop a raw genotype file and we surface variants the research associates with metabolism, recovery, methylation and more, strictly educational.</p>
       <div class="drop"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M4 4c6 4 10 12 16 16M4 20C10 16 14 8 20 4M7 5h4M13 19h4M6 9h3M15 15h3"/></svg> Drag a raw DNA file here · <i>enabled at launch</i></div>
     </div>
   </div>
@@ -77,8 +92,7 @@
     <a class="btn accent" href="account.html">Get notified at launch</a>
     <a class="btn ghost" href="cards.html">Explore the index meanwhile</a>
   </div>
-  <p class="note">Educational analysis of published research only — not a medical test, diagnosis or treatment advice. Always consult a qualified professional. Research use only.</p>
+  <p class="note">Educational analysis of published research only, not a medical test, diagnosis or treatment advice. Always consult a qualified professional. Research use only.</p>
 </div>
-<script src="fx-bg.js" defer></script>
 </body>
 </html>
