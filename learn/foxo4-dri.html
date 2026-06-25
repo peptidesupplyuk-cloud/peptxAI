@@ -20,13 +20,14 @@
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/learn/learn.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"PeptX.AI","item":"https://peptx.ai/"},{"@type":"ListItem","position":2,"name":"Compounds","item":"https://peptx.ai/cards.html"},{"@type":"ListItem","position":3,"name":"FOXO4-DRI","item":"https://peptx.ai/learn/foxo4-dri"}]},{"@type":["Drug","MedicalEntity"],"name":"FOXO4-DRI","alternateName":["Senolytic Peptide"],"description":"Cell-penetrating peptide that disrupts the FOXO4-p53 interaction, selectively triggering apoptosis in senescent cells. Experimental senolytic agent.","legalStatus":"Research compound","mechanismOfAction":"FOXO4-DRI is a peptide designed to interfere with the interaction between FOXO4 and p53 proteins. By disrupting this interaction, it selectively induces apoptosis in senescent cells, which are cells that have stopped dividing and contribute to aging and age-related diseases. This targeted action helps to clear these dysfunctional cells from tissues, potentially improving tissue function and health."},{"@type":"MedicalWebPage","name":"FOXO4-DRI — The Cell Reaper: evidence, mechanism, dosing & PK | PeptX.AI","description":"FOXO4-DRI (Senolytic Peptide): Experimental peptide researched for selectively triggering apoptosis in senescent, non-dividing cells. Evidence grade C. Research use only.","url":"https://peptx.ai/learn/foxo4-dri","lastReviewed":"2026-06-24"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"PeptX.AI","item":"https://peptx.ai/"},{"@type":"ListItem","position":2,"name":"Compounds","item":"https://peptx.ai/cards.html"},{"@type":"ListItem","position":3,"name":"FOXO4-DRI","item":"https://peptx.ai/learn/foxo4-dri"}]},{"@type":["Drug","MedicalEntity"],"name":"FOXO4-DRI","alternateName":["Senolytic Peptide"],"description":"Cell-penetrating peptide that disrupts the FOXO4-p53 interaction, selectively triggering apoptosis in senescent cells. Experimental senolytic agent.","legalStatus":"Research compound","mechanismOfAction":"FOXO4-DRI is a peptide designed to interfere with the interaction between FOXO4 and p53 proteins. By disrupting this interaction, it selectively induces apoptosis in senescent cells, which are cells that have stopped dividing and contribute to aging and age-related diseases. This targeted action helps to clear these dysfunctional cells from tissues, potentially improving tissue function and health."},{"@type":"MedicalWebPage","name":"FOXO4-DRI — The Cell Reaper: evidence, mechanism, dosing & PK | PeptX.AI","description":"FOXO4-DRI (Senolytic Peptide): Experimental peptide researched for selectively triggering apoptosis in senescent, non-dividing cells. Evidence grade C. Research use only.","url":"https://peptx.ai/learn/foxo4-dri","lastReviewed":"2026-06-25"}]}</script>
 </head>
 <body style="--accent:#FF375F;--gcol:#C9A26B">
 <div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
+<canvas id="fxbg" aria-hidden="true"></canvas>
 <nav><div class="navin">
   <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
-  <div class="navr"><a class="lk" href="/cards.html">All compounds</a><a class="lk go" href="/cards.html?ask=1">✦ Ask the AI</a></div>
+  <div class="navr"><a class="lk" href="/cards.html">All compounds</a><a class="lk go" href="/cards.html?ask=1">Ask the AI</a></div>
 </div></nav>
 
 <main class="wrap">
@@ -55,7 +56,7 @@
       <section><h2>What the research describes</h2><ul class="ticks"><li>Induces apoptosis in senescent cells</li><li>Reduces markers of cellular senescence</li><li>Improves tissue function in aged tissues</li><li>Potentially enhances physical function in aged organisms</li><li>May reduce inflammation associated with senescent cells</li></ul></section>
       <section><h2>Use areas</h2><p class="muted">FOXO4-DRI is researched across multiple areas:</p><div class="uses"><div class="useitem"><h3>Longevity</h3><p>FOXO4-DRI is relevant to longevity as it targets and removes senescent cells, which are implicated in aging and age-related diseases.</p></div><div class="useitem"><h3>Health optimisation</h3><p>FOXO4-DRI may contribute to health optimisation by reducing the burden of senescent cells, potentially improving overall tissue health and function.</p></div></div></section>
       <section><h2>Evidence summary</h2><p>There are currently no published human clinical trials for FOXO4-DRI. Most evidence comes from animal studies and in vitro experiments, which show promising senolytic effects. The lack of human data represents a significant gap in understanding its safety and efficacy in humans.</p><p class="grade-line"><b>Evidence grade C</b> — Early research.</p></section>
-      <section><h2>Research references</h2><div class="ref"><div class="rt">Targeted Apoptosis of Senescent Cells Restores Tissue Homeostasis in Response to Chemotoxicity and Aging</div><div class="rs">This study demonstrated that FOXO4-DRI can selectively induce apoptosis in senescent cells in mice, improving tissue function.</div><div class="rm">Baar et al, 2017 · <a href="https://doi.org/10.1016/j.cell.2017.02.031" target="_blank" rel="noopener nofollow">View source ↗</a></div></div></section>
+      <section><h2>Research references</h2><div class="ref"><div class="rt">Targeted Apoptosis of Senescent Cells Restores Tissue Homeostasis in Response to Chemotoxicity and Aging</div><div class="rs">This study demonstrated that FOXO4-DRI can selectively induce apoptosis in senescent cells in mice, improving tissue function.</div><div class="rm">Baar et al, 2017 · <a href="https://doi.org/10.1016/j.cell.2017.02.031" target="_blank" rel="noopener nofollow">View source</a></div></div></section>
       <section><h2>Pharmacokinetics</h2><div class="kv">
         <div><span>Half-life</span><b>—</b></div>
         <div><span>Onset (t-max)</span><b>—</b></div>
@@ -93,7 +94,8 @@
 <footer class="site"><div class="wrap fin">
   <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
   <div class="flinks"><a href="/cards.html">Compounds</a><a href="/learn/">All guides</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
-  <span class="ruo">⚠ Research use only</span>
+  <span class="ruo">Research use only</span>
 </div></footer>
+<script src="/fx-bg.js" defer></script>
 </body>
 </html>

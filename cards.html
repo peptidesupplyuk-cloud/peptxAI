@@ -37,8 +37,8 @@
   /* top bar */
   .bar{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,5vw,30px) 6px;flex:none}
   .brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-.01em}
-  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0a84ff,#00d4aa);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
-  .logo::after{content:"";position:absolute;inset:7px;border:2px solid #fff;border-right-color:transparent;border-bottom-color:transparent;border-radius:4px;transform:rotate(45deg)}
+  .logo{width:30px;height:30px;border-radius:9px;background:#0b111c;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.14);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .logo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#f6f9ff,#a7b6c9 46%,#46546a);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat}
   .brand span{color:#00d4aa}
   .cmpBtn{font-family:var(--body);font-weight:600;font-size:13px;color:var(--ink);padding:9px 15px;border-radius:100px;
     background:var(--glass);border:1px solid var(--hair2);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
@@ -261,7 +261,7 @@
   <div class="bar">
     <a class="brand" href="index.html" style="text-decoration:none;color:inherit"><div class="logo"></div>Pept<span>X</span></a>
     <div style="display:flex;gap:9px;align-items:center">
-      <button class="cmpBtn" id="askBtn" style="color:#00d4aa;border-color:rgba(0,212,170,.35)">✦ Ask AI</button>
+      <button class="cmpBtn" id="askBtn" style="color:#00d4aa;border-color:rgba(0,212,170,.35)">Ask AI</button>
       <button class="cmpBtn" id="cmpBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="7" height="14" rx="1.5"/><rect x="14" y="5" width="7" height="14" rx="1.5"/></svg>Compare</button>
     </div>
   </div>
@@ -291,7 +291,7 @@
 <div class="chatPop" id="chatPop" aria-hidden="true">
   <div class="cpHead">
     <div class="t"><div class="clogo"></div>Pept<span style="color:var(--accent)">X</span>.AI<small>research</small></div>
-    <button class="cpClose" id="cpClose" aria-label="Close chat">✕</button>
+    <button class="cpClose" id="cpClose" aria-label="Close chat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <div class="thread" id="thread"></div>
   <div class="composer">
@@ -444,7 +444,7 @@ function frontHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
       ${meter("Convenience",convLabel(p.freq)||"—",convPct(p.freq))}
     </div>
     <div class="tags">
-      ${p.is_peptide===false?`<span class="t" style="color:#ffd60a;border-color:#ffd60a44;background:#ffd60a14">⚠ Non-peptide</span>`:""}
+      ${p.is_peptide===false?`<span class="t" style="color:#ffd60a;border-color:#ffd60a44;background:#ffd60a14">Non-peptide</span>`:""}
       ${usesOf(p).map(u=>`<span class="t use">${u}</span>`).join("")}
       <span class="t">${REGSHORT[p.regulatory_status_uk]||p.regulatory_status_uk}</span>
     </div>
@@ -455,15 +455,15 @@ function frontHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade];
 function refHTML(r){const meta=[r.authors,r.year].filter(Boolean).join(", ");
   const pmid=r.pubmed_id?String(r.pubmed_id).replace(/\D/g,""):"";
   const url=r.doi?("https://doi.org/"+r.doi):(pmid?("https://pubmed.ncbi.nlm.nih.gov/"+pmid+"/"):null);
-  return `<div class="ref"><div class="rt">${r.title||"Reference"}</div>${r.one_line_summary?`<div class="rs">${r.one_line_summary}</div>`:""}<div class="rm">${meta}${url?`${meta?" · ":""}<a href="${url}" target="_blank" rel="noopener">source ↗</a>`:""}</div></div>`;}
+  return `<div class="ref"><div class="rt">${r.title||"Reference"}</div>${r.one_line_summary?`<div class="rs">${r.one_line_summary}</div>`:""}<div class="rm">${meta}${url?`${meta?" · ":""}<a href="${url}" target="_blank" rel="noopener">source</a>`:""}</div></div>`;}
 function backHTML(p){const acc=catCol(p.category),g=GR[p.evidence_grade],rr=rel(p);
   const refs=p.key_research_refs||[];
   const facts=[(p.administration&&p.administration.length)?p.administration.join("/"):"",p.freq,p.dose_range,p.cycle_duration?("Cycle: "+p.cycle_duration):""].filter(Boolean);
   const reg=[["UK",p.regulatory_status_uk],["US",p.regulatory_status_us],["EU",p.regulatory_status_eu]].filter(r=>r[1]);
   return `<div class="face back" style="--accent:${acc}"><div class="inner">
-    <div class="bhead"><div><h2>${p.name}</h2><div class="fn">${p.full_name}</div></div><button class="flipback" data-b>✕</button></div>
+    <div class="bhead"><div><h2>${p.name}</h2><div class="fn">${p.full_name}</div></div><button class="flipback" data-b><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <a class="guidelink" href="learn/${slugify(p.name)}.html">Read the full ${p.name} guide<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-    ${p.is_peptide===false?`<div class="disc" style="margin-top:14px;border-color:#ffd60a33"><b>⚠ ${p.compound_class}.</b> Grouped with peptides here for research convenience — it is not technically a peptide.</div>`:""}
+    ${p.is_peptide===false?`<div class="disc" style="margin-top:14px;border-color:#ffd60a33"><b>${p.compound_class}.</b> Grouped with peptides here for research convenience — it is not technically a peptide.</div>`:""}
     ${facts.length?`<div class="factrow">${facts.map(f=>`<span>${f}</span>`).join("")}</div>`:""}
     <div class="sec"><p>${p.description}</p></div>
     <div class="sec"><h3>How it works</h3><p>${p.mechanism_of_action}</p></div>

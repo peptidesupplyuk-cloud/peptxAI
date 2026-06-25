@@ -12,10 +12,12 @@
   :root{--bg:#05070d;--ink:#eef1f8;--muted:#98a1b6;--accent:#00d4aa;--hair:rgba(255,255,255,.1)}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Satoshi',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}
+  #fxbg{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
   .bg{position:fixed;inset:0;z-index:0;background:radial-gradient(60vmax 40vmax at 15% -10%,#1b4dff22,transparent 60%),radial-gradient(50vmax 40vmax at 110% 10%,#00d4aa1c,transparent 60%)}
   .wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:clamp(34px,7vw,72px) clamp(20px,5vw,40px) 90px}
   .brand{display:flex;align-items:center;gap:10px;margin-bottom:30px;font-family:'Clash Display';font-weight:700;font-size:18px}
-  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0a84ff,#00d4aa)}
+  .logo{width:30px;height:30px;border-radius:9px;background:#0b111c;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.14)}
+  .logo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#f6f9ff,#a7b6c9 46%,#46546a);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat}
   .brand span{color:var(--accent)}
   a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
   h1{font-family:'Clash Display';font-weight:600;font-size:clamp(30px,6vw,44px);letter-spacing:-.02em;margin-bottom:6px}
@@ -31,12 +33,13 @@
 </head>
 <body>
 <div class="bg"></div>
+<canvas id="fxbg" aria-hidden="true"></canvas>
 <div class="wrap">
   <a class="brand" href="/"><span></span><div class="logo"></div>Pept<span>X</span>.AI</a>
   <h1>Terms of Use</h1>
   <div class="upd">Last updated: June 2026</div>
 
-  <div class="callout"><b>⚠ Research &amp; education only.</b> PeptX.AI provides educational summaries of published scientific research. Nothing here is medical, health, dosing, diagnostic, or treatment advice, and it is not a substitute for a qualified healthcare professional. All compounds are referenced strictly for laboratory and research use only.</div>
+  <div class="callout"><b>Research &amp; education only.</b> PeptX.AI provides educational summaries of published scientific research. Nothing here is medical, health, dosing, diagnostic, or treatment advice, and it is not a substitute for a qualified healthcare professional. All compounds are referenced strictly for laboratory and research use only.</div>
 
   <h2>1. Who can use PeptX.AI</h2>
   <p>You must be at least 18 years old to use this site. By using it you confirm you are 18 or over and accept these Terms.</p>
@@ -70,5 +73,6 @@
   <a class="back" href="/">← Back to PeptX.AI</a>
   <footer>© 2026 PeptX · For laboratory and research use only · <a href="privacy.html">Privacy Policy</a></footer>
 </div>
+<script src="fx-bg.js" defer></script>
 </body>
 </html>

@@ -21,7 +21,7 @@ function refHTML(r){
   const meta=[r.authors,r.year].filter(Boolean).join(", ");
   const pmid=r.pubmed_id?String(r.pubmed_id).replace(/\D/g,""):"";
   const url=r.doi?("https://doi.org/"+r.doi):(pmid?("https://pubmed.ncbi.nlm.nih.gov/"+pmid+"/"):null);
-  return `<div class="ref"><div class="rt">${esc(r.title||"Reference")}</div>${r.one_line_summary?`<div class="rs">${esc(r.one_line_summary)}</div>`:""}<div class="rm">${esc(meta)}${url?`${meta?" · ":""}<a href="${esc(url)}" target="_blank" rel="noopener nofollow">View source ↗</a>`:""}</div></div>`;
+  return `<div class="ref"><div class="rt">${esc(r.title||"Reference")}</div>${r.one_line_summary?`<div class="rs">${esc(r.one_line_summary)}</div>`:""}<div class="rm">${esc(meta)}${url?`${meta?" · ":""}<a href="${esc(url)}" target="_blank" rel="noopener nofollow">View source</a>`:""}</div></div>`;
 }
 function chips(arr,pfx){return (arr||[]).map(s=>`<span>${pfx||""}${esc(s)}</span>`).join("");}
 
@@ -82,9 +82,10 @@ function page(p, all){
 </head>
 <body style="--accent:${acc};--gcol:${g.c}">
 <div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
+<canvas id="fxbg" aria-hidden="true"></canvas>
 <nav><div class="navin">
   <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
-  <div class="navr"><a class="lk" href="/cards.html">All compounds</a><a class="lk go" href="/cards.html?ask=1">✦ Ask the AI</a></div>
+  <div class="navr"><a class="lk" href="/cards.html">All compounds</a><a class="lk go" href="/cards.html?ask=1">Ask the AI</a></div>
 </div></nav>
 
 <main class="wrap">
@@ -94,7 +95,7 @@ function page(p, all){
     <div class="ptop"><span class="pcat"><span class="d"></span>${esc(p.category)}</span><span class="pgrade">Grade ${esc(p.evidence_grade)} · ${esc(g.l)}</span></div>
     <h1>${esc(p.name)}</h1>
     <div class="psub">${esc(p.full_name||"")}${p.nick?` · <b>${esc(p.nick)}</b>`:""}${aliases.length?` · <span class="al">also: ${esc(aliases.join(", "))}</span>`:""}</div>
-    ${p.is_peptide===false?`<div class="warn">⚠ ${esc(p.compound_class)} — grouped with peptides for research convenience; not technically a peptide.</div>`:""}
+    ${p.is_peptide===false?`<div class="warn">${esc(p.compound_class)} — grouped with peptides for research convenience; not technically a peptide.</div>`:""}
     <p class="lede">${esc(p.tldr||p.description)}</p>
     <div class="herobtns">
       <a class="btn accent" href="/cards.html?card=${encodeURIComponent(p.name)}">Open the card</a>
@@ -151,8 +152,9 @@ function page(p, all){
 <footer class="site"><div class="wrap fin">
   <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
   <div class="flinks"><a href="/cards.html">Compounds</a><a href="/learn/">All guides</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
-  <span class="ruo">⚠ Research use only</span>
+  <span class="ruo">Research use only</span>
 </div></footer>
+<script src="/fx-bg.js" defer></script>
 </body>
 </html>`;
 }
@@ -178,14 +180,16 @@ function indexPage(all){
 <link rel="stylesheet" href="/learn/learn.css">
 </head><body>
 <div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
-<nav><div class="navin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="navr"><a class="lk" href="/cards.html">Swipe the deck</a><a class="lk go" href="/cards.html?ask=1">✦ Ask the AI</a></div></div></nav>
+<canvas id="fxbg" aria-hidden="true"></canvas>
+<nav><div class="navin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="navr"><a class="lk" href="/cards.html">Swipe the deck</a><a class="lk go" href="/cards.html?ask=1">Ask the AI</a></div></div></nav>
 <main class="wrap">
   <nav class="crumbs"><a href="/">Home</a><span>›</span><span>Guides</span></nav>
   <header class="lhead"><h1>Peptide &amp; compound guides</h1><p>Every compound in the knowledge base — ${all.length} evidence-graded research guides. Tap any to read the mechanism, pharmacokinetics, evidence and references.</p></header>
   ${sections}
   <div class="disc"><b>Research use only.</b> Educational summaries of published research — not medical advice.</div>
 </main>
-<footer class="site"><div class="wrap fin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="flinks"><a href="/cards.html">Compounds</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div><span class="ruo">⚠ Research use only</span></div></footer>
+<footer class="site"><div class="wrap fin"><a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a><div class="flinks"><a href="/cards.html">Compounds</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div><span class="ruo">Research use only</span></div></footer>
+<script src="/fx-bg.js" defer></script>
 </body></html>`;
 }
 
@@ -195,6 +199,7 @@ html{scroll-behavior:smooth}
 body{font-family:var(--body);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 ::selection{background:rgba(0,212,170,.3)}
+#fxbg{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
 .scene{position:fixed;inset:0;z-index:0;background:radial-gradient(120% 70% at 50% -10%,#11151f,#070a11 45%,#04060b 100%)}
 .smoke{position:fixed;border-radius:50%;filter:blur(70px);mix-blend-mode:screen;opacity:.32;z-index:0}
 .s1{width:46vw;height:46vw;left:-12vw;top:-8vw;background:radial-gradient(circle,#2f6bff55,transparent 62%)}
@@ -203,8 +208,8 @@ a{color:inherit;text-decoration:none}
 nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(4,6,11,.82),rgba(4,6,11,.3));border-bottom:1px solid var(--hair2)}
 .navin{max-width:1080px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,32px)}
 .brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:18px;color:var(--ink)}
-.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0a84ff,#00d4aa);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
-.logo::after{content:"";position:absolute;inset:8px;border:2px solid #fff;border-right-color:transparent;border-bottom-color:transparent;border-radius:4px;transform:rotate(45deg)}
+.logo{width:30px;height:30px;border-radius:8px;position:relative;overflow:hidden;background:#0b111c;border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 12px -5px rgba(0,0,0,.7)}
+.logo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#f6f9ff,#a7b6c9 46%,#46546a);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat}
 .brand i{font-style:normal;color:var(--accent)}
 .navr{display:flex;gap:8px;align-items:center}
 .lk{font-weight:600;font-size:13.5px;color:var(--muted);padding:8px 13px;border-radius:10px}

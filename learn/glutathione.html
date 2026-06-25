@@ -20,13 +20,14 @@
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/learn/learn.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"PeptX.AI","item":"https://peptx.ai/"},{"@type":"ListItem","position":2,"name":"Compounds","item":"https://peptx.ai/cards.html"},{"@type":"ListItem","position":3,"name":"Glutathione","item":"https://peptx.ai/learn/glutathione"}]},{"@type":["Drug","MedicalEntity"],"name":"Glutathione","alternateName":["L-Glutathione (GSH)"],"description":"Master antioxidant produced by every cell. SubQ form bypasses poor oral bioavailability. Supports detoxification, immune function, and skin brightening.","legalStatus":"Research compound","mechanismOfAction":"Glutathione acts as a powerful antioxidant by neutralizing free radicals and reactive oxygen species, thereby protecting cells from oxidative stress. It also plays a crucial role in detoxification processes by conjugating with toxins to make them more water-soluble for excretion. Additionally, glutathione is involved in regenerating other antioxidants like vitamin C and E, and supports immune function by maintaining the redox state of cells."},{"@type":"MedicalWebPage","name":"Glutathione — The Master Shield: evidence, mechanism, dosing & PK | PeptX.AI","description":"Glutathione (L-Glutathione (GSH)): Research describes glutathione as the body's primary endogenous antioxidant, studied for oxidative stress reduction and skin brightening. Evidence grade B. Research use only.","url":"https://peptx.ai/learn/glutathione","lastReviewed":"2026-06-24"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"PeptX.AI","item":"https://peptx.ai/"},{"@type":"ListItem","position":2,"name":"Compounds","item":"https://peptx.ai/cards.html"},{"@type":"ListItem","position":3,"name":"Glutathione","item":"https://peptx.ai/learn/glutathione"}]},{"@type":["Drug","MedicalEntity"],"name":"Glutathione","alternateName":["L-Glutathione (GSH)"],"description":"Master antioxidant produced by every cell. SubQ form bypasses poor oral bioavailability. Supports detoxification, immune function, and skin brightening.","legalStatus":"Research compound","mechanismOfAction":"Glutathione acts as a powerful antioxidant by neutralizing free radicals and reactive oxygen species, thereby protecting cells from oxidative stress. It also plays a crucial role in detoxification processes by conjugating with toxins to make them more water-soluble for excretion. Additionally, glutathione is involved in regenerating other antioxidants like vitamin C and E, and supports immune function by maintaining the redox state of cells."},{"@type":"MedicalWebPage","name":"Glutathione — The Master Shield: evidence, mechanism, dosing & PK | PeptX.AI","description":"Glutathione (L-Glutathione (GSH)): Research describes glutathione as the body's primary endogenous antioxidant, studied for oxidative stress reduction and skin brightening. Evidence grade B. Research use only.","url":"https://peptx.ai/learn/glutathione","lastReviewed":"2026-06-25"}]}</script>
 </head>
 <body style="--accent:#FF375F;--gcol:#64D2FF">
 <div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
+<canvas id="fxbg" aria-hidden="true"></canvas>
 <nav><div class="navin">
   <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
-  <div class="navr"><a class="lk" href="/cards.html">All compounds</a><a class="lk go" href="/cards.html?ask=1">✦ Ask the AI</a></div>
+  <div class="navr"><a class="lk" href="/cards.html">All compounds</a><a class="lk go" href="/cards.html?ask=1">Ask the AI</a></div>
 </div></nav>
 
 <main class="wrap">
@@ -55,7 +56,7 @@
       <section><h2>What the research describes</h2><ul class="ticks"><li>Reduces oxidative stress</li><li>Enhances detoxification processes</li><li>Supports immune system function</li><li>Improves skin brightness and clarity</li><li>May reduce inflammation</li></ul></section>
       <section><h2>Use areas</h2><p class="muted">Glutathione is researched across multiple areas:</p><div class="uses"><div class="useitem"><h3>Longevity</h3><p>Glutathione's role in reducing oxidative stress and supporting detoxification may contribute to longevity by protecting cells from damage.</p></div><div class="useitem"><h3>Fitness</h3><p>Its antioxidant properties can aid in recovery by reducing exercise-induced oxidative stress.</p></div><div class="useitem"><h3>Health optimisation</h3><p>Glutathione supports overall health by enhancing detoxification, reducing oxidative stress, and supporting immune function.</p></div></div></section>
       <section><h2>Evidence summary</h2><p>Several human trials have investigated glutathione's effects, showing benefits in reducing oxidative stress and improving skin health. However, the evidence is mixed regarding its efficacy in immune support and detoxification, with some studies showing limited effects. More large-scale, controlled trials are needed to confirm these benefits.</p><p class="grade-line"><b>Evidence grade B</b> — Emerging.</p></section>
-      <section><h2>Research references</h2><div class="ref"><div class="rt">Effects of glutathione supplementation on oxidative stress markers in healthy adults</div><div class="rs">This study demonstrated that oral glutathione supplementation significantly reduced oxidative stress markers in healthy adults.</div><div class="rm">Smith et al, 2020 · <a href="https://doi.org/10.1016/j.jnutbio.2020.01.001" target="_blank" rel="noopener nofollow">View source ↗</a></div></div></section>
+      <section><h2>Research references</h2><div class="ref"><div class="rt">Effects of glutathione supplementation on oxidative stress markers in healthy adults</div><div class="rs">This study demonstrated that oral glutathione supplementation significantly reduced oxidative stress markers in healthy adults.</div><div class="rm">Smith et al, 2020 · <a href="https://doi.org/10.1016/j.jnutbio.2020.01.001" target="_blank" rel="noopener nofollow">View source</a></div></div></section>
       <section><h2>Pharmacokinetics</h2><div class="kv">
         <div><span>Half-life</span><b>0.25 hrs</b></div>
         <div><span>Onset (t-max)</span><b>30 min</b></div>
@@ -93,7 +94,8 @@
 <footer class="site"><div class="wrap fin">
   <a class="brand" href="/"><span class="logo"></span>Pept<i>X</i>.AI</a>
   <div class="flinks"><a href="/cards.html">Compounds</a><a href="/learn/">All guides</a><a href="/calculator.html">Calculator</a><a href="/cards.html?ask=1">Ask AI</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div>
-  <span class="ruo">⚠ Research use only</span>
+  <span class="ruo">Research use only</span>
 </div></footer>
+<script src="/fx-bg.js" defer></script>
 </body>
 </html>

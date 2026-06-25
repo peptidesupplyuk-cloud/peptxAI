@@ -13,6 +13,7 @@
   :root{--bg:#04060b;--ink:#f4f6fc;--muted:#9aa3b6;--accent:#00d4aa;--glass:rgba(255,255,255,.05);--glass2:rgba(255,255,255,.09);--hair:rgba(255,255,255,.13);--hair2:rgba(255,255,255,.07);--display:'Clash Display',sans-serif;--body:'Satoshi',sans-serif;--mono:'JetBrains Mono',monospace}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:var(--body);color:var(--ink);background:var(--bg);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  #fxbg{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
   .scene{position:fixed;inset:0;z-index:0;background:radial-gradient(120% 80% at 50% -10%,#11151f,#070a11 45%,#04060b 100%)}
   .smoke{position:fixed;border-radius:50%;filter:blur(70px);mix-blend-mode:screen;opacity:.4;z-index:0}
   .s1{width:46vw;height:46vw;left:-12vw;top:-8vw;background:radial-gradient(circle,#2f6bff55,transparent 62%)}
@@ -21,8 +22,8 @@
   nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(4,6,11,.8),rgba(4,6,11,.3));border-bottom:1px solid var(--hair2)}
   .navin{max-width:1100px;margin:0 auto;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,5vw,36px)}
   .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:18px}
-  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#0a84ff,#00d4aa);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
-  .logo::after{content:"";position:absolute;inset:8px;border:2px solid #fff;border-right-color:transparent;border-bottom-color:transparent;border-radius:4px;transform:rotate(45deg)}
+  .logo{width:30px;height:30px;border-radius:9px;background:#0b111c;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.14);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+  .logo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#f6f9ff,#a7b6c9 46%,#46546a);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat}
   .brand i{font-style:normal;color:var(--accent)}
   .lk{font-weight:600;font-size:14px;color:var(--muted);padding:9px 14px;border-radius:11px;border:1px solid var(--hair2);background:var(--glass)}
   .wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:clamp(40px,8vw,80px) clamp(18px,5vw,36px) 80px}
@@ -51,6 +52,7 @@
 </head>
 <body>
 <div class="scene"></div><div class="smoke s1"></div><div class="smoke s2"></div>
+<canvas id="fxbg" aria-hidden="true"></canvas>
 <nav><div class="navin"><a class="brand" href="index.html"><span class="logo"></span>Pept<i>X</i>.AI</a><a class="lk" href="cards.html">← Compounds</a></div></nav>
 <div class="wrap">
   <span class="soon"><span class="p"></span>In active build · launching shortly</span>
@@ -61,13 +63,13 @@
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3h6M10 3v6.5L5.5 17a2.5 2.5 0 0 0 2.2 3.7h8.6A2.5 2.5 0 0 0 18.5 17L14 9.5V3"/></svg></div>
       <h3>Blood panels</h3>
       <p>Hormones, lipids, metabolic, inflammation, micronutrients — parsed from a PDF or photo into structured markers with research context.</p>
-      <div class="drop">📄 Drag a PDF or photo here · <i>enabled at launch</i></div>
+      <div class="drop"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg> Drag a PDF or photo here · <i>enabled at launch</i></div>
     </div>
     <div class="panel">
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4c6 4 10 12 16 16M4 20C10 16 14 8 20 4M7 5h4M13 19h4M6 9h3M15 15h3"/></svg></div>
       <h3>DNA exports</h3>
       <p>Drop a raw genotype file and we surface variants the research associates with metabolism, recovery, methylation and more — strictly educational.</p>
-      <div class="drop">🧬 Drag a raw DNA file here · <i>enabled at launch</i></div>
+      <div class="drop"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M4 4c6 4 10 12 16 16M4 20C10 16 14 8 20 4M7 5h4M13 19h4M6 9h3M15 15h3"/></svg> Drag a raw DNA file here · <i>enabled at launch</i></div>
     </div>
   </div>
   <div class="priv"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span><span><b>Private by design.</b> Your uploads are tied to your account, processed for your analysis only, and never sold or used for advertising. You can delete them anytime.</span></div>
@@ -77,5 +79,6 @@
   </div>
   <p class="note">Educational analysis of published research only — not a medical test, diagnosis or treatment advice. Always consult a qualified professional. Research use only.</p>
 </div>
+<script src="fx-bg.js" defer></script>
 </body>
 </html>
