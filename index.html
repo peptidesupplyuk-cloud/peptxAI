@@ -39,6 +39,7 @@
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(18px,5vw,40px)}
 
   /* ── background: brushed metal + blue smoke ── */
+  #fxbg{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
   .scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:
     radial-gradient(120% 80% at 50% -10%,#11151f 0%,#070a11 45%,#04060b 100%)}
   .scene::before{content:"";position:absolute;inset:0;opacity:.5;
@@ -185,6 +186,7 @@
 </head>
 <body>
 <div class="scene"><div class="smoke s1"></div><div class="smoke s2"></div><div class="smoke s3"></div></div>
+<canvas id="fxbg" aria-hidden="true"></canvas>
 <div class="grain"></div>
 
 <nav>
@@ -398,5 +400,6 @@ try{
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
+<script src="fx-bg.js" defer></script>
 </body>
 </html>
