@@ -5,6 +5,9 @@
 (function(){
   var canvas = document.getElementById('fxbg');
   if(!canvas) return;
+  // DISABLED: the WebGL noise shader shattered on some GPUs (precision). Hide the
+  // canvas so pages fall back to their CSS background until the new SVG smoke bg is rolled out.
+  canvas.style.display='none'; return;
   var gl = canvas.getContext('webgl',{antialias:false,alpha:false,depth:false,stencil:false,powerPreference:'low-power'})
         || canvas.getContext('experimental-webgl');
   if(!gl){ canvas.style.display='none'; return; } // CSS fallback shows through

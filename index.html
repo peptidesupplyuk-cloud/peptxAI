@@ -38,18 +38,25 @@
   ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(18px,5vw,40px)}
 
-  /* ── background: brushed metal + blue smoke ── */
-  #fxbg{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
-  .scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:
-    radial-gradient(120% 80% at 50% -10%,#11151f 0%,#070a11 45%,#04060b 100%)}
-  .scene::before{content:"";position:absolute;inset:0;opacity:.5;
-    background:repeating-linear-gradient(96deg,rgba(255,255,255,.022) 0 2px,transparent 2px 5px),
-      radial-gradient(60% 40% at 50% 0%,rgba(220,230,245,.16),transparent 60%)}
-  .smoke{position:absolute;border-radius:50%;filter:blur(60px);mix-blend-mode:screen;opacity:.5;animation:float 34s ease-in-out infinite}
-  .smoke.s1{width:48vw;height:48vw;left:-12vw;top:-6vw;background:radial-gradient(circle,#2f6bff55,transparent 62%)}
-  .smoke.s2{width:42vw;height:42vw;right:-10vw;top:4vw;background:radial-gradient(circle,#7cc4ff44,transparent 62%);animation-delay:-12s}
-  .smoke.s3{width:50vw;height:50vw;left:20vw;top:46vh;background:radial-gradient(circle,#00d4aa2e,transparent 64%);animation-delay:-22s}
-  @keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(3vw,-2vw,0) scale(1.1)}}
+  /* ── background: brushed metal + blue smoke (SVG turbulence, CPU-rendered) ── */
+  .scene{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(60% 42% at 50% -4%, rgba(150,180,228,.20), transparent 56%),
+      radial-gradient(130% 100% at 50% 0%, #0c1119 0%, #080b13 42%, #04060b 100%)}
+  .scene::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;
+    background:repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}
+  .smk{position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:cover;will-change:transform}
+  .smk1{opacity:.62;mix-blend-mode:screen;
+    -webkit-mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.43 0 0 0 0 0.95 1 0 0 0 -0.18'/></filter><rect width='1280' height='800' filter='url(%23b)'/></svg>");
+    animation:drift1 90s ease-in-out infinite}
+  .smk2{opacity:.4;mix-blend-mode:screen;
+    -webkit-mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.013 0.017' numOctaves='5' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.72 0 0 0 0 0.82 0 0 0 0 1 1.2 0 0 0 -0.68'/></filter><rect width='1280' height='800' filter='url(%23w)'/></svg>");
+    animation:drift2 120s ease-in-out infinite}
+  @keyframes drift1{0%,100%{transform:translate3d(-2%,0,0) scale(1.06)}50%{transform:translate3d(3%,-3%,0) scale(1.14)}}
+  @keyframes drift2{0%,100%{transform:translate3d(2%,1%,0) scale(1.10)}50%{transform:translate3d(-3%,-2%,0) scale(1.20)}}
+  @media(prefers-reduced-motion:reduce){.smk{animation:none!important}}
   .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
@@ -185,8 +192,9 @@
 </style>
 </head>
 <body>
-<div class="scene"><div class="smoke s1"></div><div class="smoke s2"></div><div class="smoke s3"></div></div>
-<canvas id="fxbg" aria-hidden="true"></canvas>
+<div class="scene"></div>
+<div class="smk smk1"></div>
+<div class="smk smk2"></div>
 <div class="grain"></div>
 
 <nav>
@@ -400,6 +408,5 @@ try{
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
-<script src="fx-bg.js" defer></script>
 </body>
 </html>
