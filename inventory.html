@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>My Lab · Inventory &amp; Protocols · PeptX.AI</title>
+<meta name="description" content="Track your peptide inventory, reconstitution and expiry, build protocols from known stacks, and log doses. Research use only."/>
+<meta name="robots" content="noindex,follow"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230b111c'/%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f4f8ff'/%3E%3Cstop offset='.5' stop-color='%239fb0c4'/%3E%3Cstop offset='1' stop-color='%2346546a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 9H14L32 31H26Z M32 9H26L8 31H14Z' fill='url(%23s)'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://pmebegdwqizozfmzxpuw.supabase.co" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#04060b;--ink:#f4f6fc;--muted:#9aa3b6;--accent:#00d4aa;--blue:#0a84ff;--ok:#30d158;--warn:#ffd60a;--bad:#ff453a;
+    --glass:rgba(255,255,255,.05);--glass2:rgba(255,255,255,.09);--hair:rgba(255,255,255,.13);--hair2:rgba(255,255,255,.07);
+    --display:'Clash Display',sans-serif;--body:'Satoshi',sans-serif;--mono:'JetBrains Mono',monospace}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:var(--body);color:var(--ink);background:var(--bg);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .scene{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 42% at 50% -4%,rgba(150,180,228,.20),transparent 56%),radial-gradient(130% 100% at 50% 0%,#0c1119 0%,#080b13 42%,#04060b 100%)}
+  .smk{position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:cover;will-change:transform}
+  .smk1{opacity:.55;mix-blend-mode:screen;-webkit-mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.43 0 0 0 0 0.95 1 0 0 0 -0.18'/></filter><rect width='1280' height='800' filter='url(%23b)'/></svg>");animation:drift1 90s ease-in-out infinite}
+  .smk2{opacity:.36;mix-blend-mode:screen;-webkit-mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.013 0.017' numOctaves='5' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.72 0 0 0 0 0.82 0 0 0 0 1 1.2 0 0 0 -0.68'/></filter><rect width='1280' height='800' filter='url(%23w)'/></svg>");animation:drift2 120s ease-in-out infinite}
+  @keyframes drift1{0%,100%{transform:translate3d(-2%,0,0) scale(1.06)}50%{transform:translate3d(3%,-3%,0) scale(1.14)}}
+  @keyframes drift2{0%,100%{transform:translate3d(2%,1%,0) scale(1.10)}50%{transform:translate3d(-3%,-2%,0) scale(1.20)}}
+  @media(prefers-reduced-motion:reduce){.smk{animation:none!important}}
+
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(4,6,11,.82),rgba(4,6,11,.35));border-bottom:1px solid var(--hair2)}
+  .navin{max-width:1080px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,32px)}
+  .brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:18px}
+  .blogo{height:28px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+  .brand .ai{font-family:var(--display);font-weight:600;font-size:18px;color:var(--accent);margin-left:-2px}
+  .navr{display:flex;gap:8px;align-items:center}
+  .lk{font-weight:600;font-size:13.5px;color:var(--muted);padding:8px 13px;border-radius:10px;cursor:pointer}
+  .lk:hover{color:var(--ink);background:var(--glass)}
+  .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:clamp(24px,4vw,40px) clamp(16px,4vw,32px) 100px}
+
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(26px,5vw,40px);letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14.5px;margin-top:6px}
+  .sec{margin-top:30px}
+  .sechead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .sechead h2{font-family:var(--display);font-weight:600;font-size:20px;display:flex;align-items:center;gap:9px}
+  .sechead h2 .c{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+  .btn{font-family:var(--body);font-weight:700;font-size:14px;border:none;cursor:pointer;border-radius:12px;padding:11px 16px;transition:transform .15s,box-shadow .2s,background .2s;display:inline-flex;align-items:center;gap:7px}
+  .btn:active{transform:scale(.97)}
+  .btn.accent{color:#03110d;background:linear-gradient(160deg,#0a84ff,#00d4aa);box-shadow:0 10px 24px -12px #00d4aa99}
+  .btn.ghost{color:var(--ink);background:var(--glass);border:1px solid var(--hair)}
+  .btn.ghost:hover{background:var(--glass2)}
+  .btn.sm{padding:8px 12px;font-size:13px;border-radius:10px}
+  .btn.danger{color:#ffd0cc;background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.3)}
+  .btn svg{width:15px;height:15px}
+
+  .card{border-radius:18px;padding:18px;background:linear-gradient(165deg,var(--glass2),var(--glass));border:1px solid var(--hair);backdrop-filter:blur(12px)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .empty{color:var(--muted);font-size:14px;padding:22px;text-align:center;border:1px dashed var(--hair2);border-radius:16px}
+
+  /* inventory vial card */
+  .vial .vtop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .vial h3{font-family:var(--display);font-weight:600;font-size:18px}
+  .vial .meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:3px}
+  .badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:100px;border:1px solid var(--hair2);color:var(--muted);white-space:nowrap}
+  .badge.lyo{color:#9fd0ff;border-color:rgba(120,180,255,.3);background:rgba(120,180,255,.08)}
+  .badge.recon{color:var(--accent);border-color:rgba(0,212,170,.3);background:rgba(0,212,170,.08)}
+  .badge.fin{color:var(--muted)}
+  .vstat{margin-top:14px;padding:11px 13px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--hair2);font-size:13px}
+  .vstat .row{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+  .vstat .row span{color:var(--muted)}.vstat .row b{font-family:var(--mono);font-weight:500}
+  .bin{margin-top:11px;display:flex;align-items:center;gap:9px;font-weight:600;font-size:13.5px;padding:10px 12px;border-radius:11px}
+  .bin.ok{color:#bff0d2;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.28)}
+  .bin.warn{color:#fff1a8;background:rgba(255,214,10,.1);border:1px solid rgba(255,214,10,.3)}
+  .bin.bad{color:#ffc7c2;background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.35)}
+  .bin .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .vact{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+
+  /* protocol card */
+  .proto h3{font-family:var(--display);font-weight:600;font-size:19px;display:flex;align-items:center;gap:8px}
+  .proto .pg{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .item{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--hair2)}
+  .item .in{flex:1;min-width:0}
+  .item .inm{font-weight:600;font-size:14.5px}
+  .item .ind{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:2px}
+  .item .due{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-radius:100px}
+  .item .due.now{color:#03110d;background:var(--accent)}
+  .item .due.ok{color:var(--muted);border:1px solid var(--hair2)}
+
+  /* due strip */
+  .due-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .due-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:13px;background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.25)}
+  .due-pill b{font-weight:600;font-size:14px}.due-pill span{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+  /* forms / modal */
+  .scrim{position:fixed;inset:0;z-index:50;background:rgba(3,5,10,.6);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:60px 16px 16px;overflow:auto}
+  .scrim.on{display:flex}
+  .modal{width:100%;max-width:460px;border-radius:20px;padding:22px;background:linear-gradient(170deg,rgba(20,24,36,.97),rgba(8,10,18,.99));border:1px solid var(--hair);box-shadow:0 40px 90px -25px #000}
+  .modal h3{font-family:var(--display);font-weight:600;font-size:19px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+  .modal .x{width:30px;height:30px;border-radius:9px;border:1px solid var(--hair2);background:var(--glass);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+  .modal .x svg{width:13px;height:13px}
+  .fg{display:flex;flex-direction:column;gap:7px;margin-bottom:13px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  label{font-size:12px;color:var(--muted);font-weight:600}
+  input,select{width:100%;font-family:var(--body);font-size:15px;color:var(--ink);background:var(--glass);border:1px solid var(--hair);border-radius:11px;padding:12px 14px;outline:none}
+  input:focus,select:focus{border-color:var(--accent)}
+  select option{background:#0b0f18}
+  .hint{font-size:11px;color:var(--muted)}
+  .ruo{margin-top:26px;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#e9d27a;background:rgba(255,214,10,.07);border:1px solid rgba(255,214,10,.22);padding:7px 13px;border-radius:100px}
+  .hidden{display:none!important}
+  .loading{text-align:center;color:var(--muted);font-family:var(--mono);font-size:13px;padding:70px 0}
+
+  /* auth gate */
+  .authwrap{min-height:64vh;display:flex;align-items:center;justify-content:center}
+  .authcard{width:100%;max-width:420px;border-radius:22px;padding:32px;text-align:center;background:linear-gradient(165deg,var(--glass2),var(--glass));border:1px solid var(--hair);backdrop-filter:blur(18px)}
+  .authcard h2{font-family:var(--display);font-weight:600;font-size:24px;margin:6px 0 8px}
+  .authcard p{color:#bcc4d4;font-size:14px;line-height:1.55;margin-bottom:22px}
+  .authcard .btn{width:100%;justify-content:center;margin-top:11px}
+  .msg{margin-top:14px;font-size:13.5px;padding:12px;border-radius:11px;display:none}
+  .msg.ok{display:block;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);color:#bfeee2}
+  .msg.err{display:block;background:rgba(255,69,58,.1);border:1px solid rgba(255,69,58,.3);color:#ffc7c2}
+</style>
+</head>
+<body>
+<div class="scene"></div><div class="smk smk1"></div><div class="smk smk2"></div>
+<nav><div class="navin">
+  <a class="brand" href="index.html"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></a>
+  <div class="navr"><a class="lk" href="cards.html">Compounds</a><a class="lk" href="calculator.html">Calculator</a><a class="lk" id="navAcct" href="account.html">Account</a></div>
+</div></nav>
+
+<div class="wrap">
+  <div class="loading" id="boot">Connecting…</div>
+
+  <!-- AUTH -->
+  <div class="authwrap hidden" id="authView"><div class="authcard">
+    <h1 style="font-size:26px">Your Lab</h1>
+    <p>Sign in to track your peptide inventory, reconstitution and expiry, build protocols and log doses. Your data stays private to your account.</p>
+    <div class="fg" style="text-align:left"><label for="em">Email</label><input id="em" type="email" inputmode="email" placeholder="you@email.com"/></div>
+    <button class="btn accent" id="otpBtn">Email me a magic link</button>
+    <button class="btn ghost" id="gBtn">Continue with Google</button>
+    <div class="msg" id="authMsg"></div>
+  </div></div>
+
+  <!-- DASHBOARD -->
+  <div class="hidden" id="dash">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px">
+      <div><h1>My Lab</h1><div class="sub" id="who"></div></div>
+      <button class="btn ghost sm" id="signout">Sign out</button>
+    </div>
+
+    <div class="sec" id="dueSec">
+      <div class="sechead"><h2>Due today <span class="c" id="dueCount"></span></h2></div>
+      <div id="dueWrap"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sechead"><h2>Inventory <span class="c" id="invCount"></span></h2>
+        <button class="btn accent sm" id="addVialBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add vial</button></div>
+      <div class="grid" id="invGrid"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sechead"><h2>Protocols <span class="c" id="protoCount"></span></h2>
+        <button class="btn accent sm" id="addProtoBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New protocol</button></div>
+      <div id="protoWrap"></div>
+    </div>
+
+    <div class="ruo">Research use only · tracking and reminders, not medical or dosing advice</div>
+  </div>
+</div>
+
+<!-- modals -->
+<div class="scrim" id="scrim"><div class="modal" id="modal"></div></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SB_URL="https://pmebegdwqizozfmzxpuw.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtZWJlZ2R3cWl6b3pmbXp4cHV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MzEsImV4cCI6MjA4OTk2MDYzMX0.B3z3hxwR7RBaPx2Q8S4Bp1mpQyaKifAHry7_z2RjiZI";
+const EXPORT="https://pmebegdwqizozfmzxpuw.supabase.co/functions/v1/peptx-cards-export";
+const sb=createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const redirectTo=location.origin+location.pathname;
+let USER=null, COMPOUNDS=[], STACKS=[], INV=[], PROTOS=[], ITEMS=[], LOGS=[];
+
+/* ---------- auth ---------- */
+function showMsg(t,k){const m=$("authMsg");m.textContent=t;m.className="msg "+k;}
+$("otpBtn").onclick=async()=>{const email=$("em").value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){showMsg("Enter a valid email.","err");return;}
+  $("otpBtn").disabled=true;const{error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:redirectTo}});$("otpBtn").disabled=false;
+  showMsg(error?(error.message||"Could not send link"):"Check your inbox for the sign-in link.",error?"err":"ok");};
+$("gBtn").onclick=async()=>{const{error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo,scopes:"email profile"}});if(error)showMsg("Google sign-in is not enabled yet, use the email link.","err");};
+$("signout").onclick=async()=>{await sb.auth.signOut();location.reload();};
+
+/* ---------- helpers ---------- */
+const FREQ={daily:'Daily',eod:'Every other day','2x_week':'2x / week','3x_week':'3x / week','5x_week':'5x / week',weekly:'Once weekly'};
+const dayMs=86400000;
+function daysSince(ts){return Math.floor((Date.now()-new Date(ts).getTime())/dayMs);}
+function fmtDose(mcg){if(mcg==null)return '';return mcg>=1000?(+(mcg/1000).toFixed(2))+' mg':Math.round(mcg)+' mcg';}
+function concOf(v){if(!v.mg_per_vial||!v.bac_ml)return null;return v.mg_per_vial/v.bac_ml;} // mg/ml
+function unitsFor(v,mcg){const c=concOf(v);if(!c||!mcg)return null;return (mcg/1000)/c*100;} // U-100 units
+function binState(v){ // returns {cls,label,days} for reconstituted vials
+  if(v.form!=='reconstituted'||!v.reconstituted_at)return null;
+  const used=daysSince(v.reconstituted_at), left=(v.shelf_life_days||28)-used;
+  if(left<0)return{cls:'bad',label:`Past use-by by ${-left} day${-left===1?'':'s'}, bin it`,days:left};
+  if(left<=5)return{cls:'warn',label:`Bin in ${left} day${left===1?'':'s'}`,days:left};
+  return{cls:'ok',label:`${left} days left in fridge`,days:left};
+}
+
+/* ---------- data ---------- */
+async function loadAll(){
+  const [inv,pro,it,lg]=await Promise.all([
+    sb.from('peptx_inventory').select('*').order('created_at',{ascending:false}),
+    sb.from('peptx_protocols').select('*').order('created_at',{ascending:false}),
+    sb.from('peptx_protocol_items').select('*'),
+    sb.from('peptx_dose_logs').select('*').gte('taken_at',new Date(Date.now()-14*dayMs).toISOString())
+  ]);
+  INV=inv.data||[];PROTOS=pro.data||[];ITEMS=it.data||[];LOGS=lg.data||[];
+  renderDue();renderInv();renderProto();
+}
+async function loadRef(){
+  try{const d=await (await fetch(EXPORT)).json();COMPOUNDS=(d.cards||[]).map(c=>c.name).sort();}catch(_){COMPOUNDS=[];}
+  try{const{data}=await sb.from('peptx_stacks').select('*').order('sort');STACKS=data||[];}catch(_){STACKS=[];}
+}
+function compoundOptions(sel){return '<option value="">Select compound…</option>'+COMPOUNDS.map(n=>`<option ${n===sel?'selected':''}>${esc(n)}</option>`).join('');}
+
+/* ---------- due-today logic ---------- */
+function logsFor(item){return LOGS.filter(l=>l.protocol_item_id===item.id||(l.compound_name===item.compound_name)).sort((a,b)=>new Date(b.taken_at)-new Date(a.taken_at));}
+function isDue(item){
+  const ls=logsFor(item);const last=ls[0];
+  const today=new Date();today.setHours(0,0,0,0);
+  const takenToday=ls.some(l=>{const d=new Date(l.taken_at);d.setHours(0,0,0,0);return d.getTime()===today.getTime();});
+  if(takenToday)return false;
+  const f=item.frequency;
+  if(f==='daily')return true;
+  if(f==='eod')return !last||daysSince(last.taken_at)>=2;
+  if(f==='weekly')return !last||daysSince(last.taken_at)>=7;
+  const last7=ls.filter(l=>daysSince(l.taken_at)<7).length;
+  const target=f==='2x_week'?2:f==='3x_week'?3:f==='5x_week'?5:1;
+  return last7<target;
+}
+
+/* ---------- render ---------- */
+function renderDue(){
+  const due=[];PROTOS.filter(p=>p.status==='active').forEach(p=>ITEMS.filter(i=>i.protocol_id===p.id).forEach(i=>{if(isDue(i))due.push({p,i});}));
+  $("dueCount").textContent=due.length?due.length:'';
+  $("dueWrap").innerHTML=due.length
+    ?`<div class="due-strip">${due.map(({p,i})=>`<div class="due-pill"><div><b>${esc(i.compound_name)}</b> <span>${fmtDose(i.dose_mcg)} · ${esc(p.name)}</span></div><button class="btn accent sm" data-log="${i.id}">Log</button></div>`).join('')}</div>`
+    :`<div class="empty">Nothing due today. Add a protocol to track your schedule.</div>`;
+  $("dueWrap").querySelectorAll('[data-log]').forEach(b=>b.onclick=()=>logDose(ITEMS.find(x=>x.id===b.dataset.log)));
+}
+function renderInv(){
+  $("invCount").textContent=INV.length?INV.length:'';
+  if(!INV.length){$("invGrid").innerHTML=`<div class="empty">No vials yet. Add your first to track reconstitution and expiry.</div>`;return;}
+  $("invGrid").innerHTML=INV.map(v=>{
+    const b=binState(v), c=concOf(v);
+    const badge=v.form==='finished'?'<span class="badge fin">Finished</span>':v.form==='reconstituted'?'<span class="badge recon">Reconstituted</span>':'<span class="badge lyo">Lyophilised</span>';
+    return `<div class="card vial">
+      <div class="vtop"><div><h3>${esc(v.compound_name)}</h3><div class="meta">${v.mg_per_vial?esc(v.mg_per_vial)+' mg':''}${v.vials_qty>1?' · x'+v.vials_qty:''} · ${esc(v.storage||'fridge')}</div></div>${badge}</div>
+      ${v.form==='reconstituted'?`<div class="vstat">
+        ${c?`<div class="row"><span>Concentration</span><b>${(+c.toFixed(2))} mg/ml</b></div><div class="row"><span>Per unit (U-100)</span><b>${(+(c*10).toFixed(1))} mcg</b></div>`:''}
+        <div class="row"><span>Reconstituted</span><b>${new Date(v.reconstituted_at).toLocaleDateString()}</b></div>
+      </div>`:''}
+      ${b?`<div class="bin ${b.cls}"><span class="dot" style="background:${b.cls==='ok'?'var(--ok)':b.cls==='warn'?'var(--warn)':'var(--bad)'}"></span>${b.label}</div>`:''}
+      <div class="vact">
+        ${v.form==='lyophilized'?`<button class="btn accent sm" data-recon="${v.id}">Reconstitute</button>`:''}
+        ${v.form==='reconstituted'?`<button class="btn ghost sm" data-fin="${v.id}">Mark finished</button>`:''}
+        <button class="btn ghost sm" data-edit="${v.id}">Edit</button>
+        <button class="btn danger sm" data-del="${v.id}">Delete</button>
+      </div></div>`;}).join('');
+  $("invGrid").querySelectorAll('[data-recon]').forEach(b=>b.onclick=()=>reconModal(b.dataset.recon));
+  $("invGrid").querySelectorAll('[data-fin]').forEach(b=>b.onclick=()=>updInv(b.dataset.fin,{form:'finished'}));
+  $("invGrid").querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>vialModal(INV.find(x=>x.id===b.dataset.edit)));
+  $("invGrid").querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delRow('peptx_inventory',b.dataset.del));
+}
+function renderProto(){
+  $("protoCount").textContent=PROTOS.length?PROTOS.length:'';
+  if(!PROTOS.length){$("protoWrap").innerHTML=`<div class="empty">No protocols yet. Start one from a known stack like GLOW or Wolverine, or build your own.</div>`;return;}
+  $("protoWrap").innerHTML=PROTOS.map(p=>{
+    const items=ITEMS.filter(i=>i.protocol_id===p.id);
+    return `<div class="card proto" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+        <div><h3>${esc(p.name)}</h3><div class="pg">${p.goal?esc(p.goal)+' · ':''}${esc(p.status)}${p.start_date?' · since '+new Date(p.start_date).toLocaleDateString():''}</div></div>
+        <button class="btn danger sm" data-delp="${p.id}">Delete</button>
+      </div>
+      <div style="margin-top:8px">${items.length?items.map(i=>`<div class="item">
+        <div class="in"><div class="inm">${esc(i.compound_name)}</div><div class="ind">${fmtDose(i.dose_mcg)} · ${FREQ[i.frequency]||i.frequency} · ${esc(i.time_of_day||'')}</div></div>
+        <span class="due ${isDue(i)?'now':'ok'}">${isDue(i)?'Due':'On track'}</span>
+        <button class="btn accent sm" data-log="${i.id}">Log</button>
+        <button class="btn ghost sm" data-deli="${i.id}">✕</button>
+      </div>`).join(''):'<div class="hint" style="padding:8px 0">No compounds in this protocol yet.</div>'}</div>
+      <button class="btn ghost sm" data-additem="${p.id}" style="margin-top:12px">+ Add compound</button>
+    </div>`;}).join('');
+  $("protoWrap").querySelectorAll('[data-log]').forEach(b=>b.onclick=()=>logDose(ITEMS.find(x=>x.id===b.dataset.log)));
+  $("protoWrap").querySelectorAll('[data-deli]').forEach(b=>b.onclick=()=>delRow('peptx_protocol_items',b.dataset.deli));
+  $("protoWrap").querySelectorAll('[data-delp]').forEach(b=>b.onclick=()=>{if(confirm('Delete this protocol and its items?'))delRow('peptx_protocols',b.dataset.delp);});
+  $("protoWrap").querySelectorAll('[data-additem]').forEach(b=>b.onclick=()=>itemModal(b.dataset.additem));
+}
+
+/* ---------- writes ---------- */
+async function updInv(id,patch){await sb.from('peptx_inventory').update({...patch,updated_at:new Date().toISOString()}).eq('id',id);loadAll();}
+async function delRow(tbl,id){await sb.from(tbl).delete().eq('id',id);loadAll();}
+async function logDose(item){if(!item)return;await sb.from('peptx_dose_logs').insert({user_id:USER.id,protocol_item_id:item.id,compound_name:item.compound_name,dose_mcg:item.dose_mcg,taken_at:new Date().toISOString()});loadAll();}
+
+/* ---------- modals ---------- */
+const scrim=$("scrim"),modal=$("modal");
+function openModal(html){modal.innerHTML=html;scrim.classList.add('on');}
+function closeModal(){scrim.classList.remove('on');modal.innerHTML='';}
+scrim.addEventListener('click',e=>{if(e.target===scrim)closeModal();});
+const closeX='<button class="x" id="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>';
+
+function vialModal(v){v=v||{};
+  openModal(`<h3>${v.id?'Edit vial':'Add a vial'} ${closeX}</h3>
+    <div class="fg"><label>Compound</label><select id="m_c">${compoundOptions(v.compound_name)}</select></div>
+    <div class="frow"><div class="fg"><label>Amount per vial (mg)</label><input id="m_mg" type="number" step="any" value="${v.mg_per_vial??''}"/></div>
+      <div class="fg"><label>Vials</label><input id="m_q" type="number" min="1" value="${v.vials_qty??1}"/></div></div>
+    <div class="frow"><div class="fg"><label>Storage</label><select id="m_st"><option ${v.storage==='fridge'?'selected':''}>fridge</option><option ${v.storage==='freezer'?'selected':''}>freezer</option><option ${v.storage==='room'?'selected':''}>room</option></select></div>
+      <div class="fg"><label>Fridge shelf-life (days)</label><input id="m_sl" type="number" value="${v.shelf_life_days??28}"/></div></div>
+    <button class="btn accent" id="m_save" style="width:100%;justify-content:center">${v.id?'Save':'Add vial'}</button>`);
+  $("mx").onclick=closeModal;
+  $("m_save").onclick=async()=>{
+    const row={user_id:USER.id,compound_name:$("m_c").value,mg_per_vial:parseFloat($("m_mg").value)||null,vials_qty:parseInt($("m_q").value)||1,storage:$("m_st").value,shelf_life_days:parseInt($("m_sl").value)||28};
+    if(!row.compound_name)return;
+    if(v.id)await sb.from('peptx_inventory').update({...row,updated_at:new Date().toISOString()}).eq('id',v.id);
+    else await sb.from('peptx_inventory').insert({...row,form:'lyophilized'});
+    closeModal();loadAll();};
+}
+function reconModal(id){const v=INV.find(x=>x.id===id);if(!v)return;
+  openModal(`<h3>Reconstitute ${esc(v.compound_name)} ${closeX}</h3>
+    <p class="hint" style="margin-bottom:14px">${v.mg_per_vial?esc(v.mg_per_vial)+' mg vial. ':''}Enter the bacteriostatic water you are adding. We will track the concentration and the use-by date.</p>
+    <div class="frow"><div class="fg"><label>BAC water (ml)</label><input id="r_bac" type="number" step="any" value="2"/></div>
+      <div class="fg"><label>Fridge shelf-life (days)</label><input id="r_sl" type="number" value="${v.shelf_life_days??28}"/></div></div>
+    <div class="vstat" id="r_prev" style="margin:4px 0 14px"></div>
+    <button class="btn accent" id="r_save" style="width:100%;justify-content:center">Mark reconstituted</button>`);
+  $("mx").onclick=closeModal;
+  const prev=()=>{const bac=parseFloat($("r_bac").value);const c=(v.mg_per_vial&&bac)?v.mg_per_vial/bac:null;
+    $("r_prev").innerHTML=c?`<div class="row"><span>Concentration</span><b>${(+c.toFixed(2))} mg/ml</b></div><div class="row"><span>Per unit (U-100)</span><b>${(+(c*10).toFixed(1))} mcg</b></div>`:'<span class="hint">Add vial mg to see concentration.</span>';};
+  prev();$("r_bac").addEventListener('input',prev);
+  $("r_save").onclick=async()=>{await sb.from('peptx_inventory').update({form:'reconstituted',bac_ml:parseFloat($("r_bac").value)||null,shelf_life_days:parseInt($("r_sl").value)||28,reconstituted_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('id',v.id);closeModal();loadAll();};
+}
+function protoModal(){
+  openModal(`<h3>New protocol ${closeX}</h3>
+    <div class="fg"><label>Start from a known stack (optional)</label><select id="p_stack"><option value="">Custom / blank</option>${STACKS.map(s=>`<option value="${esc(s.name)}">${esc(s.name)} · ${esc(s.goal||'')}</option>`).join('')}</select></div>
+    <div class="fg"><label>Name</label><input id="p_name" placeholder="e.g. Recovery block"/></div>
+    <div class="fg"><label>Goal (optional)</label><input id="p_goal" placeholder="e.g. Tendon recovery"/></div>
+    <p class="hint" id="p_comp"></p>
+    <button class="btn accent" id="p_save" style="width:100%;justify-content:center;margin-top:6px">Create protocol</button>`);
+  $("mx").onclick=closeModal;
+  const sSel=$("p_stack");
+  sSel.onchange=()=>{const s=STACKS.find(x=>x.name===sSel.value);if(s){if(!$("p_name").value)$("p_name").value=s.name;if(!$("p_goal").value)$("p_goal").value=s.goal||'';$("p_comp").textContent='Will add: '+(s.components||[]).join(', ');}else $("p_comp").textContent='';};
+  $("p_save").onclick=async()=>{
+    const name=$("p_name").value.trim();if(!name)return;
+    const{data,error}=await sb.from('peptx_protocols').insert({user_id:USER.id,name,goal:$("p_goal").value.trim()||null}).select('id').single();
+    if(error||!data){closeModal();return;}
+    const s=STACKS.find(x=>x.name===sSel.value);
+    if(s&&s.components&&s.components.length){
+      await sb.from('peptx_protocol_items').insert(s.components.map(c=>({protocol_id:data.id,user_id:USER.id,compound_name:c,frequency:'weekly'})));
+    }
+    closeModal();loadAll();};
+}
+function itemModal(protoId){
+  openModal(`<h3>Add compound ${closeX}</h3>
+    <div class="fg"><label>Compound</label><select id="i_c">${compoundOptions()}</select></div>
+    <div class="frow"><div class="fg"><label>Dose</label><input id="i_d" type="number" step="any" placeholder="mcg"/></div>
+      <div class="fg"><label>Frequency</label><select id="i_f">${Object.entries(FREQ).map(([k,v])=>`<option value="${k}" ${k==='weekly'?'selected':''}>${v}</option>`).join('')}</select></div></div>
+    <div class="fg"><label>Time of day</label><select id="i_t"><option>AM</option><option>PM</option><option>Pre-workout</option><option>Bedtime</option></select></div>
+    <button class="btn accent" id="i_save" style="width:100%;justify-content:center">Add to protocol</button>`);
+  $("mx").onclick=closeModal;
+  $("i_save").onclick=async()=>{const c=$("i_c").value;if(!c)return;
+    await sb.from('peptx_protocol_items').insert({protocol_id:protoId,user_id:USER.id,compound_name:c,dose_mcg:parseFloat($("i_d").value)||null,frequency:$("i_f").value,time_of_day:$("i_t").value});
+    closeModal();loadAll();};
+}
+$("addVialBtn").onclick=()=>vialModal();
+$("addProtoBtn").onclick=()=>protoModal();
+
+/* ---------- route ---------- */
+async function route(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session&&session.user){USER=session.user;$("boot").classList.add('hidden');$("authView").classList.add('hidden');$("dash").classList.remove('hidden');
+    $("who").textContent=session.user.email||'';$("navAcct").textContent='Account';
+    await loadRef();await loadAll();
+  } else {$("boot").classList.add('hidden');$("authView").classList.remove('hidden');}
+}
+sb.auth.onAuthStateChange((_e,s)=>{if(s&&s.user&&!USER){route();}});
+route();
+</script>
+</body>
+</html>
