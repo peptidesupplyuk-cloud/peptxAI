@@ -10,7 +10,7 @@
 <meta property="og:title" content="PeptX.AI · Ask the peptide research assistant"/>
 <meta property="og:description" content="A research-grounded peptide chat. Educational summaries only, not medical advice."/>
 <meta property="og:type" content="website"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a84ff'/%3E%3Cstop offset='1' stop-color='%2300d4aa'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230b111c'/%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f4f8ff'/%3E%3Cstop offset='.5' stop-color='%239fb0c4'/%3E%3Cstop offset='1' stop-color='%2346546a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 9H14L32 31H26Z M32 9H26L8 31H14Z' fill='url(%23s)'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
 <style>
@@ -20,12 +20,13 @@
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{font-family:var(--body);color:var(--ink);background:var(--bg);overflow:hidden;-webkit-font-smoothing:antialiased;position:fixed;inset:0}
-  .aura{position:fixed;inset:-30vmax;z-index:0;filter:blur(34px);opacity:.7;pointer-events:none}
-  .aura span{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:drift 32s ease-in-out infinite}
-  .aura .a{width:48vmax;height:48vmax;left:-8vmax;top:-12vmax;background:radial-gradient(circle,#1b4dff44,transparent 60%)}
-  .aura .b{width:44vmax;height:44vmax;right:-10vmax;top:4vmax;background:radial-gradient(circle,#00d4aa3a,transparent 62%);animation-delay:-12s}
-  .aura .c{width:50vmax;height:50vmax;left:18vmax;bottom:-26vmax;background:radial-gradient(circle,#bf5af233,transparent 60%);animation-delay:-20s}
-  @keyframes drift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(4vmax,-3vmax,0) scale(1.07)}}
+  .scene{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 42% at 50% -4%,rgba(150,180,228,.20),transparent 56%),radial-gradient(130% 100% at 50% 0%,#0c1119 0%,#080b13 42%,#04060b 100%)}
+  .smk{position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:cover;will-change:transform}
+  .smk1{opacity:.6;mix-blend-mode:screen;-webkit-mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);mask:radial-gradient(66% 54% at 50% 36%,transparent 6%,#000 70%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.005 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.43 0 0 0 0 0.95 1 0 0 0 -0.18'/></filter><rect width='1280' height='800' filter='url(%23b)'/></svg>");animation:drift1 90s ease-in-out infinite}
+  .smk2{opacity:.4;mix-blend-mode:screen;-webkit-mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);mask:radial-gradient(80% 64% at 50% 42%,transparent 14%,#000 86%);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1280' height='800'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.013 0.017' numOctaves='5' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.72 0 0 0 0 0.82 0 0 0 0 1 1.2 0 0 0 -0.68'/></filter><rect width='1280' height='800' filter='url(%23w)'/></svg>");animation:drift2 120s ease-in-out infinite}
+  @keyframes drift1{0%,100%{transform:translate3d(-2%,0,0) scale(1.06)}50%{transform:translate3d(3%,-3%,0) scale(1.14)}}
+  @keyframes drift2{0%,100%{transform:translate3d(2%,1%,0) scale(1.10)}50%{transform:translate3d(-3%,-2%,0) scale(1.20)}}
+  @media(prefers-reduced-motion:reduce){.smk{animation:none!important}}
   body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
@@ -88,7 +89,7 @@
 </style>
 </head>
 <body>
-<div class="aura"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+<div class="scene"></div><div class="smk smk1"></div><div class="smk smk2"></div>
 <div class="app">
   <div class="bar">
     <div class="brand"><img class="blogo" src="/peptx-logo.webp" alt="PeptX"/><span class="ai">.AI</span></div>

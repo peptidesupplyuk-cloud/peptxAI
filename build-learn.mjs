@@ -74,7 +74,7 @@ function page(p, all){
 <meta property="og:url" content="${ORIGIN}/${OUT}/${slug}"/>
 <meta property="og:image" content="${ORIGIN}/og.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%2300d4aa'/%3E%3C/svg%3E"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230b111c'/%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f4f8ff'/%3E%3Cstop offset='.5' stop-color='%239fb0c4'/%3E%3Cstop offset='1' stop-color='%2346546a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 9H14L32 31H26Z M32 9H26L8 31H14Z' fill='url(%23s)'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/learn/learn.css">
@@ -171,7 +171,7 @@ function indexPage(all){
 <meta name="robots" content="index,follow"/><meta name="theme-color" content="#04060b"/>
 <link rel="canonical" href="${ORIGIN}/learn/"/>
 <meta property="og:title" content="Peptide &amp; Compound Guides | PeptX.AI"/><meta property="og:description" content="${esc(desc)}"/><meta property="og:type" content="website"/><meta property="og:url" content="${ORIGIN}/learn/"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%2300d4aa'/%3E%3C/svg%3E"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230b111c'/%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f4f8ff'/%3E%3Cstop offset='.5' stop-color='%239fb0c4'/%3E%3Cstop offset='1' stop-color='%2346546a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 9H14L32 31H26Z M32 9H26L8 31H14Z' fill='url(%23s)'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,600,700&f[]=jetbrains-mono@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/learn/learn.css">
