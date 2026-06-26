@@ -21,6 +21,7 @@ nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linea
 .logo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#f6f9ff,#a7b6c9 46%,#46546a);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M5 4H14L35 36H26Z'/%3E%3Cpath d='M35 4H26L5 36H14Z'/%3E%3C/svg%3E") center/60% no-repeat}
 .brand i{font-style:normal;color:var(--accent)}
 .blogo{height:28px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.bmark{height:27px;width:auto;display:block}
 .brand .ai{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;color:var(--accent);margin-left:-2px}
 .navr{display:flex;gap:8px;align-items:center}
 .lk{font-weight:600;font-size:13.5px;color:var(--muted);padding:8px 13px;border-radius:10px}
